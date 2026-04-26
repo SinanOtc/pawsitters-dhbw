@@ -14,7 +14,8 @@
 
       <!-- Logout bei Spring muss POST sein, deshlab Formular anstatt nur Link -->
       <form th:action="@{/logout}" method="post">
-        <button type="submit">Logout</button>
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+          <button type="submit">Logout</button>
       </form>
 </body>
 </html>
