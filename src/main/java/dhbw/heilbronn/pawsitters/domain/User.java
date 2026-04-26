@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * User für die Anmeldung im System
+ * Allgemeiner-User für die Anmeldung im System
  * Profildaten liegen in Owner- bzw. HostProfile
  */
 @Entity
@@ -42,8 +42,4 @@ public class User {
         this. passwordAberHashed = passwordAberHashed;
         this.role = role;
     }
-
-
-
-
 }
