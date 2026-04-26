@@ -45,25 +45,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    /**
-     * Test User für Entwicklung
-     * TODO: Wird durch echte User aus DB ersetzt später
-     */
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder encoder) {
-        UserDetails owner = User.builder()
-                .username("dummyOwner@test.de")
-                .password(encoder.encode("testPWD123"))
-                .roles("OWNER")
-                .build();
-
-        UserDetails host = User.builder()
-                .username("dummyHost@test.de")
-                .password(encoder.encode("testPWD123"))
-                .roles("HOST")
-                .build();
-
-        return new InMemoryUserDetailsManager(owner, host);
-    }
 }
