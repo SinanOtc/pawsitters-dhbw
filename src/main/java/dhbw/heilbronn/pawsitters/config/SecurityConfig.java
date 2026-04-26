@@ -26,11 +26,11 @@ public class SecurityConfig {
                 // TODO: Eigene Loginseite aufbauen
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccesUrl("/dashboard", true)
+                        .defaultSuccessUrl("/dashboard", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccesUrl("/")
+                        .logoutSuccessUrl("/")
                         .permitAll()
                 );
         return http.build();
