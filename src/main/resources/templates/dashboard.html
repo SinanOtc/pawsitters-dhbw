@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="de"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+      <h1>Dashboard</h1>
+
+      <!-- Zeigt Username des Users -->
+      <p>Eingeloggt als <span sec:authentication="name"></span> </p>
+
+      <!-- Logout bei Spring muss POST sein, deshlab Formular anstatt nur Link -->
+      <form th:action="@{/logout}" method="post">
+        <button type="submit">Logout</button>
+      </form>
+</body>
+</html>
