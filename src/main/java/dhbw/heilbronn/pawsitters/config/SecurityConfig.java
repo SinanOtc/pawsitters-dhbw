@@ -48,7 +48,7 @@ public class SecurityConfig {
 
     /**
      * Test User für Entwicklung
-     * Wird durch echte User aus DB ersetzt
+     * TODO: Wird durch echte User aus DB ersetzt später
      */
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder encoder) {
