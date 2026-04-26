@@ -3,8 +3,11 @@ package dhbw.heilbronn.pawsitters.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
@@ -42,6 +45,25 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    /**
+     * Test User für Entwicklung
+     * Wird durch echte User aus DB ersetzt
+     */
+    @Bean
+    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder encoder) {
+        UserDetails owner = User.builder()
+                .username("dummyOwner@test.de")
+                .password(encoder.encode("testPWD123"))
+                .roles("OWNER")
+                .build();
+
+        UserDetails host = User.builder()
+                .username("dummyHost@test.de")
+                .password(encoder.encode("testPWD123"))
+                .roles("HOST")
+                .build();
+
+        return new InMemoryUserDetailsManager(owner, host);
+    }
 }
-
-
