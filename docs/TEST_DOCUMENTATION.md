@@ -1,5 +1,13 @@
 # Testdokumentation
 ## Übersicht
-## Unit Tests
-## Integrationstests
-## Edge Cases
+
+## SecurityConfigTest
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/config/SecurityConfigTest.java`
+
+| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
+|---|---|---|---|
+| `homeIsPubliclyAccessible` | GET `/` ohne Login | HTTP 200 | Normal |
+| `dashboardRedirectAnonymousUserToLogIn` | GET `/dashboard` ohne Login | HTTP 302 Redirect zu `/login` | Edge Case (Schutzregel) |
+| `dashboardIsAccessibleForLoggedInUser` | GET `/dashboard` mit eingeloggtem User | HTTP 200 | Normal |
+| `validLoginRedirectsToDashboard` | POST `/login` mit gültigen Credentials | HTTP 302 Redirect zu `/dashboard` | Normal |
+| `invalidLoginRedirectsToLoginWithError` | POST `/login` mit ungültigem Passwort | HTTP 302 Redirect zu `/login?error` | Edge Case (Fehlerpfad) |
