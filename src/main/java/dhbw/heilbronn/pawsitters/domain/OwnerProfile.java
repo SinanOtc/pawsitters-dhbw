@@ -3,6 +3,7 @@ package dhbw.heilbronn.pawsitters.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,15 +31,18 @@ public class OwnerProfile {
     private User user;
 
     @NotBlank
-    @Column(nullable = false)
+    @Size(max = 100)
+    @Column(nullable = false, length = 100)
     private String firstName;
 
     @NotBlank
-    @Column(nullable = false)
+    @Size(max = 100)
+    @Column(nullable = false, length = 100)
     private String lastName;
 
     @NotBlank
-    @Column(nullable = false)
+    @Size(max = 256)
+    @Column(nullable = false, length = 256)
     private String address;
 
     public OwnerProfile(User user, String firstName, String lastName, String address) {
