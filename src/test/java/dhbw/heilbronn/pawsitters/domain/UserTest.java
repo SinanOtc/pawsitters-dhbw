@@ -23,7 +23,7 @@ public class UserTest {
 
     @Test
     void constructor_setAllFields() {
-        User user = new User("TestOwner@test.de", "TestPWD", UserRole.OWNER)
+        User user = new User("TestOwner@test.de", "TestPWD", UserRole.OWNER);
 
         assertThat(user.getEmail()).isEqualTo("TestOwner@test.de");
         assertThat(user.getPasswordHashed()).isEqualTo("TestPWD");
