@@ -32,7 +32,7 @@ public class User {
     private String email;
 
     @NotBlank
-    @Column(nullable = false)
+    @Column(nullable = false, length = 60)
     private String passwordHashed;
 
     @Enumerated(EnumType.STRING)
