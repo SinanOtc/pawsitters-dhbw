@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Mein Profil</title>
+</head>
+<body>
+    <h1>Mein Besitzerprofil</h1>
+
+    <p>Eingeloggt als <span sec:authentication="name"></span></p>
+
+    <!-- profile = OwnerProfile aus dem Controller -->
+    <table>
+      <tr>
+        <th scope="row">Vorname:</th>
+        <td th:text="${profile.firstName}"></td>
+      </tr>
+      <tr>
+        <th scope="row">Nachname:</th>
+        <td th:text="${profile.lastName}"></td>
+      </tr>
+      <tr>
+        <th scope="row">E-Mail:</th>
+        <td th:text="${profile.user.email}"></td>
+      </tr>
+      <tr>
+        <th scope="row">Adresse:</th>
+        <td th:text="${profile.address}"></td>
+      </tr>
+    </table>
+
+    <p><a th:href="@{/owner/profile/edit}">Profil bearbeiten</a></p>
+    <p><a th:href="@{/dashboard}">Zurück zum Dashboard</a></p>
+
+</body>
+</html>

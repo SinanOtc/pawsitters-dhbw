@@ -48,6 +48,7 @@ class UserTest {
         assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("email"));
     }
 
+    @Test
     void role_null_failValidation() {
         User user = new User("owner@test.de", "TestPWDxxx", null);
 
