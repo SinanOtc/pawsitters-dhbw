@@ -25,23 +25,23 @@
 
         <p>
             <label>Passwort:
-                <input type="password" th:field="*{password()}" required>
+                <input type="password" th:field="*{password}" required>
             </label>
             <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color:red;"></span>
         </p>
 
         <p>
             <label>Vorname:
-                <input type="text" th:field="*{firstName()}" required>
+                <input type="text" th:field="*{firstName}" required>
             </label>
-            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName()}" style="color:red"></span>
+            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" style="color:red"></span>
         </p>
 
         <p>
             <label>Nachname:
-                <input type="text" th:field="*{lastName()}" required>
+                <input type="text" th:field="*{lastName}" required>
             </label>
-            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName()}" style="color:red"></span>
+            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color:red"></span>
         </p>
 
         <p>
@@ -54,7 +54,7 @@
         <button type="submit">Registrieren</button>
     </form>
 
-    <p><a> th:href="@{/login}"Bereits registriert? Zum Login</a></p>
+    <p><a th:href="@{/login}">Bereits registriert? Zum Login</a></p>
 
 </body>
 </html>
