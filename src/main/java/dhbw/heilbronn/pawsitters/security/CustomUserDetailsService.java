@@ -2,7 +2,6 @@ package dhbw.heilbronn.pawsitters.security;
 
 import dhbw.heilbronn.pawsitters.domain.User;
 import dhbw.heilbronn.pawsitters.repository.UserRepository;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,7 +19,6 @@ import java.util.List;
  * In Dev bleibt InMemoryUserDetailsManager aus DevUsersConfig bestehen
  */
 @Service
-@Profile("!dev")
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
