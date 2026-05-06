@@ -16,14 +16,15 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) {
         http
                 // Startseite, Loginseite, assets
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/login", "/owner/register", "/css/**","/js/**").permitAll()
+                        // alle Ownerroutes nur für eingeloggte PetOwner
+                        .requestMatchers("/owner/**").hasRole("OWNER")
                         .anyRequest().authenticated()
                 )
-                // TODO: Eigene Loginseite aufbauen
                 .formLogin(form -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/dashboard", true)
