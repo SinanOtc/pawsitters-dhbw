@@ -12,12 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
-/**
- * Formular DTO für Registrierung eines neuen Hosts
- * Wird im Controller an Form gebunden, nicht direkt an die Entität
- *
- */
-
+/** Registrierungs-DTO. Bündelt Login- und Profil-Felder; das Klartext-Passwort bleibt damit aus der Entity-Schicht heraus. */
 public record RegisterHostForm (
 
     @NotBlank
