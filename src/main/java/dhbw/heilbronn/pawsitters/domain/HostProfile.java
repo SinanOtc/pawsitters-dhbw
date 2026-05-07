@@ -17,13 +17,7 @@ import java.time.LocalDate;
 import java.util.EnumSet;
 import java.util.Set;
 
-
-/**
- * Profil eines Host
- * 1:1 zu User, darf ohne ihn nicht existieren
- * Daten, unabhängig von Login
- */
-
+/** Profil-Daten getrennt von {@link User}, weil Login-Felder und Domain-Felder unterschiedliche Lebenszyklen haben. */
 @Entity
 @Table(name = "host_profiles")
 @Getter
