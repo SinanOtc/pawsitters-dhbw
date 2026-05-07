@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Mein Profil</title>
+</head>
+<body>
+    <h1>Mein Hostprofil</h1>
+
+    <p>Eingeloggt als <span sec:authentication="name"></span></p>
+
+    <!-- profile = HostProfile aus dem Controller -->
+    <table>
+      <tr>
+        <th scope="row">Vorname:</th>
+        <td th:text="${profile.firstName}"></td>
+      </tr>
+      <tr>
+        <th scope="row">Nachname:</th>
+        <td th:text="${profile.lastName}"></td>
+      </tr>
+      <tr>
+        <th scope="row">E-Mail:</th>
+        <td th:text="${profile.user.email}"></td>
+      </tr>
+      <tr>
+        <th scope="row">Adresse:</th>
+        <td th:text="${profile.address}"></td>
+      </tr>
+      <tr>
+        <th scope="row">Akzeptierte Tierarten:</th>
+        <td>
+          <span th:each="species, iter : ${profile.acceptedSpecies}">
+            <span th:text="${species}"></span><span th:if="${!iter.last}">, </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Verfügbar von:</th>
+        <td th:text="${profile.availableFrom}"></td>
+      </tr>
+      <tr>
+        <th scope="row">Verfügbar bis:</th>
+        <td th:text="${profile.availableUntil}"></td>
+      </tr>
+      <tr>
+        <th scope="row">Preis pro Woche (€):</th>
+        <td th:text="${profile.pricePerWeek}"></td>
+      </tr>
+    </table>
+
+    <p><a th:href="@{/host/profile/edit}">Profil bearbeiten</a></p>
+    <p><a th:href="@{/dashboard}">Zurück zum Dashboard</a></p>
+
+</body>
+</html>
