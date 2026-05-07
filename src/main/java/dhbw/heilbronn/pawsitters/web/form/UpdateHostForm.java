@@ -12,13 +12,10 @@ import java.time.LocalDate;
 import java.util.Set;
 
 /**
- * Form für das Bearbeiten eines bestehenden Host Profils
- *
  * WICHTIG:
  *  - bei Update KEIN Passwort und Email Änderung
  *  (das ist zu sicherheitsrelevant und muss in einen eigenen Flow)
  */
-
 public record UpdateHostForm(
 
         @NotBlank
