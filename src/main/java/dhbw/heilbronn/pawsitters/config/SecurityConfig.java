@@ -20,9 +20,11 @@ public class SecurityConfig {
         http
                 // Startseite, Loginseite, assets
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/owner/register", "/css/**","/js/**").permitAll()
+                        .requestMatchers("/", "/login", "/owner/register", "/host/register", "/css/**","/js/**").permitAll()
                         // alle Ownerroutes nur für eingeloggte PetOwner
                         .requestMatchers("/owner/**").hasRole("OWNER")
+                        // alle Hostroutes nur für eingeloggte Hosts
+                        .requestMatchers("/host/**").hasRole("HOST")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
