@@ -58,3 +58,35 @@ Integrationstest mit `@WebMvcTest`, läuft gegen MockMvc + echte SecurityConfig.
 | `postRegister_validForm_redirectsToLoginWithFlag` | POST `/owner/register` mit gültigem Form | HTTP 302 Redirect zu `/login?registered`, `OwnerService.register` aufgerufen | Normal |
 | `postRegister_invalidEmail_returnsRegisterWithErrors` | POST mit ungültiger E-Mail | HTTP 200, View `owner/register`, Field-Error auf `email`, Service NICHT aufgerufen | Edge Case (Validation) |
 | `postRegister_emailAlreadyTaken_showsFieldError` | POST mit bereits vergebener E-Mail | HTTP 200, View `owner/register`, Field-Error auf `email` | Edge Case (Duplikat) |
+
+## PetServiceTest
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/service/PetServiceTest.java`
+
+| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
+|---|---|---|---|
+| `register_validForm_savesPetWithOwner` | Pet-Anlage mit gültigem Form | Pet wird mit Owner-Referenz gespeichert | Normal |
+| `register_appliesAllOptionalFields` | Optionale Felder werden übernommen | breed, birthYear, chip*, vaccinated, neutered, description gesetzt | Normal |
+| `findAllByOwner_returnsOwnersPets` | Liste der Pets eines Owners | Repository liefert nur die Pets des Owners | Normal |
+| `findByIdForOwner_existing_returnsPet` | Eigenes Pet per ID laden | Pet wird zurückgegeben | Normal |
+| `findByIdForOwner_notOwnedByUser_throwsPetNotFound` | Fremdes Pet per URL-Manipulation | `PetNotFoundException` | Edge Case (Security) |
+| `update_existingPet_updatesAllFields` | Update aller änderbaren Felder | Alle Felder am Pet aktualisiert | Normal |
+| `delete_existingPet_callsRepositoryDelete` | Eigenes Pet löschen | `rep
+
+## PetControllerTest
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/web/controller/PetControllerTest.java`
+
+Integrationstest mit `@WebMvcTest` + `@WithMockUser(roles="OWNER")` gegen
+MockMvc + echte SecurityConfig.
+
+| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
+|---|---|---|---|
+| `getPets_returnsListView` | GET `/owner/pets` | HTTP 200, View `owner/pets/list`, `pets` im Model | Normal |
+| `getNewForm_returnsFormViewInNewMode` | GET `/owner/pets/new` | HTTP 200, View `owner/pets/form`, `mode=new` | Normal |
+| `postNew_validForm_redirectsToList` | POST mit gültigem Form | HTTP 302 → `/owner/pets`, Service aufgerufen | Normal |
+| `postNew_emptyName_returnsFormWithFieldError` | POST mit leerem Name (`@NotBlank`) | HTTP 200, Field-Error auf `name`, Service NICHT aufgerufen | Edge Case (Validation) |
+| `postNew_chippedWithoutChipNumber_failsAssertTrue` | chipped=true ohne Chip-Nummer | HTTP 200, `@AssertTrue isChipDataConsistent` feuert | Edge Case (Cross-Field) |
+| `getEditForm_existingPet_returnsFormPrefilled` | GET `/owner/pets/{id}/edit` | View `owner/pets/form`, `mode=edit`, `petId` im Model | Normal |
+| `postEdit_validForm_redirectsToList` | Update durchläuft | HTTP 302 → `/owner/pets`, `update()` aufgerufen | Normal |
+| `postEdit_invalidForm_returnsFormInEditModeWithoutUpdate` | POST mit ungültigem Form bei Edit | HTTP 200, Field-Error, kein Update | Edge Case (Validation) |
+| `postDelete_redirectsToList` | POST `/owner/pets/{id}/delete` | HTTP 302 → `/owner/pets`, `delete()` aufgerufen | Normal |
+| `getPets_unauthenticated_redirectsToLogin` | GET ohne Auth | HTTP 302 zu `/login` | Edge Case (Security) |
