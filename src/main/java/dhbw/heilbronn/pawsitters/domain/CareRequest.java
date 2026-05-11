@@ -60,7 +60,7 @@ public class CareRequest {
 
     /**
      * Constraint: Enddatum muss nach Startdatum liegen.
-     * @Future auf den Feldern prüft schon dass beide in der Zukunft sind.
+     * - @Future auf den Feldern prüft schon dass beide in der Zukunft sind.
      */
     @AssertTrue(message = "Enddatum muss nach Startdatum liegen")
     public boolean isDateRangeValid() {
