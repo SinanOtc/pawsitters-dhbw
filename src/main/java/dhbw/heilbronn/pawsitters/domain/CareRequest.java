@@ -12,7 +12,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "care_request")
+@Table(name = "care_requests")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
