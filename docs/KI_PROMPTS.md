@@ -35,3 +35,47 @@
   - Testdokumentation von KI generiert
 - **Verifikation:** Code wurde aktiv mitgestaltet. Verständnis durch Nachfragen und Erklärungen sichergestellt, alle Tests lokal mit `./mvnw test` werden akzeptiert.
 - **!! Dieser Abschnitt wurde mit KI erstellt!!**
+
+  ## Pet-Registrierung (Entity, Repository, Service, Controller, Tests)
+  - **Datum:** 06.05 && 10.05.2026
+  - **Tool:** Claude Opus 4.7
+  - **Prompts:**
+    - Architektur-Beratung zur Pet-Schichten (Entity 1:n zu OwnerProfile,
+      Repository mit
+      Owner-Filter, Service mit Zugehörigkeitsprüfung gegen URL-Manipulation)
+    - PetForm als Java Record mit `@AssertTrue` für Chip-Konsistenz
+      (chipped ↔ chipNumber)
+    - PetController-Skizze für Liste/Anlegen/Bearbeiten/Löschen mit
+      `mode`-basierter
+      Form-View und `currentUserId(...)`-Helper
+    - PetServiceTest mit Mockito (KI-generiert, manuell geprüft und
+      dokumentiert)
+    - PetControllerTest mit `@WebMvcTest` + `@WithMockUser` für Routing,
+      Validation,
+      Security-Redirect
+    - Erklärung von SonarQube-/IntelliJ-Warnungen (DataFlowIssue bei
+      `@NotNull`-null,
+      SameParameterValue, S2637 duplicate-literal) und Suppress-Strategie
+  - **Verifikation:** Alle Tests lokal mit `./mvnw test` grün, manuelle
+    Code-Reviews,
+    Verständnisprüfung durch Nachfragen.
+
+  ## CareRequest (Entity, Repository, Service, Controller, Tests)
+  - **Datum:** 11.05.2026
+  - **Tool:** Claude Opus 4.7
+  - **Prompts:**
+    - Schichten-Plan für `CareRequest` analog zum Pet-Pattern: Entity 1:n zu Owner + 1:n zu Pet,
+      Repository mit Owner-Filter, Service mit Re-Use der `petService.findByIdForOwner`-Security
+    - `@AssertTrue isDateRangeValid()` als Cross-Field-Check für Enddatum nach Startdatum
+      (sowohl in der Entity als auch im Form-Record)
+    - `CareRequestForm` als Java Record mit `@NotNull` + `@Future` + Cross-Field-Validation
+    - Bewusster Verzicht auf Edit/Delete-Routes — Status-Wechsel sind workflow-getrieben,
+      nicht user-editierbar (vermeidet inkonsistente Zustände)
+    - `CareRequestServiceTest` mit Mockito (auch Security-Edge-Case: fremdes Pet wirft
+      `PetNotFoundException`)
+    - `CareRequestControllerTest` mit `@WebMvcTest` für Routing, Validation
+      (`@NotNull`, `@Future`, `@AssertTrue` Cross-Field), Auth-Redirect
+    - Kritische Diskussion von Copilot-Review-Suggestions (Validation-Duplikation,
+      Enterprise-Javadoc, Try-Catch in `@Transactional` → bewusst nicht übernommen)
+  - **Verifikation:** Alle Tests lokal mit `./mvnw test` grün, manuelle Code-Reviews,
+    Verständnisprüfung durch Nachfragen.
