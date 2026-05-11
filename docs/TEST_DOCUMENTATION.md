@@ -90,3 +90,43 @@ MockMvc + echte SecurityConfig.
 | `postEdit_invalidForm_returnsFormInEditModeWithoutUpdate` | POST mit ungültigem Form bei Edit | HTTP 200, Field-Error, kein Update | Edge Case (Validation) |
 | `postDelete_redirectsToList` | POST `/owner/pets/{id}/delete` | HTTP 302 → `/owner/pets`, `delete()` aufgerufen | Normal |
 | `getPets_unauthenticated_redirectsToLogin` | GET ohne Auth | HTTP 302 zu `/login` | Edge Case (Security) |
+
+## CareRequestTest (Domain)
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/domain/CareRequestTest.java`
+
+| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
+  |---|---|---|---|
+| `constructor_setsAllFields` | Konstruktor setzt owner, pet, startDate, endDate | Alle Getter geben übergebene Werte | Normal |
+| `constructor_setsStatusToOpen` | Default-Status nach Konstruktor | Status ist `OPEN` (Workflow-Schutz: nie direkt MATCHED/CLOSED erzeugen) | Normal |
+| `startDate_inPast_failsValidation` | `@Future` auf startDate | Validation-Violation auf `startDate` | Edge Case |
+| `endDate_inPast_failsValidation` | `@Future` auf endDate | Validation-Violation auf `endDate` | Edge Case |
+| `endDate_beforeStartDate_failsAssertTrue` | Cross-Field: Enddatum vor Startdatum | Violation auf `dateRangeValid` | Edge Case (Cross-Field) |
+| `endDate_equalsStartDate_failsAssertTrue` | Boundary: gleicher Tag | Violation auf `dateRangeValid` (Enddatum nicht NACH Startdatum) | Edge Case (Boundary) |
+| `owner_null_failsValidation` | `@NotNull` auf owner | Violation auf `owner` | Edge Case |
+| `pet_null_failsValidation` | `@NotNull` auf pet | Violation auf `pet` | Edge Case |
+
+## CareRequestServiceTest
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/service/CareRequestServiceTest.java`
+
+| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
+  |---|---|---|---|
+| `register_validForm_savesRequestWithOpenStatus` | Anfrage-Anlage | Status `OPEN`, owner + pet korrekt verknüpft, save() aufgerufen | Normal |
+| `register_petNotOwnedByUser_propagatesPetNotFound` | Pet gehört nicht dem User | `PetNotFoundException` propagiert, nichts gespeichert | Edge Case (Security) |
+| `findAllByOwner_returnsOwnersRequests` | Liste der Anfragen | Repository liefert nur die des Owners | Normal |
+| `findByIdForOwner_existing_returnsRequest` | Eigene Anfrage per ID | Anfrage wird zurückgegeben | Normal |
+| `findByIdForOwner_notFoundOrNotOwned_throwsCareRequestNotFound` | Anfrage existiert nicht oder fremd | `CareRequestNotFoundException` | Edge Case (Security) |
+
+## CareRequestControllerTest
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/web/controller/CareRequestControllerTest.java`
+
+Integrationstest mit `@WebMvcTest` + `@WithMockUser(roles="OWNER")` gegen MockMvc + echte SecurityConfig.
+
+| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
+  |---|---|---|---|
+| `getCareRequests_returnsListView` | GET `/owner/care-requests` | View `owner/care-requests/list`, `careRequests` im Model | Normal |
+| `getNewForm_returnsFormViewWithPetsAndEmptyRequestForm` | GET `/new` | View `owner/care-requests/form`, `careRequestForm` + `pets` im Model | Normal |
+| `postNew_validForm_redirectsToList` | POST mit gültigem Form | HTTP 302 → `/owner/care-requests`, Service aufgerufen | Normal |
+| `postNew_endBeforeStart_returnsFormWithoutRegister` | `@AssertTrue` Cross-Field | View `form`, Service NICHT aufgerufen | Edge Case (Cross-Field) |
+| `postNew_pastStartDate_returnsFormWithFieldError` | `@Future` auf startDate | Field-Error auf `startDate`, kein Service-Call | Edge Case (Validation) |
+| `postNew_missingPetId_returnsFormWithFieldError` | `@NotNull` auf petId | Field-Error auf `petId`, kein Service-Call | Edge Case (Validation) |
+| `getCareRequests_unauthenticated_redirectsToLogin` | GET ohne Auth | HTTP 302 zu `/login` | Edge Case (Security) |
