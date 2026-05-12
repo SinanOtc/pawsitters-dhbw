@@ -30,9 +30,9 @@ public class HostService {
     }
 
     /**
-     * Registreiert einen neuen Host. legt User + HostProfile in einer Transaktion zusammen.
-     * Erzeugt EmailAlreadyTakenException wenn Email bereits vergeben ist.
-     * (Über alle Rollen hinweg: Eine Email -> ein Account)
+     * Registriert einen neuen Host. Legt User + HostProfile in einer Transaktion zusammen.
+     * Erzeugt EmailAlreadyTakenException, wenn E-Mail bereits vergeben ist.
+     * (Über alle Rollen hinweg: Eine E-Mail → ein Account)
      */
     @Transactional
     public HostProfile register(RegisterHostForm form) {
@@ -58,7 +58,7 @@ public class HostService {
     }
 
     /**
-     * Lädt Profil eines eingeloggten Hosts.
+     * Lädt das Profil eines eingeloggten Hosts.
      * Wirft HostProfilNotFoundException als Konsistenzsciherung.
      */
     @Transactional(readOnly = true)
@@ -69,7 +69,7 @@ public class HostService {
     }
 
     /**
-     * Profilupdate. Lookup direkt im Repository ansatt findByUserId.
+     * Profilupdate. Lookup direkt im Repository, anstatt findByUserId.
      */
     @Transactional
     public HostProfile update(Long userId, UpdateHostForm form) {
