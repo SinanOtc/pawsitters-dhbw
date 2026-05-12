@@ -30,21 +30,25 @@
         <th scope="row">E-Mail:</th>
         <td th:text="${profile.user.email}"></td>
       </tr>
-      <tr>
+      <tr data-address-fallback-row th:attr="data-address=${profile.address}">
+        <th scope="row">Adresse:</th>
+        <td th:text="${profile.address}"></td>
+      </tr>
+      <tr data-address-split-row hidden>
         <th scope="row">Straße:</th>
-        <td data-address-part="street" th:attr="data-address=${profile.address}" th:text="${profile.address}"></td>
+        <td data-address-part="street"></td>
       </tr>
-      <tr>
+      <tr data-address-split-row hidden>
         <th scope="row">Straßennummer:</th>
-        <td data-address-part="streetNumber" th:attr="data-address=${profile.address}"></td>
+        <td data-address-part="streetNumber"></td>
       </tr>
-      <tr>
+      <tr data-address-split-row hidden>
         <th scope="row">PLZ:</th>
-        <td data-address-part="postalCode" th:attr="data-address=${profile.address}"></td>
+        <td data-address-part="postalCode"></td>
       </tr>
-      <tr>
+      <tr data-address-split-row hidden>
         <th scope="row">Ort:</th>
-        <td data-address-part="city" th:attr="data-address=${profile.address}"></td>
+        <td data-address-part="city"></td>
       </tr>
     </table>
 

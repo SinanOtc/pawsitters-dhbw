@@ -35,16 +35,32 @@
             class="field-error"></span>
     </p>
 
-    <input type="hidden" th:field="*{address}" data-composed-address>
+    <noscript>
+      <p class="message message-success">
+        JavaScript ist deaktiviert. Bitte die Adresse vollständig im Feld "Adresse" eingeben.
+      </p>
+    </noscript>
 
+    <p data-address-fallback-group>
+      <label for="address">Adresse</label>
+      <input type="text"
+             th:field="*{address}"
+             autocomplete="street-address"
+             maxlength="256"
+             required
+             data-composed-address>
+      <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"
+            class="field-error"></span>
+    </p>
+
+    <div data-address-split hidden>
     <p>
       <label for="street">Straße</label>
       <input type="text"
              id="street"
              autocomplete="address-line1"
              data-address-field="street"
-             maxlength="100"
-             required>
+             maxlength="100">
     </p>
 
     <p>
@@ -53,8 +69,7 @@
              id="streetNumber"
              autocomplete="address-line2"
              data-address-field="streetNumber"
-             maxlength="20"
-             required>
+             maxlength="20">
     </p>
 
     <p>
@@ -65,7 +80,7 @@
              inputmode="numeric"
              data-address-field="postalCode"
              pattern="[0-9]{5}"
-             required>
+             maxlength="5">
     </p>
 
     <p>
@@ -74,11 +89,9 @@
              id="city"
              autocomplete="address-level2"
              data-address-field="city"
-             maxlength="100"
-             required>
-      <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"
-            class="field-error"></span>
+             maxlength="100">
     </p>
+    </div>
 
     <div class="form-actions">
       <button type="submit">Speichern</button>

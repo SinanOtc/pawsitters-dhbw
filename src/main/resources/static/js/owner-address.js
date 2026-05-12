@@ -25,40 +25,88 @@
         return parts;
     }
 
-    function composeAddress(form) {
-        var street = form.querySelector("[data-address-field='street']");
-        var streetNumber = form.querySelector("[data-address-field='streetNumber']");
-        var postalCode = form.querySelector("[data-address-field='postalCode']");
-        var city = form.querySelector("[data-address-field='city']");
+    function getAddressFields(form) {
+        var fields = {
+            street: form.querySelector("[data-address-field='street']"),
+            streetNumber: form.querySelector("[data-address-field='streetNumber']"),
+            postalCode: form.querySelector("[data-address-field='postalCode']"),
+            city: form.querySelector("[data-address-field='city']")
+        };
+
+        return Object.keys(fields).every(function (key) {
+            return fields[key];
+        }) ? fields : null;
+    }
+
+    function hasCompleteAddress(parts) {
+        return parts.street && parts.streetNumber && parts.postalCode && parts.city;
+    }
+
+    function composeAddress(fields) {
+        if (!fields) {
+            return null;
+        }
 
         return [
-            [street.value.trim(), streetNumber.value.trim()].filter(Boolean).join(" "),
-            [postalCode.value.trim(), city.value.trim()].filter(Boolean).join(" ")
+            [fields.street.value.trim(), fields.streetNumber.value.trim()].filter(Boolean).join(" "),
+            [fields.postalCode.value.trim(), fields.city.value.trim()].filter(Boolean).join(" ")
         ].filter(Boolean).join(", ");
     }
 
-    document.querySelectorAll("[data-composed-address]").forEach(function (hiddenAddress) {
-        var form = hiddenAddress.form;
-        var addressParts = splitAddress(hiddenAddress.value);
+    document.querySelectorAll("[data-composed-address]").forEach(function (addressInput) {
+        var form = addressInput.form;
+        var splitGroup = form ? form.querySelector("[data-address-split]") : null;
+        var fallbackGroup = form ? form.querySelector("[data-address-fallback-group]") : null;
+        var fields = form ? getAddressFields(form) : null;
+
+        if (!form || !splitGroup || !fields) {
+            return;
+        }
+
+        var addressParts = splitAddress(addressInput.value);
 
         Object.keys(addressParts).forEach(function (key) {
-            var field = form.querySelector("[data-address-field='" + key + "']");
+            var field = fields[key];
             if (field && !field.value) {
                 field.value = addressParts[key];
             }
         });
 
+        if (fallbackGroup) {
+            fallbackGroup.hidden = true;
+        }
+
+        addressInput.required = false;
+        splitGroup.hidden = false;
+        Object.keys(fields).forEach(function (key) {
+            fields[key].required = true;
+        });
+
         form.addEventListener("submit", function () {
-            hiddenAddress.value = composeAddress(form);
+            var composedAddress = composeAddress(fields);
+            if (composedAddress) {
+                addressInput.value = composedAddress;
+            }
         });
     });
 
-    document.querySelectorAll("[data-address-part]").forEach(function (element) {
-        var addressParts = splitAddress(element.dataset.address);
-        var part = element.dataset.addressPart;
+    document.querySelectorAll("[data-address-fallback-row]").forEach(function (fallbackRow) {
+        var addressParts = splitAddress(fallbackRow.dataset.address);
+        var table = fallbackRow.closest("table");
 
-        if (addressParts[part]) {
-            element.textContent = addressParts[part];
+        if (!table || !hasCompleteAddress(addressParts)) {
+            return;
         }
+
+        fallbackRow.hidden = true;
+        table.querySelectorAll("[data-address-split-row]").forEach(function (row) {
+            var element = row.querySelector("[data-address-part]");
+            var part = element ? element.dataset.addressPart : null;
+
+            if (part && addressParts[part]) {
+                element.textContent = addressParts[part];
+                row.hidden = false;
+            }
+        });
     });
 }());
