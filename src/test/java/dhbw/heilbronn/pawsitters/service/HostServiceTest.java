@@ -106,7 +106,7 @@ class HostServiceTest {
 
         verify(passwordEncoder).encode("geheim123");
         verify(userRepository).save(argThat(u ->
-                u.getPasswordHashed().equals("$2a$10$hashedValue")
+                u.getPasswordHashed().equals("$2a$10$ hashedValue")
                         && !u.getPasswordHashed().equals("geheim123")
         ));
     }
