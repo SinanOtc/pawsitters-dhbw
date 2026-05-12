@@ -65,6 +65,11 @@
         }
 
         var addressParts = splitAddress(addressInput.value);
+        var hasStoredAddress = Boolean(addressInput.value.trim());
+
+        if (hasStoredAddress && !hasCompleteAddress(addressParts)) {
+            return;
+        }
 
         Object.keys(addressParts).forEach(function (key) {
             var field = fields[key];
