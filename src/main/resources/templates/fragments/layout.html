@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <!-- Seitentitel kommt von der Unterseite, sonst Standard-Titel -->
+    <title th:text="${pageTitle} ?: 'Pawsitters'">Pawsitters</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="site-header">
+    <a th:href="@{/}" class="brand">Pawsitters</a>
+
+    <nav class="navbar">
+        <!-- Login-Link nur sichtbar, wenn man nicht eingeloggt ist -->
+        <a sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a>
+
+        <!-- Diese Links nur sichtbar, wenn man eingeloggt ist -->
+        <a sec:authorize="isAuthenticated()" th:href="@{/owner/profile}">Profil</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/owner/care-requests}">Anfragen</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/owner/offers}">Angebote</a>
+
+        <!-- Logout muss POST sein, deshalb als Mini-Formular -->
+        <form sec:authorize="isAuthenticated()"
+              th:action="@{/logout}" method="post" class="logout-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit">Logout</button>
+        </form>
+    </nav>
+</header>
+
+<!-- Hier wird der Inhalt der jeweiligen Seite eingesetzt -->
+<main class="content">
+    <div th:replace="${content}">
+        <p>Platzhalter (wird beim Rendern ersetzt)</p>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <small>&copy; 2026 Pawsitters &middot; DHBW Heilbronn</small>
+</footer>
+
+</body>
+</html>
