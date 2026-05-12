@@ -11,12 +11,14 @@ import dhbw.heilbronn.pawsitters.web.form.RegisterHostForm;
 import dhbw.heilbronn.pawsitters.web.form.UpdateHostForm;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
 /**
  * Logik für Host-Registrierung und Profilverwaltung.
  * Schema wie bei OwnerService.
  * Host ist als USER(role=HOST) + HostProfile umgesetzt.
  */
+@Service
 public class HostService {
 
     private final UserRepository userRepository;
