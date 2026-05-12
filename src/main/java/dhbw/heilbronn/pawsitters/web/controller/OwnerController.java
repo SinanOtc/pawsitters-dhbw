@@ -93,7 +93,9 @@ public class OwnerController {
     }
 
     @PostMapping("/profile/edit")
-    public String editSubmit(@Valid UpdateOwnerForm updateForm, BindingResult bindingResult, @AuthenticationPrincipal UserDetails principal) {
+    public String editSubmit(@Valid @ModelAttribute("updateForm") UpdateOwnerForm updateForm,
+                             BindingResult bindingResult,
+                             @AuthenticationPrincipal UserDetails principal) {
         if(bindingResult.hasErrors()) {
             return EDIT_VIEW;
         }
