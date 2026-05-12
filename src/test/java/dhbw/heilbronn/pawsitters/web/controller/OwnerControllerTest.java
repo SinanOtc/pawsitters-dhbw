@@ -55,7 +55,10 @@ class OwnerControllerTest {
                         .param("password", "geheim123")
                         .param("firstName", "Max")
                         .param("lastName", "Mustermann")
-                        .param("address", "Musterstraße 1"))
+                        .param("street", "Musterstraße")
+                        .param("streetNumber", "1")
+                        .param("postalCode", "74072")
+                        .param("city", "Heilbronn"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login?registered"));
 
@@ -70,7 +73,10 @@ class OwnerControllerTest {
                         .param("password", "geheim123")
                         .param("firstName", "Max")
                         .param("lastName", "Mustermann")
-                        .param("address", "Musterstraße 1"))
+                        .param("street", "Musterstraße")
+                        .param("streetNumber", "1")
+                        .param("postalCode", "74072")
+                        .param("city", "Heilbronn"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("owner/register"))
                 .andExpect(model().attributeHasFieldErrors("registerForm", "email"));
@@ -90,7 +96,10 @@ class OwnerControllerTest {
                         .param("password", "geheim123")
                         .param("firstName", "Max")
                         .param("lastName", "Mustermann")
-                        .param("address", "Musterstraße 1"))
+                        .param("street", "Musterstraße")
+                        .param("streetNumber", "1")
+                        .param("postalCode", "74072")
+                        .param("city", "Heilbronn"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("owner/register"))
                 .andExpect(model().attributeHasFieldErrors("registerForm", "email"));

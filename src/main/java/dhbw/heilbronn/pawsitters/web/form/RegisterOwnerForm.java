@@ -2,6 +2,7 @@ package dhbw.heilbronn.pawsitters.web.form;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 /**
@@ -30,8 +31,23 @@ public record RegisterOwnerForm (
     String lastName,
 
     @NotBlank
-    @Size(max = 256)
-    String address
+    @Size(max = 100)
+    String street,
+
+    @NotBlank
+    @Size(max = 20)
+    String streetNumber,
+
+    @NotBlank
+    @Pattern(regexp = "\\d{5}")
+    String postalCode,
+
+    @NotBlank
+    @Size(max = 100)
+    String city
     ) {
 
+    public String address() {
+        return street + " " + streetNumber + ", " + postalCode + " " + city;
+    }
 }

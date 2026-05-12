@@ -10,7 +10,12 @@
 <section>
     <h1>Mein Besitzerprofil</h1>
 
-    <p>Eingeloggt als <span sec:authentication="name"></span></p>
+    <p class="muted">Eingeloggt als <span sec:authentication="name"></span></p>
+
+    <p class="profile-name">
+        <span th:text="${profile.firstName}">Max</span>
+        <span th:text="${profile.lastName}">Mustermann</span>
+    </p>
 
     <table>
       <tr>
@@ -26,13 +31,27 @@
         <td th:text="${profile.user.email}"></td>
       </tr>
       <tr>
-        <th scope="row">Adresse:</th>
-        <td th:text="${profile.address}"></td>
+        <th scope="row">Straße:</th>
+        <td th:text="${addressParts.street}"></td>
+      </tr>
+      <tr>
+        <th scope="row">Straßennummer:</th>
+        <td th:text="${addressParts.streetNumber}"></td>
+      </tr>
+      <tr>
+        <th scope="row">PLZ:</th>
+        <td th:text="${addressParts.postalCode}"></td>
+      </tr>
+      <tr>
+        <th scope="row">Ort:</th>
+        <td th:text="${addressParts.city}"></td>
       </tr>
     </table>
 
-    <p><a th:href="@{/owner/profile/edit}">Profil bearbeiten</a></p>
-    <p><a th:href="@{/dashboard}">Zurück zum Dashboard</a></p>
+    <div class="form-actions">
+        <a th:href="@{/owner/profile/edit}">Profil bearbeiten</a>
+        <a th:href="@{/dashboard}">Zum Dashboard</a>
+    </div>
 </section>
 </body>
 </html>

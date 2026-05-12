@@ -31,7 +31,10 @@ public class DevUsersConfig {
                         "testPWD123",
                         "DemoMax",
                         "DemoMustermann",
-                        "Demostraße 1, 74072 Heilbronn"
+                        "Demostraße",
+                        "1",
+                        "74072",
+                        "Heilbronn"
                 ));
             }
 
