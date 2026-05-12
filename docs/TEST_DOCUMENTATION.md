@@ -130,3 +130,54 @@ Integrationstest mit `@WebMvcTest` + `@WithMockUser(roles="OWNER")` gegen MockMv
 | `postNew_pastStartDate_returnsFormWithFieldError` | `@Future` auf startDate | Field-Error auf `startDate`, kein Service-Call | Edge Case (Validation) |
 | `postNew_missingPetId_returnsFormWithFieldError` | `@NotNull` auf petId | Field-Error auf `petId`, kein Service-Call | Edge Case (Validation) |
 | `getCareRequests_unauthenticated_redirectsToLogin` | GET ohne Auth | HTTP 302 zu `/login` | Edge Case (Security) |
+
+## HostProfileTest (Domain)
+
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/domain/HostProfileTest.java`
+
+| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
+|---|---|---|---|
+| `constructor_setsAllFields` | Konstruktor setzt alle Felder | Alle Getter liefern korrekte Werte | Normal |
+| `constructor_nullAcceptedSpecies_doesNotThrow` | Defensive Null-Behandlung | Konstruktor wirft nicht, Feld ist leeres EnumSet | Edge Case |
+| `constructor_emptyAcceptedSpecies_doesNotThrow` | Regression-Test für `EnumSet.copyOf`-Bug | Konstruktor wirft nicht | Edge Case (Bug-Fix) |
+| `firstName_blank_failsValidation` | `@NotBlank` auf firstName | Violation auf `firstName` | Edge Case |
+| `acceptedSpecies_empty_failsValidation` | `@Size(min=1)` auf Collection | Violation auf `acceptedSpecies` | Edge Case |
+| `availableFrom_inPast_failsValidation` | `@FutureOrPresent` | Violation auf `availableFrom` | Edge Case |
+| `availableUntil_beforeAvailableFrom_failsAssertTrue` | Cross-Field-Reihenfolge | Violation auf `availabilityRangeValid` | Edge Case (Cross-Field) |
+| `availableUntil_equalsAvailableFrom_failsAssertTrue` | Boundary: gleicher Tag | Violation auf `availabilityRangeValid` | Edge Case (Boundary) |
+| `pricePerWeek_zero_failsValidation` | `@DecimalMin(inclusive=false)` | Violation auf `pricePerWeek` | Edge Case |
+| `pricePerWeek_negative_failsValidation` | Negativer Preis | Violation auf `pricePerWeek` | Edge Case |
+
+## HostServiceTest
+
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/service/HostServiceTest.java`
+
+| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
+|---|---|---|---|
+| `register_validForm_savesUserAndProfile` | Registrierung mit gültigem Form | User und HostProfile werden gespeichert | Normal |
+| `register_passwordIsHashed_neverStoresPlaintext` | Passwort-Hashing | Nur BCrypt-Hash, nie Klartext in der Entity | Edge Case (Security) |
+| `register_userRoleIsHost` | Rollen-Schutzregel | User wird mit Rolle `HOST` gespeichert (nie OWNER) | Edge Case (Privilege-Schutz) |
+| `register_emailAlreadyTaken_throwsException` | Doppelte E-Mail | `EmailAlreadyTakenException`, nichts gespeichert | Edge Case (Duplikat) |
+| `findByUserId_existing_returnsProfile` | Profil zu existierender User-ID | Korrektes HostProfile | Normal |
+| `findByUserId_notFound_throwsHostProfileNotFoundException` | Profil fehlt | `HostProfileNotFoundException` | Edge Case |
+| `update_existingProfile_updatesAllFields` | Update aller änderbaren Felder | Alle Felder aktualisiert | Normal |
+| `update_notFound_throwsHostProfileNotFoundException` | Update für nicht existierendes Profil | `HostProfileNotFoundException` | Edge Case |
+
+## HostControllerTest
+
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/web/controller/HostControllerTest.java`
+
+Integrationstest mit `@WebMvcTest` + `@WithMockUser(roles="HOST")` gegen MockMvc + echte SecurityConfig.
+
+| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
+|---|---|---|---|
+| `getRegister_returnsRegisterView` | GET `/host/register` | View `host/register`, `registerForm` + `allSpecies` im Model | Normal |
+| `postRegister_validForm_redirectsToLoginWithFlag` | POST mit gültigem Form | HTTP 302 zu `/login?registered`, Service aufgerufen | Normal |
+| `postRegister_invalidEmail_returnsRegisterWithFieldError` | POST mit ungültiger E-Mail | Field-Error auf `email`, kein Service-Call | Edge Case (Validation) |
+| `postRegister_endBeforeStart_returnsRegisterWithoutCallingService` | Cross-Field availableUntil < availableFrom | Form-View, kein Service-Call | Edge Case (Cross-Field) |
+| `postRegister_emailAlreadyTaken_showsFieldError` | E-Mail-Duplikat | Field-Error auf `email` | Edge Case (Duplikat) |
+| `getProfile_returnsProfileView` | GET `/host/profile` | View `host/profile`, `profile` im Model | Normal |
+| `getEditForm_returnsEditViewPrefilled` | GET `/host/profile/edit` | View `host/profile-edit`, `updateForm` vorbefüllt, `allSpecies` im Model | Normal |
+| `postEditForm_validForm_redirectsToProfile` | POST mit gültigem Form | HTTP 302 zu `/host/profile`, `update()` aufgerufen | Normal |
+| `postEditForm_invalidForm_returnsEditViewWithoutUpdate` | POST mit leerem firstName | Field-Error auf `firstName`, kein Update | Edge Case (Validation) |
+| `getProfile_unauthenticated_redirectsToLogin` | GET ohne Auth | HTTP 302 zu `/login` | Edge Case (Security) |

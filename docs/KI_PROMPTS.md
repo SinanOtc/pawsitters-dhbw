@@ -8,6 +8,8 @@
   - Erstelle eine simple login.html, home.html und dashboard.html
   - Vereinzelt für Code Erklärungen bzw. Hinweise genutzt
 
+---
+
 ## Domain-Entities (User, UserRole, OwnerProfile) + Validation-Tests
 - **Datum:** 26.04 && 03.05.2026
 - **Tool:** Claude Opus 4.7
@@ -18,6 +20,8 @@
     RFC 5321 → 254, BCrypt-Hash → 60, Adressen → 255)
   - Empfehlungen für Unit-Tests mit `jakarta.validation.Validator`
 - **Verifikation:** Alle Tests lokal mit `./mvnw test` ausgeführt und auf grün geprüft. 
+
+---
 
 ## PetOwner-Registrierung (Repository, Service, Controller, Templates, Tests)
 - **Datum:** 04.05.2026
@@ -35,6 +39,8 @@
   - Testdokumentation von KI generiert
 - **Verifikation:** Code wurde aktiv mitgestaltet. Verständnis durch Nachfragen und Erklärungen sichergestellt, alle Tests lokal mit `./mvnw test` werden akzeptiert.
 - **!! Dieser Abschnitt wurde mit KI erstellt!!**
+
+---
 
   ## Pet-Registrierung (Entity, Repository, Service, Controller, Tests)
   - **Datum:** 06.05 && 10.05.2026
@@ -60,6 +66,8 @@
     Code-Reviews,
     Verständnisprüfung durch Nachfragen.
 
+---
+
   ## CareRequest (Entity, Repository, Service, Controller, Tests)
   - **Datum:** 11.05.2026
   - **Tool:** Claude Opus 4.7
@@ -79,3 +87,36 @@
       Enterprise-Javadoc, Try-Catch in `@Transactional` → bewusst nicht übernommen)
   - **Verifikation:** Alle Tests lokal mit `./mvnw test` grün, manuelle Code-Reviews,
     Verständnisprüfung durch Nachfragen.
+
+---
+
+  ## Host-Profil (Entity, Repository, Service, Controller, Forms, Tests)
+  - **Datum:** 12.05.2026
+  - **Tool:** Claude Opus 4.7
+  - **Prompts:**
+    - Beratung: `HostProfile`-Entity mit `Set<PetSpecies>` als
+      `@ElementCollection`,
+      `@AssertTrue isAvailabilityRangeValid()` als Cross-Field-Check
+      für Verfügbarkeitszeitraum,
+      `@DecimalMin(inclusive=false)` für `pricePerWeek > 0`
+    - `RegisterHostForm` (mit E-Mail/Passwort) vs. `UpdateHostForm`
+      (ohne) als Java Records
+    - `HostService` analog `OwnerService` — `existsByEmail` über alle
+      Rollen,
+      Passwort-Hashing vor DB-Schreibung, Schutzregel `UserRole.HOST`
+      hardcoded
+    - SecurityConfig-Erweiterung: `/host/register` zu `permitAll`,
+      `/host/**` mit `ROLE_HOST`
+    - `@WebMvcTest` Controller-Tests mit Multi-Select-Param-Binding für
+      `acceptedSpecies`
+    - Kritische Diskussion von IntelliJ-AI-Suggestions
+      (Inline-Access-Control,
+      Global-Exception-Handler, „E-Mail-Hint an Angreifer") — bewusst
+      nicht übernommen,
+      weil Registrierungs- vs. Login-Kontext unterschieden werden
+      müssen.
+    - Dieser Abschnitt
+  - **Verifikation:** Alle Tests lokal mit `./mvnw test` grün (28
+    Host-Tests), manuelle Code-Reviews, Verständnisprüfung durch Nachfragen.
+
+  ---
