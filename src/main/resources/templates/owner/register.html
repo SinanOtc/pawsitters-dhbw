@@ -67,8 +67,8 @@
                    maxlength="256"
                    required
                    data-composed-address>
-            <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="field-error"></span>
         </p>
+        <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="field-error"></span>
 
         <div data-address-split hidden>
         <p>

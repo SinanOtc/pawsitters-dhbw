@@ -15,10 +15,11 @@
         var streetSection = sections[0] ? sections[0].trim() : "";
         var citySection = sections[1] ? sections.slice(1).join(",").trim() : "";
         var streetMatch = streetSection.match(/^(.*)\s+(\S+)$/);
+        var hasStreetNumber = streetMatch && /\d/.test(streetMatch[2]);
         var cityMatch = citySection.match(/^(\d{5})\s+(.+)$/);
 
-        parts.street = streetMatch ? streetMatch[1] : streetSection;
-        parts.streetNumber = streetMatch ? streetMatch[2] : "";
+        parts.street = hasStreetNumber ? streetMatch[1] : streetSection;
+        parts.streetNumber = hasStreetNumber ? streetMatch[2] : "";
         parts.postalCode = cityMatch ? cityMatch[1] : "";
         parts.city = cityMatch ? cityMatch[2] : citySection;
 
