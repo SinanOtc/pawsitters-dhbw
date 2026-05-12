@@ -90,9 +90,7 @@
 
         form.addEventListener("submit", function () {
             var composedAddress = composeAddress(fields);
-            if (composedAddress) {
-                addressInput.value = composedAddress;
-            }
+            addressInput.value = composedAddress || "";
         });
     });
 
