@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-    <meta charset="UTF-8">
     <title>Pawsitters</title>
 </head>
 <body>
+<section>
     <h1>Pawsitters</h1>
-    <p>Tierbetreuung bla bla bla</p>
-    <a href="/login" th:href="@{/login}">Zum Login</a>
-    <a href="/owner/register" th:ref="@{/owner/register}">Als PetOwner registrieren</a>
+    <p>Tierbetreuung einfach organisieren.</p>
+    <p>
+        <a th:href="@{/login}">Zum Login</a>
+        <a th:href="@{/owner/register}">Als PetOwner registrieren</a>
+    </p>
+</section>
 </body>
 </html>
