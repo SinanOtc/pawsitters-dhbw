@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-  <meta charset="UTF-8">
-  <title>Betreuungsanfragen — Liste (TODO Frontend)</title>
+  <title>Betreuungsanfragen</title>
 </head>
 <body>
-<!-- TODO Frontend: Liste der CareRequests rendern (pet, startDate,
-endDate, status), Add-Button -->
-<h1>Betreuungsanfragen</h1>
+<section>
+  <h1>Betreuungsanfragen</h1>
+  <p><a th:href="@{/owner/care-requests/new}">Neue Anfrage erstellen</a></p>
+</section>
 </body>
+</html>

@@ -115,6 +115,12 @@ label {
     color: #1f7a3f;
 }
 
+.field-error {
+    color: #a61b1b;
+    display: block;
+    margin-top: 0.25rem;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;

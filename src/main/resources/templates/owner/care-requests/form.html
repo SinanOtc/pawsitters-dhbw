@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-  <meta charset="UTF-8">
-  <title>Betreuungsanfrage — Anlegen (TODO Frontend)</title>
+  <title>Neue Betreuungsanfrage</title>
 </head>
 <body>
-<!-- TODO Frontend: Form mit Pet-Dropdown (Model-Attribute "pets"), Datum-Pickers für startDate/endDate. Model-Attribute: careRequestForm (record mit petId, startDate, endDate), pets (List<Pet>). Action: POST /owner/care-requests/new -->
-<h1>Neue Betreuungsanfrage</h1>
+<section>
+  <h1>Neue Betreuungsanfrage</h1>
+  <p><a th:href="@{/owner/care-requests}">Zurück zu den Anfragen</a></p>
+</section>
 </body>
 </html>
