@@ -54,7 +54,7 @@ public record RegisterHostForm (
      * Constraint: availableFrom muss VOR availableUntil liegen.
      * Gleicher Aufbau wie bei den anderen Timeconstraints.
      */
-    @AssertTrue(message = "Verfügbarkeits-Startdatum muss vor dem Enddateum liegen")
+    @AssertTrue(message = "Verfügbarkeits-Startdatum muss vor dem Enddatum liegen")
     public boolean isAvailabilityRangeValid() {
         if(availableFrom == null || availableUntil == null){
             return true;
