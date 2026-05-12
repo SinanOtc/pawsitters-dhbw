@@ -1,23 +1,18 @@
 <!DOCTYPE html>
 <html lang="de"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-    <meta charset="UTF-8">
     <title>Dashboard</title>
 </head>
 <body>
-      <h1>Dashboard</h1>
+<section>
+    <h1>Dashboard</h1>
 
-      <!-- Zeigt Username des Users -->
-      <p>Eingeloggt als <span sec:authentication="name"></span> </p>
+    <p>Eingeloggt als <span sec:authentication="name"></span></p>
 
-      <p><a th:href="@{/owner/profile}">Mein Profil</a></p>
-
-      <!-- Logout bei Spring muss POST sein, deshlab Formular anstatt nur Link -->
-      <form th:action="@{/logout}" method="post">
-          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-          <button type="submit">Logout</button>
-      </form>
+    <p><a th:href="@{/owner/profile}">Mein Profil</a></p>
+</section>
 </body>
 </html>

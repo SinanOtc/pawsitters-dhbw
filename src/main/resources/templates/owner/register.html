@@ -1,60 +1,51 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-    <meta charset="UTF-8">
     <title>Registrieren</title>
 </head>
 <body>
+<section>
     <h1>PetOwner Registrierung</h1>
 
-    <!-- th:object => bindet das Formular an registerForm Model-Attribut -->
-    <!-- th:action => wird per Thymeleaf mit Context Path versehen, post -->
-
     <form th:action="@{/owner/register}" th:object="${registerForm}" method="post">
-
-        <!-- CSRF Token, von Spring Security verlangt -->
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
         <p>
-            <label>E-Mail:
-                <input type="email" th:field="*{email}" required>
-            </label>
-            <!-- Fehlermeldung aus BindingResult zu "email" -->
-            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color:red"></span>
+            <label for="email">E-Mail</label>
+            <input type="email" th:field="*{email}" required>
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="field-error"></span>
         </p>
 
         <p>
-            <label>Passwort:
-                <input type="password" th:field="*{password}" required>
-            </label>
-            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color:red;"></span>
+            <label for="password">Passwort</label>
+            <input type="password" th:field="*{password}" required>
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="field-error"></span>
         </p>
 
         <p>
-            <label>Vorname:
-                <input type="text" th:field="*{firstName}" required>
-            </label>
-            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" style="color:red"></span>
+            <label for="firstName">Vorname</label>
+            <input type="text" th:field="*{firstName}" required>
+            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="field-error"></span>
         </p>
 
         <p>
-            <label>Nachname:
-                <input type="text" th:field="*{lastName}" required>
-            </label>
-            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color:red"></span>
+            <label for="lastName">Nachname</label>
+            <input type="text" th:field="*{lastName}" required>
+            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="field-error"></span>
         </p>
 
         <p>
-            <label>Adresse:
-                <input type="text" th:field="*{address}" required>
-            </label>
-            <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" style="color:red;"></span>
+            <label for="address">Adresse</label>
+            <input type="text" th:field="*{address}" required>
+            <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="field-error"></span>
         </p>
 
         <button type="submit">Registrieren</button>
     </form>
 
     <p><a th:href="@{/login}">Bereits registriert? Zum Login</a></p>
-
+</section>
 </body>
 </html>

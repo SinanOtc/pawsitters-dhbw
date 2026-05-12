@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="de"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-    <meta charset="UTF-8">
     <title>Mein Profil</title>
 </head>
 <body>
+<section>
     <h1>Mein Besitzerprofil</h1>
 
     <p>Eingeloggt als <span sec:authentication="name"></span></p>
 
-    <!-- profile = OwnerProfile aus dem Controller -->
     <table>
       <tr>
         <th scope="row">Vorname:</th>
@@ -33,6 +33,6 @@
 
     <p><a th:href="@{/owner/profile/edit}">Profil bearbeiten</a></p>
     <p><a th:href="@{/dashboard}">Zurück zum Dashboard</a></p>
-
+</section>
 </body>
 </html>
