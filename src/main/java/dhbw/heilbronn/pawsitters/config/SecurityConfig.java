@@ -23,7 +23,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/login", "/owner/register", "/host/register", "/css/**","/js/**").permitAll()
                         // alle Ownerroutes nur für eingeloggte PetOwner
                         .requestMatchers("/owner/**").hasRole("OWNER")
-                        .requestMatchers("host/**").hasRole("HOST")
+                        .requestMatchers("/host/**").hasRole("HOST")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
