@@ -75,7 +75,7 @@ public class HostProfile {
     @Column(nullable = false, precision = 8, scale = 2)
     private BigDecimal pricePerWeek;
 
-    // 8 Pflichtfelder ohne sinnvolle Subgruppierungen
+    // 8 Pflichtfelder. Keine sinnvolle Subgruppierungen möglich
     @SuppressWarnings("java:S107")
     public HostProfile(User user, String firstName, String lastName, String address, Set<PetSpecies> acceptedSpecies, LocalDate availableFrom, LocalDate availableUntil, BigDecimal pricePerWeek) {
         this.user = user;
