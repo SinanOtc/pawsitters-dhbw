@@ -43,7 +43,7 @@ public class OwnerController {
     public String registerForm(Model model) {
         // leeres Form-Objekt damit Thymeleaf Felder Mappen kann
         model.addAttribute("registerForm",
-                new RegisterOwnerForm("","","","","","","",""));
+                new RegisterOwnerForm("","","","",""));
         return REGISTER_VIEW;
     }
 
@@ -71,7 +71,6 @@ public class OwnerController {
     public String profile(@AuthenticationPrincipal UserDetails principal, Model model) {
         OwnerProfile profile = loadProfileByEmail(principal.getUsername());
         model.addAttribute("profile", profile);
-        model.addAttribute("addressParts", splitAddress(profile.getAddress()));
         return "owner/profile";
     }
 
@@ -79,23 +78,17 @@ public class OwnerController {
     @GetMapping("/profile/edit")
     public String editForm(@AuthenticationPrincipal UserDetails principal, Model model) {
         OwnerProfile profile = loadProfileByEmail(principal.getUsername());
-        AddressParts addressParts = splitAddress(profile.getAddress());
         // Form mit Werten befüllen
         model.addAttribute("updateForm", new UpdateOwnerForm(
                 profile.getFirstName(),
                 profile.getLastName(),
-                addressParts.street(),
-                addressParts.streetNumber(),
-                addressParts.postalCode(),
-                addressParts.city()
+                profile.getAddress()
         ));
         return EDIT_VIEW;
     }
 
     @PostMapping("/profile/edit")
-    public String editSubmit(@Valid @ModelAttribute("updateForm") UpdateOwnerForm updateForm,
-                             BindingResult bindingResult,
-                             @AuthenticationPrincipal UserDetails principal) {
+    public String editSubmit(@Valid UpdateOwnerForm updateForm, BindingResult bindingResult, @AuthenticationPrincipal UserDetails principal) {
         if(bindingResult.hasErrors()) {
             return EDIT_VIEW;
         }
@@ -114,29 +107,6 @@ public class OwnerController {
                 .orElseThrow(() -> new IllegalStateException("Eingeloggter User nicht gefunden"))
                 .getId();
         return ownerService.findByUserId(userId);
-    }
-
-    private AddressParts splitAddress(String address) {
-        if (address == null || address.isBlank()) {
-            return new AddressParts("", "", "", "");
-        }
-
-        String[] addressSections = address.split(",", 2);
-        String streetSection = addressSections[0].trim();
-        String citySection = addressSections.length > 1 ? addressSections[1].trim() : "";
-
-        int lastStreetSpace = streetSection.lastIndexOf(' ');
-        String street = lastStreetSpace > 0 ? streetSection.substring(0, lastStreetSpace).trim() : streetSection;
-        String streetNumber = lastStreetSpace > 0 ? streetSection.substring(lastStreetSpace + 1).trim() : "";
-
-        int firstCitySpace = citySection.indexOf(' ');
-        String postalCode = firstCitySpace > 0 ? citySection.substring(0, firstCitySpace).trim() : "";
-        String city = firstCitySpace > 0 ? citySection.substring(firstCitySpace + 1).trim() : citySection;
-
-        return new AddressParts(street, streetNumber, postalCode, city);
-    }
-
-    public record AddressParts(String street, String streetNumber, String postalCode, String city) {
     }
 
 }

@@ -32,19 +32,19 @@
       </tr>
       <tr>
         <th scope="row">Straße:</th>
-        <td th:text="${addressParts.street}"></td>
+        <td data-address-part="street" th:attr="data-address=${profile.address}" th:text="${profile.address}"></td>
       </tr>
       <tr>
         <th scope="row">Straßennummer:</th>
-        <td th:text="${addressParts.streetNumber}"></td>
+        <td data-address-part="streetNumber" th:attr="data-address=${profile.address}"></td>
       </tr>
       <tr>
         <th scope="row">PLZ:</th>
-        <td th:text="${addressParts.postalCode}"></td>
+        <td data-address-part="postalCode" th:attr="data-address=${profile.address}"></td>
       </tr>
       <tr>
         <th scope="row">Ort:</th>
-        <td th:text="${addressParts.city}"></td>
+        <td data-address-part="city" th:attr="data-address=${profile.address}"></td>
       </tr>
     </table>
 
@@ -52,6 +52,7 @@
         <a th:href="@{/owner/profile/edit}">Profil bearbeiten</a>
         <a th:href="@{/dashboard}">Zum Dashboard</a>
     </div>
+    <script th:src="@{/js/owner-address.js}"></script>
 </section>
 </body>
 </html>

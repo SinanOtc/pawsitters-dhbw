@@ -54,10 +54,7 @@ class OwnerServiceTest {
                 "geheim123",
                 "Max",
                 "Mustermann",
-                "Musterstraße",
-                "1",
-                "74072",
-                "Heilbronn"
+                "Musterstraße 1, 74072 Heilbronn"
         );
     }
 
@@ -150,11 +147,11 @@ class OwnerServiceTest {
         OwnerProfile profile = new OwnerProfile(user, "Alt-Vor", "Alt-Nach", "Alt-Str. 1");
         when(ownerProfileRepository.findByUserId(1L)).thenReturn(Optional.of(profile));
 
-        UpdateOwnerForm form = new UpdateOwnerForm("Neu-Vor", "Neu-Nach", "Neu-Str.", "2", "74072", "Heilbronn");
+        UpdateOwnerForm form = new UpdateOwnerForm("Neu-Vor", "Neu-Nach", "Neu-Str. 2");
         OwnerProfile result = ownerService.update(1L, form);
 
         assertThat(result.getFirstName()).isEqualTo("Neu-Vor");
         assertThat(result.getLastName()).isEqualTo("Neu-Nach");
-        assertThat(result.getAddress()).isEqualTo("Neu-Str. 2, 74072 Heilbronn");
+        assertThat(result.getAddress()).isEqualTo("Neu-Str. 2");
     }
 }

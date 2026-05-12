@@ -53,45 +53,48 @@
             <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="field-error"></span>
         </p>
 
+        <input type="hidden" th:field="*{address}" data-composed-address>
+
         <p>
             <label for="street">Straße</label>
             <input type="text"
-                   th:field="*{street}"
+                   id="street"
                    autocomplete="address-line1"
+                   data-address-field="street"
                    maxlength="100"
                    required>
-            <span th:if="${#fields.hasErrors('street')}" th:errors="*{street}" class="field-error"></span>
         </p>
 
         <p>
             <label for="streetNumber">Straßennummer</label>
             <input type="text"
-                   th:field="*{streetNumber}"
+                   id="streetNumber"
                    autocomplete="address-line2"
+                   data-address-field="streetNumber"
                    maxlength="20"
                    required>
-            <span th:if="${#fields.hasErrors('streetNumber')}" th:errors="*{streetNumber}" class="field-error"></span>
         </p>
 
         <p>
             <label for="postalCode">PLZ</label>
             <input type="text"
-                   th:field="*{postalCode}"
+                   id="postalCode"
                    autocomplete="postal-code"
                    inputmode="numeric"
+                   data-address-field="postalCode"
                    pattern="[0-9]{5}"
                    required>
-            <span th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}" class="field-error"></span>
         </p>
 
         <p>
             <label for="city">Ort</label>
             <input type="text"
-                   th:field="*{city}"
+                   id="city"
                    autocomplete="address-level2"
+                   data-address-field="city"
                    maxlength="100"
                    required>
-            <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" class="field-error"></span>
+            <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="field-error"></span>
         </p>
 
         <div class="form-actions">
@@ -99,6 +102,7 @@
             <a th:href="@{/login}">Zum Login</a>
         </div>
     </form>
+    <script th:src="@{/js/owner-address.js}"></script>
 </section>
 </body>
 </html>
