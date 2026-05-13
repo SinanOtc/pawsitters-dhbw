@@ -120,3 +120,27 @@
     Host-Tests), manuelle Code-Reviews, Verständnisprüfung durch Nachfragen.
 
   ---
+
+## Offer / Matching-Logik (Entity, Repositories, Service, Controller, Tests)
+- **Datum:** 13.05.2026
+- **Tool:** Claude Opus 4.7
+- **Prompts:**
+    - Anforderungsanalyse Issue #7: Was bedeutet "passt zu Host"? Vier Filter
+      abgeleitet (Status OPEN, Species ∈ acceptedSpecies, Datum in Verfügbarkeit,
+      kein eigenes Offer schon vorhanden)
+    - Architektur-Entscheidung: Ein `OfferController` für Host- und Owner-Routes
+      (bewusster Pattern-Bruch, weil Offer per Definition zwei Parteien verbindet)
+    - JPQL-`@Query` mit `NOT EXISTS`-Subquery für die Matching-Logik
+      (Alternative Java-Filter besprochen, SQL-Variante gewählt für Skalierbarkeit
+      und um genau diese Stelle gegen Bugs testbar zu machen)
+    - Neuer Test-Typ `@DataJpaTest` eingeführt um die JPQL gegen H2 zu verifizieren
+      — Mockito allein kann SQL-Bugs nicht fangen
+    - Re-Verify-Pattern in `OfferService.createOffer`: Eligibility-Check geht
+      über `findMatchingForHost(...).contains(cr)` statt Bedingungen einzeln zu
+      prüfen → Single Source of Truth, Query-Änderungen propagieren automatisch
+    - `OfferNotEligibleException` als URL-Manipulation-Guard
+    - `@WebMvcTest` mit gemischten Rollen (HOST + OWNER) — per-Test
+      `@WithMockUser` statt Klassen-Annotation, beide UserRepository-Mocks in
+      `@BeforeEach`
+- **Verifikation:** Alle Tests lokal mit `./mvnw test` grün (25 neue Offer-Tests),
+  manuelle Code-Reviews, Verständnisprüfung durch Nachfragen.
