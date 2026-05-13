@@ -144,3 +144,37 @@
       `@BeforeEach`
 - **Verifikation:** Alle Tests lokal mit `./mvnw test` grün (25 neue Offer-Tests),
   manuelle Code-Reviews, Verständnisprüfung durch Nachfragen.
+
+## Offer-Accept + Auto-Reject-Kaskade (#8 + #9 + #10 Teil
+1)
+- **Datum:** 13.05.2026
+- **Tool:** Claude Opus 4.7
+- **Prompts:**
+    - Scope-Klärung: #8 + #9 + #10 Teil 1 (OPEN→MATCHED)
+      zusammen in einem PR,
+      #10 Teil 2 (MATCHED→CLOSED via Scheduled-Job) als
+      Folge-PR getrennt
+    - Service-Methode `OfferService.accept(offerId,
+  ownerUserId)` als atomare Operation:
+      Offer→ACCEPTED, CareRequest→MATCHED, Kaskade aller
+      anderen PENDING-Offers
+      derselben CareRequest auf REJECTED
+    - Security: gleiche `OfferNotFoundException` für
+      nicht-existent UND fremd-besessen
+      (Owner-Mismatch) — kein Info-Leak welche Offers
+      existieren
+    - State-Guards: `OfferNotPendingException` für
+      nicht-PENDING Offers UND
+      nicht-OPEN CareRequests (Race-Condition-Schutz)
+    - Kaskaden-Pattern:
+      `findByCareRequestIdAndStatus(...PENDING)` laden, Filter
+      `!o.getId().equals(offerId)` damit das anzunehmende
+      Offer nicht
+      selbst-rejected wird
+    - Owner-Scoped Test-Setup mit Mockito + zwei zusätzliche
+      Host-Profile für die
+      Kaskaden-Verifikation (3 Offers, 1 ACCEPTED + 2
+      REJECTED)
+- **Verifikation:** Alle 124 Tests grün, manuelle
+  Code-Reviews,
+  Verständnisprüfung durch Nachfragen.
