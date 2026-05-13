@@ -210,30 +210,36 @@ Integrationstest mit `@DataJpaTest` gegen In-Memory-H2 — verifiziert die JPQL-
 ## OfferServiceTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/service/OfferServiceTest.java`
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-  |---|---|---|---|
-| `findMatchingRequests_returnsResultsFromRepo` | Pass-Through zur Repo-Matching-Query | Repository-Ergebnis wird durchgereicht | Normal |
-| `findOffersByHost_returnsHostsOffers` | Eigene Offers eines Hosts | Repository-Ergebnis wird durchgereicht | Normal |
-| `findOffersByCareRequest_ownedByUser_returnsOffers` | Owner sieht Offers für eigene CareRequest | Liste der Offers | Normal |
-| `findOffersByCareRequest_notOwnedByUser_throwsCareRequestNotFound` | Fremde CareRequest per URL-Manipulation | `CareRequestNotFoundException`, kein Offer-Lookup | Edge Case (Security)
+| Test | Was wird getestet                                                                              | Erwartetes Ergebnis                                                  | Typ                  |
+  |---|------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|----------------------|
+| `findMatchingRequests_returnsResultsFromRepo` | Pass-Through zur Repo-Matching-Query                                                           | Repository-Ergebnis wird durchgereicht                               | Normal               |
+| `findOffersByHost_returnsHostsOffers` | Eigene Offers eines Hosts                                                                      | Repository-Ergebnis wird durchgereicht                               | Normal               |
+| `findOffersByCareRequest_ownedByUser_returnsOffers` | Owner sieht Offers für eigene CareRequest                                                      | Liste der Offers                                                     | Normal               |
+| `findOffersByCareRequest_notOwnedByUser_throwsCareRequestNotFound` | Fremde CareRequest per URL-Manipulation                                                        | `CareRequestNotFoundException`, kein Offer-Lookup                    | Edge Case (Security) 
 |
-| `createOffer_matchingRequest_savesOfferWithPendingStatus` | Happy Path | Offer mit korrekten Feldern gespeichert | Normal |
-| `createOffer_careRequestNotFound_throwsException` | CareRequest-ID existiert nicht | `CareRequestNotFoundException` | Edge Case |
-| `createOffer_notMatching_throwsOfferNotEligible` | CareRequest existiert, passt aber nicht (URL-Manipulation) | `OfferNotEligibleException`, kein Save | Edge Case (Security) |
+| `createOffer_matchingRequest_savesOfferWithPendingStatus` | Happy Path                                                                                     | Offer mit korrekten Feldern gespeichert                              | Normal               |
+| `createOffer_careRequestNotFound_throwsException` | CareRequest-ID existiert nicht                                                                 | `CareRequestNotFoundException`                                       | Edge Case            |
+| `createOffer_notMatching_throwsOfferNotEligible` | CareRequest existiert, passt aber nicht (URL-Manipulation)                                     | `OfferNotEligibleException`, kein Save                               | Edge Case (Security) |
+| `accept_pending_setsOfferAcceptedAndRequestMatched` | Happy Path: Offer PENDING→ACCEPTED, CareRequest OPEN→MATCHED                                   | Status-Wechsel beider Entities korrekt                               | Normal               |
+| `accept_cascadeRejectsOtherPendingOffers` | #9 Kaskade: 3 PENDING-Offers, eins wird angenommen                                             | Akzeptiertes Offer ACCEPTED, andere zwei REJECTED, CareRequest MATCHED | Normal |
+| `accept_offerNotFound_throwsOfferNotFound` | Offer-ID existiert nicht                                                                       | `OfferNotFoundException`, kein Status-Wechsel                        | Edge Case                                                    |
+| `accept_offerNotOwnedByUser_throwsOfferNotFound` | Owner                                                        versucht fremdes Offer anzunehmen | `OfferNotFoundException` (gleiche Exception, kein Info-Leak)         | Edge Case (Security) |
+| `accept_offerAlreadyAccepted_throwsOfferNotPending` | Offer ist schon ACCEPTED/REJECTED                                                              |`OfferNotPendingException` | Edge Case                                                                                      |
+| `accept_careRequestAlreadyMatched_throwsOfferNotPending`| CareRequest schon MATCHED (Race-Condition) |`OfferNotPendingException` | Edge Case                                                                                      |
 
 ## OfferControllerTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/web/controller/OfferControllerTest.java`
 
 Integrationstest mit `@WebMvcTest` — gemischte Rollen (HOST und OWNER), pro Test per `@WithMockUser` gesetzt.
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-  |---|---|---|---|
-| `getBrowseMatchingRequests_returnsListView` | GET `/host/care-requests` (Host) | View `host/care-requests/list`, `matchingRequests` im Model | Normal |
-| `getOfferForm_returnsFormViewWithCareRequestId` | GET `/host/care-requests/{id}/offer` | View, `offerForm` + `careRequestId` im Model | Normal |
-| `postCreateOffer_validForm_redirectsToHostOffers` | POST mit gültigem Form | HTTP 302 → `/host/offers`, Service aufgerufen | Normal |
-| `postCreateOffer_invalidPrice_returnsFormViewWithoutService` | weeklyPrice = 0 | Field-Error auf `weeklyPrice`, kein Service-Call | Edge Case (Validation) |
-| `getHostOffers_returnsHostOffersView` | GET `/host/offers` | View `host/offers/list`, `offers` im Model | Normal |
-| `getOwnerOffers_returnsOwnerOffersView` | GET `/owner/care-requests/{id}/offers` (Owner) | View `owner/care-requests/offers`, `offers` + `careRequestId` im Model | Normal |
-| `getBrowseMatchingRequests_unauthenticated_redirectsToLogin` | GET ohne Auth | HTTP 302 zu `/login` | Edge Case (Security) |
-
+| Test | Was wird getestet                              | Erwartetes Ergebnis                                                                | Typ |
+  |---|------------------------------------------------|------------------------------------------------------------------------------------|---|
+| `getBrowseMatchingRequests_returnsListView` | GET `/host/care-requests` (Host)               | View `host/care-requests/list`, `matchingRequests` im Model                        | Normal |
+| `getOfferForm_returnsFormViewWithCareRequestId` | GET `/host/care-requests/{id}/offer`           | View, `offerForm` + `careRequestId` im Model                                       | Normal |
+| `postCreateOffer_validForm_redirectsToHostOffers` | POST mit gültigem Form                         | HTTP 302 → `/host/offers`, Service aufgerufen                                      | Normal |
+| `postCreateOffer_invalidPrice_returnsFormViewWithoutService` | weeklyPrice = 0                                | Field-Error auf `weeklyPrice`, kein Service-Call                                   | Edge Case (Validation) |
+| `getHostOffers_returnsHostOffersView` | GET `/host/offers`                             | View `host/offers/list`, `offers` im Model                                         | Normal |
+| `getOwnerOffers_returnsOwnerOffersView` | GET `/owner/care-requests/{id}/offers` (Owner) | View `owner/care-requests/offers`, `offers` + `careRequestId` im Model             | Normal |
+| `getBrowseMatchingRequests_unauthenticated_redirectsToLogin` | GET ohne Auth                                  | HTTP 302 zu `/login`                                                               | Edge Case (Security) |
+| `postAcceptOffer_validOffer_redirectsToCareRequests` | POST `/owner/offers/{id}/accept` als Owner     | HTTP 302 → `/owner/care-requests`, Service mit korrektem offerId+userId aufgerufen | Normal |
   ---
