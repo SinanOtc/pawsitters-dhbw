@@ -181,3 +181,59 @@ Integrationstest mit `@WebMvcTest` + `@WithMockUser(roles="HOST")` gegen MockMvc
 | `postEditForm_validForm_redirectsToProfile` | POST mit gültigem Form | HTTP 302 zu `/host/profile`, `update()` aufgerufen | Normal |
 | `postEditForm_invalidForm_returnsEditViewWithoutUpdate` | POST mit leerem firstName | Field-Error auf `firstName`, kein Update | Edge Case (Validation) |
 | `getProfile_unauthenticated_redirectsToLogin` | GET ohne Auth | HTTP 302 zu `/login` | Edge Case (Security) |
+
+## OfferTest (Domain)
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/domain/OfferTest.java`
+
+| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
+  |---|---|---|---|
+| `constructor_setsAllFields` | Konstruktor setzt host, careRequest, weeklyPrice | Alle Getter liefern korrekte Werte | Normal |
+| `constructor_setsStatusToPending` | Default-Status nach Konstruktor | Status ist `PENDING` (Workflow-Schutz, nie direkt ACCEPTED/REJECTED) | Normal |
+| `host_null_failsValidation` | `@NotNull` auf host | Violation auf `host` | Edge Case |
+| `careRequest_null_failsValidation` | `@NotNull` auf careRequest | Violation auf `careRequest` | Edge Case |
+| `weeklyPrice_zero_failsValidation` | `@DecimalMin(inclusive=false)` | Violation auf `weeklyPrice` | Edge Case |
+| `weeklyPrice_negative_failsValidation` | Negativer Preis | Violation auf `weeklyPrice` | Edge Case |
+
+## CareRequestRepositoryTest (Integration, @DataJpaTest)
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/repository/CareRequestRepositoryTest.java`
+
+Integrationstest mit `@DataJpaTest` gegen In-Memory-H2 — verifiziert die JPQL-Matching-Query gegen echte SQL-Ausführung.
+
+| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
+  |---|---|---|---|
+| `findMatchingForHost_speciesAndDateMatch_returnsRequest` | Happy Path — alle 4 Filter passen | CareRequest erscheint im Ergebnis | Normal |
+| `findMatchingForHost_speciesMismatch_returnsEmpty` | Filter: Species-Check | Pet-Species nicht in acceptedSpecies → ausgefiltert | Edge Case (Filter-Pfad) |
+| `findMatchingForHost_dateOutsideAvailability_returnsEmpty` | Filter: Datum-Range | CareRequest-Range außerhalb Host-Verfügbarkeit → ausgefiltert | Edge Case (Filter-Pfad) |
+| `findMatchingForHost_hostAlreadyOffered_excludesRequest` | Filter: NOT EXISTS-Subquery | Host hat schon Offer → ausgefiltert | Edge Case (Filter-Pfad) |
+| `findMatchingForHost_closedRequest_returnsEmpty` | Filter: Status OPEN | MATCHED/CLOSED-Requests werden ausgefiltert | Edge Case (Filter-Pfad) |
+
+## OfferServiceTest
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/service/OfferServiceTest.java`
+
+| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
+  |---|---|---|---|
+| `findMatchingRequests_returnsResultsFromRepo` | Pass-Through zur Repo-Matching-Query | Repository-Ergebnis wird durchgereicht | Normal |
+| `findOffersByHost_returnsHostsOffers` | Eigene Offers eines Hosts | Repository-Ergebnis wird durchgereicht | Normal |
+| `findOffersByCareRequest_ownedByUser_returnsOffers` | Owner sieht Offers für eigene CareRequest | Liste der Offers | Normal |
+| `findOffersByCareRequest_notOwnedByUser_throwsCareRequestNotFound` | Fremde CareRequest per URL-Manipulation | `CareRequestNotFoundException`, kein Offer-Lookup | Edge Case (Security)
+|
+| `createOffer_matchingRequest_savesOfferWithPendingStatus` | Happy Path | Offer mit korrekten Feldern gespeichert | Normal |
+| `createOffer_careRequestNotFound_throwsException` | CareRequest-ID existiert nicht | `CareRequestNotFoundException` | Edge Case |
+| `createOffer_notMatching_throwsOfferNotEligible` | CareRequest existiert, passt aber nicht (URL-Manipulation) | `OfferNotEligibleException`, kein Save | Edge Case (Security) |
+
+## OfferControllerTest
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/web/controller/OfferControllerTest.java`
+
+Integrationstest mit `@WebMvcTest` — gemischte Rollen (HOST und OWNER), pro Test per `@WithMockUser` gesetzt.
+
+| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
+  |---|---|---|---|
+| `getBrowseMatchingRequests_returnsListView` | GET `/host/care-requests` (Host) | View `host/care-requests/list`, `matchingRequests` im Model | Normal |
+| `getOfferForm_returnsFormViewWithCareRequestId` | GET `/host/care-requests/{id}/offer` | View, `offerForm` + `careRequestId` im Model | Normal |
+| `postCreateOffer_validForm_redirectsToHostOffers` | POST mit gültigem Form | HTTP 302 → `/host/offers`, Service aufgerufen | Normal |
+| `postCreateOffer_invalidPrice_returnsFormViewWithoutService` | weeklyPrice = 0 | Field-Error auf `weeklyPrice`, kein Service-Call | Edge Case (Validation) |
+| `getHostOffers_returnsHostOffersView` | GET `/host/offers` | View `host/offers/list`, `offers` im Model | Normal |
+| `getOwnerOffers_returnsOwnerOffersView` | GET `/owner/care-requests/{id}/offers` (Owner) | View `owner/care-requests/offers`, `offers` + `careRequestId` im Model | Normal |
+| `getBrowseMatchingRequests_unauthenticated_redirectsToLogin` | GET ohne Auth | HTTP 302 zu `/login` | Edge Case (Security) |
+
+  ---
