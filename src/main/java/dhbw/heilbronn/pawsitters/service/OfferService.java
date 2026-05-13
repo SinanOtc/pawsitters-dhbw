@@ -1,13 +1,12 @@
 package dhbw.heilbronn.pawsitters.service;
 
-import dhbw.heilbronn.pawsitters.domain.CareRequest;
-import dhbw.heilbronn.pawsitters.domain.HostProfile;
-import dhbw.heilbronn.pawsitters.domain.Offer;
-import dhbw.heilbronn.pawsitters.domain.OwnerProfile;
+import dhbw.heilbronn.pawsitters.domain.*;
 import dhbw.heilbronn.pawsitters.repository.CareRequestRepository;
 import dhbw.heilbronn.pawsitters.repository.OfferRepository;
 import dhbw.heilbronn.pawsitters.service.exception.CareRequestNotFoundException;
 import dhbw.heilbronn.pawsitters.service.exception.OfferNotEligibleException;
+import dhbw.heilbronn.pawsitters.service.exception.OfferNotFoundException;
+import dhbw.heilbronn.pawsitters.service.exception.OfferNotPendingException;
 import dhbw.heilbronn.pawsitters.web.form.OfferForm;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,5 +106,61 @@ public class OfferService {
         return offerRepository.findByCareRequestId(careRequestId);
     }
 
+    // === Offer akzeptieren ===
 
+    /**
+     * Owner nimmt ein Offer an. Atomare Operationen:
+     *      1. Offer auf ACCEPTED
+     *      2. Zugehörige CareRequest auf MATCHED (Issue #10 Pt.1)
+     *      3. Alle anderen PENDING-Offers derselben CareRequest auf REJECTED (#9)
+     * Schutzregeln:
+     *      - Offer muss zur CareRequest des Owners gehören -> sonst OfferNotFoundException
+     *      (gleiche Exception wie nicht-existent, damit URL-Manipulation keinen Info-Leak gibt)
+     *      - Offer muss PENDING sein -> sonst OfferNotFOundException
+     *      - CareRequest muss OPEN sein -> sonst OfferNotPendingException
+     *      (anderes Offer wurde schon angenommen -> Race Condition Schutz)
+     */
+    @Transactional
+    public Offer accept(Long offerId, Long ownerUserId){
+        OwnerProfile owner = ownerService.findByUserId(ownerUserId);
+
+        Offer offer = offerRepository.findById(offerId)
+                .orElseThrow(() -> new
+                        OfferNotFoundException(offerId));
+
+        // Security: Offer muss zu einer CareRequest des Owners gehören.
+        // Bewusst gleiche Exception wie "nicht existent", um einen Infoleak zu vermeiden
+        if(!offer.getCareRequest().getOwner().getId().equals(owner.getId())){
+            throw new OfferNotFoundException(offerId);
+        }
+
+        // State Check Offer: muss PENDING sein
+        if(offer.getStatus() != OfferStatus.PENDING){
+            throw new OfferNotPendingException(offerId);
+        }
+
+        CareRequest cr = offer.getCareRequest();
+
+        // State-Check CareRequest: muss OPEN sein (sonst hat schon ein anderes Offer
+        // ACCEPTED ausgelöst — sollte durch Offer-State eigentlich nicht passieren,
+        // aber doppelte Absicherung gegen Race-Conditions)
+        if(cr.getStatus() != RequestStatus.OPEN){
+            throw new OfferNotPendingException(offerId);
+        }
+
+        // Alle ANDEREN PENDING Offers derselben CareRequest auf REJECTED.
+        // Das aktuell anzunehmende Offer ist noch PENDING und in der Liste
+        // per Filter explizit ausschließen (somst würden wir es selbst rejecten)
+        List<Offer> pending = offerRepository.findByCareRequestIdAndStatus(cr.getId(), OfferStatus.PENDING);
+
+        pending.stream()
+                .filter(o -> !o.getId().equals(offerId))
+                .forEach(o -> o.setStatus(OfferStatus.REJECTED));
+
+        // Statusupdates auf dem akzeptierten Offer und der CareRequest
+        offer.setStatus(OfferStatus.ACCEPTED);
+        cr.setStatus(RequestStatus.MATCHED);
+
+        return offer;
+    }
 }

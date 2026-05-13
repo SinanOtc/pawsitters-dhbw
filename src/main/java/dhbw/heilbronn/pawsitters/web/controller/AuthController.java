@@ -1,4 +1,4 @@
-package dhbw.heilbronn.pawsitters.controller;
+package dhbw.heilbronn.pawsitters.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

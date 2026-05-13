@@ -32,6 +32,8 @@ public class OfferController {
     private static final String HOST_OFFERS_VIEW = "host/offers/list";
     private static final String OWNER_OFFERS_VIEW = "owner/care-requests/offers";
     private static final String REDIRECT_HOST_OFFERS = "redirect:/host/offers";
+    private static final String REDIRECT_OWNER_CARE_REQUESTS = "redirect:/owner/care-requests";
+
 
     private final OfferService offerService;
     private final UserRepository userRepository;
@@ -91,6 +93,15 @@ public class OfferController {
         model.addAttribute("offers", offers);
         model.addAttribute("careRequestId", id);
         return OWNER_OFFERS_VIEW;
+    }
+
+    // === Owner: Offer annehmen
+    @PostMapping("/owner/offers/{offerId}/accept")
+    public String acceptOffer(@PathVariable Long offerId, @AuthenticationPrincipal UserDetails principal) {
+        Long userId = currentUserId(principal);
+        offerService.accept(offerId, userId);
+        // Zurück zur CareRequest Liste, diese zeigt jetzt den Status MATCHED
+        return REDIRECT_OWNER_CARE_REQUESTS;
     }
 
     // === Hilfsfunktionen ===

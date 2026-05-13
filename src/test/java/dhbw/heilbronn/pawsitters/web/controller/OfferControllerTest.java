@@ -36,13 +36,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("dev")
 class OfferControllerTest {
 
-    private static final String HOST_EMAIL =
-            "host@test.de";
+    private static final String HOST_EMAIL = "host@test.de";
     private static final Long HOST_USER_ID = 1L;
-    private static final String OWNER_EMAIL =
-            "owner@test.de";
+    private static final String OWNER_EMAIL = "owner@test.de";
     private static final Long OWNER_USER_ID = 2L;
     private static final Long CARE_REQUEST_ID = 42L;
+    private static final Long OFFER_ID = 100L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -186,5 +185,20 @@ class OfferControllerTest {
         mockMvc.perform(get("/host/care-requests"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login"));
+    }
+
+    // === Owner: Offer annehmen ===
+    @Test
+    @WithMockUser(username = OWNER_EMAIL, roles = "OWNER")
+    void postAcceptOffer_validOffer_redirectsToCareRequests()
+            throws Exception {
+        mockMvc.perform(post("/owner/offers/{offerId}/accept",
+                        OFFER_ID)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+
+                .andExpect(redirectedUrl("/owner/care-requests"));
+
+        verify(offerService).accept(OFFER_ID, OWNER_USER_ID);
     }
 }

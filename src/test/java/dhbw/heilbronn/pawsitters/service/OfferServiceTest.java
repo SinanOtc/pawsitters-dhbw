@@ -1,18 +1,12 @@
 package dhbw.heilbronn.pawsitters.service;
 
-import dhbw.heilbronn.pawsitters.domain.CareRequest;
-import dhbw.heilbronn.pawsitters.domain.HostProfile;
-import dhbw.heilbronn.pawsitters.domain.Offer;
-import dhbw.heilbronn.pawsitters.domain.OwnerProfile;
-import dhbw.heilbronn.pawsitters.domain.Pet;
-import dhbw.heilbronn.pawsitters.domain.PetGender;
-import dhbw.heilbronn.pawsitters.domain.PetSpecies;
-import dhbw.heilbronn.pawsitters.domain.User;
-import dhbw.heilbronn.pawsitters.domain.UserRole;
+import dhbw.heilbronn.pawsitters.domain.*;
 import dhbw.heilbronn.pawsitters.repository.CareRequestRepository;
 import dhbw.heilbronn.pawsitters.repository.OfferRepository;
 import dhbw.heilbronn.pawsitters.service.exception.CareRequestNotFoundException;
 import dhbw.heilbronn.pawsitters.service.exception.OfferNotEligibleException;
+import dhbw.heilbronn.pawsitters.service.exception.OfferNotFoundException;
+import dhbw.heilbronn.pawsitters.service.exception.OfferNotPendingException;
 import dhbw.heilbronn.pawsitters.web.form.OfferForm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -235,5 +229,144 @@ class OfferServiceTest {
                 .isInstanceOf(OfferNotEligibleException.class);
 
         verify(offerRepository, never()).save(any());
+    }
+
+    // === accept ===
+
+    // Neue Konstante
+    private static final Long OFFER_ID = 100L;
+
+    @Test
+    void accept_pending_setsOfferAcceptedAndRequestMatched() {
+        Offer offer = new Offer(host, careRequest, new
+                BigDecimal("60.00"));
+        offer.setId(OFFER_ID);
+
+        when(ownerService.findByUserId(OWNER_USER_ID)).thenReturn(owner);
+        when(offerRepository.findById(OFFER_ID)).thenReturn(Optional.of(offer));
+        when(offerRepository.findByCareRequestIdAndStatus(CARE_REQUEST_ID, OfferStatus.PENDING))
+                .thenReturn(List.of(offer));  // nur dieses Offer, keine anderen
+
+        Offer result = offerService.accept(OFFER_ID,
+                OWNER_USER_ID);
+
+        assertThat(result.getStatus()).isEqualTo(OfferStatus.ACCEPTED);
+        assertThat(careRequest.getStatus()).isEqualTo(RequestStatus.MATCHED);
+    }
+
+    @Test
+    void accept_cascadeRejectsOtherPendingOffers() {
+        // #9: Andere PENDING-Offers werden REJECTED beim Annehmen eines Offers
+        Offer toAccept = new Offer(host, careRequest, new
+                BigDecimal("60.00"));
+        toAccept.setId(OFFER_ID);
+
+        HostProfile host2 = new HostProfile(
+                new User("host2@t.de", "hash", UserRole.HOST),
+                "Maria", "Schmidt", "Adresse 2",
+                EnumSet.of(PetSpecies.DOG),
+                LocalDate.now().plusDays(1),
+                LocalDate.now().plusDays(30),
+                new BigDecimal("55.00")
+        );
+        Offer other1 = new Offer(host2, careRequest, new
+                BigDecimal("55.00"));
+        other1.setId(200L);
+
+        HostProfile host3 = new HostProfile(
+                new User("host3@t.de", "hash", UserRole.HOST),
+                "Klaus", "Meier", "Adresse 3",
+                EnumSet.of(PetSpecies.DOG),
+                LocalDate.now().plusDays(1),
+                LocalDate.now().plusDays(30),
+                new BigDecimal("70.00")
+        );
+        Offer other2 = new Offer(host3, careRequest, new
+                BigDecimal("70.00"));
+        other2.setId(300L);
+
+        when(ownerService.findByUserId(OWNER_USER_ID)).thenReturn(owner);
+        when(offerRepository.findById(OFFER_ID)).thenReturn(Optional.of(toAccept));
+        when(offerRepository.findByCareRequestIdAndStatus(CARE_REQUEST_ID, OfferStatus.PENDING))
+                .thenReturn(List.of(toAccept, other1,
+                        other2));
+
+        offerService.accept(OFFER_ID, OWNER_USER_ID);
+
+        // Akzeptiertes Offer ACCEPTED, andere REJECTED
+        assertThat(toAccept.getStatus()).isEqualTo(OfferStatus
+                .ACCEPTED);
+        assertThat(other1.getStatus()).isEqualTo(OfferStatus.REJECTED);
+        assertThat(other2.getStatus()).isEqualTo(OfferStatus.REJECTED);
+        assertThat(careRequest.getStatus()).isEqualTo(RequestStatus.MATCHED);
+    }
+
+    @Test
+    void accept_offerNotFound_throwsOfferNotFound() {
+        when(ownerService.findByUserId(OWNER_USER_ID)).thenReturn(owner);
+        when(offerRepository.findById(OFFER_ID)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> offerService.accept(OFFER_ID,
+                OWNER_USER_ID))
+                .isInstanceOf(OfferNotFoundException.class);
+    }
+
+    @Test
+    void accept_offerNotOwnedByUser_throwsOfferNotFound() {
+        // Security: Offer existiert, gehört aber zu einer fremden CareRequest.
+        // Gleiche Exception wie "nicht existent" → kein Info-Leak.
+                OwnerProfile otherOwner = new OwnerProfile(
+                new User("other@t.de", "hash",
+                        UserRole.OWNER), "Anna", "X", "Y");
+        otherOwner.setId(999L);  // nicht OWNER_ID
+        Pet otherPet = new Pet(otherOwner, "Miez",
+                PetSpecies.CAT, PetGender.FEMALE);
+        CareRequest otherCr = new CareRequest(otherOwner,
+                otherPet,
+                LocalDate.now().plusDays(5),
+                LocalDate.now().plusDays(15));
+        Offer offer = new Offer(host, otherCr, new
+                BigDecimal("60.00"));
+        offer.setId(OFFER_ID);
+
+        when(ownerService.findByUserId(OWNER_USER_ID)).thenReturn(owner);
+        when(offerRepository.findById(OFFER_ID)).thenReturn(Optional.of(offer));
+
+        assertThatThrownBy(() -> offerService.accept(OFFER_ID,
+                OWNER_USER_ID))
+                .isInstanceOf(OfferNotFoundException.class);
+    }
+
+    @Test
+    void accept_offerAlreadyAccepted_throwsOfferNotPending() {
+        Offer offer = new Offer(host, careRequest, new
+                BigDecimal("60.00"));
+        offer.setId(OFFER_ID);
+        offer.setStatus(OfferStatus.ACCEPTED);  // schon angenommen
+
+        when(ownerService.findByUserId(OWNER_USER_ID)).thenReturn(owner);
+        when(offerRepository.findById(OFFER_ID)).thenReturn(Optional.of(offer));
+
+        assertThatThrownBy(() -> offerService.accept(OFFER_ID,
+                OWNER_USER_ID))
+                .isInstanceOf(OfferNotPendingException.class);
+    }
+
+    @Test
+    void
+    accept_careRequestAlreadyMatched_throwsOfferNotPending() {
+        // Race-Condition-Schutz: Offer noch PENDING, aber CareRequest schon MATCHED
+        // (anderes Offer wurde davor angenommen) → reject this attempt
+        Offer offer = new Offer(host, careRequest, new
+                BigDecimal("60.00"));
+        offer.setId(OFFER_ID);
+        careRequest.setStatus(RequestStatus.MATCHED);
+
+        when(ownerService.findByUserId(OWNER_USER_ID)).thenReturn(owner);
+        when(offerRepository.findById(OFFER_ID)).thenReturn(Optional.of(offer));
+
+        assertThatThrownBy(() -> offerService.accept(OFFER_ID,
+                OWNER_USER_ID))
+                .isInstanceOf(OfferNotPendingException.class);
     }
 }
