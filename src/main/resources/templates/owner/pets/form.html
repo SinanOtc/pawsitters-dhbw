@@ -3,11 +3,116 @@
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-    <title>Haustier bearbeiten</title>
+    <title th:text="${mode == 'edit'} ? 'Haustier bearbeiten' : 'Haustier registrieren'">Haustier registrieren</title>
 </head>
 <body>
 <section>
-    <h1>Haustier bearbeiten</h1>
+    <h1 th:text="${mode == 'edit'} ? 'Haustier bearbeiten' : 'Haustier registrieren'">Haustier registrieren</h1>
+
+    <form th:action="${mode == 'edit'} ? @{/owner/pets/{id}/edit(id=${petId})} : @{/owner/pets/new}"
+          th:object="${petForm}"
+          method="post">
+
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+        <p>
+            <label for="name">Name</label>
+            <input type="text"
+                   th:field="*{name}"
+                   autocomplete="off"
+                   maxlength="100"
+                   required>
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="field-error"></span>
+        </p>
+
+        <p>
+            <label for="species">Tierart</label>
+            <select th:field="*{species}" required>
+                <option value="">Tierart wählen</option>
+                <option value="DOG">Hund</option>
+                <option value="CAT">Katze</option>
+                <option value="BIRD">Vogel</option>
+                <option value="RABBIT">Kaninchen</option>
+                <option value="RODENT">Nagetier</option>
+                <option value="REPTILE">Reptil</option>
+                <option value="FISH">Fisch</option>
+                <option value="OTHER">Andere</option>
+            </select>
+            <span th:if="${#fields.hasErrors('species')}" th:errors="*{species}" class="field-error"></span>
+        </p>
+
+        <p>
+            <label for="breed">Rasse</label>
+            <input type="text"
+                   th:field="*{breed}"
+                   autocomplete="off"
+                   maxlength="100">
+            <span th:if="${#fields.hasErrors('breed')}" th:errors="*{breed}" class="field-error"></span>
+        </p>
+
+        <p>
+            <label for="gender">Geschlecht</label>
+            <select th:field="*{gender}" required>
+                <option value="">Geschlecht wählen</option>
+                <option value="MALE">Männlich</option>
+                <option value="FEMALE">Weiblich</option>
+                <option value="UNKNOWN">Unbekannt</option>
+            </select>
+            <span th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" class="field-error"></span>
+        </p>
+
+        <p>
+            <label for="birthYear">Geburtsjahr</label>
+            <input type="number"
+                   th:field="*{birthYear}"
+                   min="1985"
+                   max="2026"
+                   inputmode="numeric">
+            <span th:if="${#fields.hasErrors('birthYear')}" th:errors="*{birthYear}" class="field-error"></span>
+        </p>
+
+        <fieldset>
+            <legend>Gesundheit</legend>
+
+            <label class="checkbox-option" for="chipped">
+                <input type="checkbox" th:field="*{chipped}">
+                Gechippt
+            </label>
+
+            <p>
+                <label for="chipNumber">Chip-Nummer</label>
+                <input type="text"
+                       th:field="*{chipNumber}"
+                       autocomplete="off"
+                       maxlength="20">
+                <span th:if="${#fields.hasErrors('chipNumber')}" th:errors="*{chipNumber}" class="field-error"></span>
+                <span th:if="${#fields.hasErrors('chipDataConsistent')}" th:errors="*{chipDataConsistent}" class="field-error"></span>
+            </p>
+
+            <label class="checkbox-option" for="vaccinated">
+                <input type="checkbox" th:field="*{vaccinated}">
+                Geimpft
+            </label>
+
+            <label class="checkbox-option" for="neutered">
+                <input type="checkbox" th:field="*{neutered}">
+                Kastriert
+            </label>
+        </fieldset>
+
+        <p>
+            <label for="description">Besonderheiten</label>
+            <textarea th:field="*{description}" maxlength="500" rows="5"></textarea>
+            <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="field-error"></span>
+        </p>
+
+        <p class="form-actions">
+            <button type="submit" th:text="${mode == 'edit'} ? 'Haustier speichern' : 'Haustier registrieren'">
+                Haustier registrieren
+            </button>
+            <a th:href="@{/owner/pets}">Abbrechen</a>
+        </p>
+    </form>
 </section>
 </body>
 </html>
