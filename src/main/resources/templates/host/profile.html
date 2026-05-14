@@ -45,7 +45,7 @@
     </tr>
     <tr>
       <th scope="row">Preis pro Woche:</th>
-      <td><span th:text="${profile.pricePerWeek}"></span> €</td>
+      <td><span th:text="${#numbers.formatDecimal(profile.pricePerWeek, 1, 'POINT', 2, 'COMMA')}"></span> €</td>
     </tr>
   </table>
 
