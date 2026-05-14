@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>409 — Konflikt (TODO Frontend)</title>
+</head>
+<body>
+<!-- TODO Frontend: 409-Page mit Styling. Tritt z.B. auf wenn ein anderes Offer schon angenommen wurde, oder wenn man versucht ein nicht-PENDING Offer anzunehmen. -->
+<h1>409 — Aktion nicht möglich</h1>
+<p th:text="${message}">Die Aktion kann im aktuellen
+  Zustand nicht durchgeführt werden.</p>
+<p><a th:href="@{/dashboard}">Zurück zum Dashboard</a></p>
+</body>
+</html>

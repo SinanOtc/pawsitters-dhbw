@@ -4,73 +4,73 @@
 ## SecurityConfigTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/config/SecurityConfigTest.java`
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-|---|---|---|---|
-| `homeIsPubliclyAccessible` | GET `/` ohne Login | HTTP 200 | Normal |
-| `dashboardRedirectAnonymousUserToLogIn` | GET `/dashboard` ohne Login | HTTP 302 Redirect zu `/login` | Edge Case (Schutzregel) |
-| `dashboardIsAccessibleForLoggedInUser` | GET `/dashboard` mit eingeloggtem User | HTTP 200 | Normal |
-| `validLoginRedirectsToDashboard` | POST `/login` mit gültigen Credentials | HTTP 302 Redirect zu `/dashboard` | Normal |
-| `invalidLoginRedirectsToLoginWithError` | POST `/login` mit ungültigem Passwort | HTTP 302 Redirect zu `/login?error` | Edge Case (Fehlerpfad) |
+| Test                                    | Was wird getestet                      | Erwartetes Ergebnis                 | Typ                     |
+|-----------------------------------------|----------------------------------------|-------------------------------------|-------------------------|
+| `homeIsPubliclyAccessible`              | GET `/` ohne Login                     | HTTP 200                            | Normal                  |
+| `dashboardRedirectAnonymousUserToLogIn` | GET `/dashboard` ohne Login            | HTTP 302 Redirect zu `/login`       | Edge Case (Schutzregel) |
+| `dashboardIsAccessibleForLoggedInUser`  | GET `/dashboard` mit eingeloggtem User | HTTP 200                            | Normal                  |
+| `validLoginRedirectsToDashboard`        | POST `/login` mit gültigen Credentials | HTTP 302 Redirect zu `/dashboard`   | Normal                  |
+| `invalidLoginRedirectsToLoginWithError` | POST `/login` mit ungültigem Passwort  | HTTP 302 Redirect zu `/login?error` | Edge Case (Fehlerpfad)  |
 
 ## UserTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/domain/UserTest.java`
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-|---|---|---|---|
-| `constructor_setsAllFields` | Konstruktor setzt email, passwordHashed, role korrekt | Alle Getter geben die übergebenen Werte zurück | Normal |
-| `email_invalidFormat_failsValidation` | E-Mail ohne `@`-Zeichen wird validiert | Validation-Violation auf Feld `email` | Edge Case (ungültiges Format) |
-| `email_blank_failsValidation` | Leere E-Mail wird validiert | Validation-Violation auf Feld `email` | Edge Case (leerer Pflichtwert) |
-| `passwordHashed_blank_failsValidation` | Leerer Passwort-Hash wird validiert | Validation-Violation auf Feld `passwordHashed` | Edge Case (leerer Pflichtwert) |
-| `role_null_failsValidation` | `null` als Rolle wird validiert | Validation-Violation auf Feld `role` | Edge Case (Pflichtfeld nicht gesetzt) |
+| Test                                   | Was wird getestet                                     | Erwartetes Ergebnis                            | Typ                                   |
+|----------------------------------------|-------------------------------------------------------|------------------------------------------------|---------------------------------------|
+| `constructor_setsAllFields`            | Konstruktor setzt email, passwordHashed, role korrekt | Alle Getter geben die übergebenen Werte zurück | Normal                                |
+| `email_invalidFormat_failsValidation`  | E-Mail ohne `@`-Zeichen wird validiert                | Validation-Violation auf Feld `email`          | Edge Case (ungültiges Format)         |
+| `email_blank_failsValidation`          | Leere E-Mail wird validiert                           | Validation-Violation auf Feld `email`          | Edge Case (leerer Pflichtwert)        |
+| `passwordHashed_blank_failsValidation` | Leerer Passwort-Hash wird validiert                   | Validation-Violation auf Feld `passwordHashed` | Edge Case (leerer Pflichtwert)        |
+| `role_null_failsValidation`            | `null` als Rolle wird validiert                       | Validation-Violation auf Feld `role`           | Edge Case (Pflichtfeld nicht gesetzt) |
 
 ## OwnerProfileTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/domain/OwnerProfileTest.java`
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-|---|---|---|---|
-| `constructor_setsAllFields` | Konstruktor setzt user, firstName, lastName, address korrekt | Alle Getter geben die übergebenen Werte zurück, `user` ist identisch | Normal |
-| `firstName_blank_failsValidation` | Leerer Vorname wird validiert | Validation-Violation auf Feld `firstName` | Edge Case (leerer Pflichtwert) |
-| `lastName_blank_failsValidation` | Leerer Nachname wird validiert | Validation-Violation auf Feld `lastName` | Edge Case (leerer Pflichtwert) |
-| `address_blank_failsValidation` | Leere Adresse wird validiert | Validation-Violation auf Feld `address` | Edge Case (leerer Pflichtwert) |
-| `firstName_tooLong_failsValidation` | Vorname mit 101 Zeichen (über `@Size(max=100)`) | Validation-Violation auf Feld `firstName` | Edge Case (Längen-Constraint) |
+| Test                                | Was wird getestet                                            | Erwartetes Ergebnis                                                  | Typ                            |
+|-------------------------------------|--------------------------------------------------------------|----------------------------------------------------------------------|--------------------------------|
+| `constructor_setsAllFields`         | Konstruktor setzt user, firstName, lastName, address korrekt | Alle Getter geben die übergebenen Werte zurück, `user` ist identisch | Normal                         |
+| `firstName_blank_failsValidation`   | Leerer Vorname wird validiert                                | Validation-Violation auf Feld `firstName`                            | Edge Case (leerer Pflichtwert) |
+| `lastName_blank_failsValidation`    | Leerer Nachname wird validiert                               | Validation-Violation auf Feld `lastName`                             | Edge Case (leerer Pflichtwert) |
+| `address_blank_failsValidation`     | Leere Adresse wird validiert                                 | Validation-Violation auf Feld `address`                              | Edge Case (leerer Pflichtwert) |
+| `firstName_tooLong_failsValidation` | Vorname mit 101 Zeichen (über `@Size(max=100)`)              | Validation-Violation auf Feld `firstName`                            | Edge Case (Längen-Constraint)  |
 
 ## OwnerServiceTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/service/OwnerServiceTest.java`
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-|---|---|---|---|
-| `register_validForm_savesUserAndProfile` | Registrierung mit gültigem Form | User und OwnerProfile werden gespeichert | Normal |
-| `register_passwordIsHashed_neverStoresPlaintext` | Klartext-Passwort darf nicht in der Entity landen | User bekommt nur den BCrypt-Hash, nicht das Klartext-Passwort | Edge Case (Security) |
-| `register_userRoleIsOwner` | Rollen-Schutzregel bei der Registrierung | User wird mit Rolle `OWNER` gespeichert (nie HOST) | Edge Case (Privilege-Schutz) |
-| `register_emailAlreadyTaken_throwsException` | Doppelte E-Mail bei der Registrierung | `EmailAlreadyTakenException`, nichts wird gespeichert | Edge Case (Duplikat) |
-| `findByUserId_existing_returnsProfile` | Profil zu existierender User-ID | Korrektes OwnerProfile wird zurückgegeben | Normal |
-| `findByUserId_notFound_throwsIllegalStateException` | Profil zu nicht-existierender User-ID | `IllegalStateException` (Daten-Konsistenzfehler) | Edge Case |
-| `update_existingProfile_updatesAllFields` | Update der änderbaren Felder | firstName, lastName, address werden aktualisiert | Normal |
+| Test                                                | Was wird getestet                                 | Erwartetes Ergebnis                                           | Typ                          |
+|-----------------------------------------------------|---------------------------------------------------|---------------------------------------------------------------|------------------------------|
+| `register_validForm_savesUserAndProfile`            | Registrierung mit gültigem Form                   | User und OwnerProfile werden gespeichert                      | Normal                       |
+| `register_passwordIsHashed_neverStoresPlaintext`    | Klartext-Passwort darf nicht in der Entity landen | User bekommt nur den BCrypt-Hash, nicht das Klartext-Passwort | Edge Case (Security)         |
+| `register_userRoleIsOwner`                          | Rollen-Schutzregel bei der Registrierung          | User wird mit Rolle `OWNER` gespeichert (nie HOST)            | Edge Case (Privilege-Schutz) |
+| `register_emailAlreadyTaken_throwsException`        | Doppelte E-Mail bei der Registrierung             | `EmailAlreadyTakenException`, nichts wird gespeichert         | Edge Case (Duplikat)         |
+| `findByUserId_existing_returnsProfile`              | Profil zu existierender User-ID                   | Korrektes OwnerProfile wird zurückgegeben                     | Normal                       |
+| `findByUserId_notFound_throwsIllegalStateException` | Profil zu nicht-existierender User-ID             | `IllegalStateException` (Daten-Konsistenzfehler)              | Edge Case                    |
+| `update_existingProfile_updatesAllFields`           | Update der änderbaren Felder                      | firstName, lastName, address werden aktualisiert              | Normal                       |
 
 ## OwnerControllerTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/web/controller/OwnerControllerTest.java`
 
 Integrationstest mit `@WebMvcTest`, läuft gegen MockMvc + echte SecurityConfig.
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-|---|---|---|---|
-| `getRegister_returnsRegisterView` | GET `/owner/register` | HTTP 200, View `owner/register`, leeres `registerForm` im Model | Normal |
-| `postRegister_validForm_redirectsToLoginWithFlag` | POST `/owner/register` mit gültigem Form | HTTP 302 Redirect zu `/login?registered`, `OwnerService.register` aufgerufen | Normal |
-| `postRegister_invalidEmail_returnsRegisterWithErrors` | POST mit ungültiger E-Mail | HTTP 200, View `owner/register`, Field-Error auf `email`, Service NICHT aufgerufen | Edge Case (Validation) |
-| `postRegister_emailAlreadyTaken_showsFieldError` | POST mit bereits vergebener E-Mail | HTTP 200, View `owner/register`, Field-Error auf `email` | Edge Case (Duplikat) |
+| Test                                                  | Was wird getestet                        | Erwartetes Ergebnis                                                                | Typ                    |
+|-------------------------------------------------------|------------------------------------------|------------------------------------------------------------------------------------|------------------------|
+| `getRegister_returnsRegisterView`                     | GET `/owner/register`                    | HTTP 200, View `owner/register`, leeres `registerForm` im Model                    | Normal                 |
+| `postRegister_validForm_redirectsToLoginWithFlag`     | POST `/owner/register` mit gültigem Form | HTTP 302 Redirect zu `/login?registered`, `OwnerService.register` aufgerufen       | Normal                 |
+| `postRegister_invalidEmail_returnsRegisterWithErrors` | POST mit ungültiger E-Mail               | HTTP 200, View `owner/register`, Field-Error auf `email`, Service NICHT aufgerufen | Edge Case (Validation) |
+| `postRegister_emailAlreadyTaken_showsFieldError`      | POST mit bereits vergebener E-Mail       | HTTP 200, View `owner/register`, Field-Error auf `email`                           | Edge Case (Duplikat)   |
 
 ## PetServiceTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/service/PetServiceTest.java`
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-|---|---|---|---|
-| `register_validForm_savesPetWithOwner` | Pet-Anlage mit gültigem Form | Pet wird mit Owner-Referenz gespeichert | Normal |
-| `register_appliesAllOptionalFields` | Optionale Felder werden übernommen | breed, birthYear, chip*, vaccinated, neutered, description gesetzt | Normal |
-| `findAllByOwner_returnsOwnersPets` | Liste der Pets eines Owners | Repository liefert nur die Pets des Owners | Normal |
-| `findByIdForOwner_existing_returnsPet` | Eigenes Pet per ID laden | Pet wird zurückgegeben | Normal |
-| `findByIdForOwner_notOwnedByUser_throwsPetNotFound` | Fremdes Pet per URL-Manipulation | `PetNotFoundException` | Edge Case (Security) |
-| `update_existingPet_updatesAllFields` | Update aller änderbaren Felder | Alle Felder am Pet aktualisiert | Normal |
-| `delete_existingPet_callsRepositoryDelete` | Eigenes Pet löschen | `rep
+| Test                                                | Was wird getestet                  | Erwartetes Ergebnis                                                | Typ                  |
+|-----------------------------------------------------|------------------------------------|--------------------------------------------------------------------|----------------------|
+| `register_validForm_savesPetWithOwner`              | Pet-Anlage mit gültigem Form       | Pet wird mit Owner-Referenz gespeichert                            | Normal               |
+| `register_appliesAllOptionalFields`                 | Optionale Felder werden übernommen | breed, birthYear, chip*, vaccinated, neutered, description gesetzt | Normal               |
+| `findAllByOwner_returnsOwnersPets`                  | Liste der Pets eines Owners        | Repository liefert nur die Pets des Owners                         | Normal               |
+| `findByIdForOwner_existing_returnsPet`              | Eigenes Pet per ID laden           | Pet wird zurückgegeben                                             | Normal               |
+| `findByIdForOwner_notOwnedByUser_throwsPetNotFound` | Fremdes Pet per URL-Manipulation   | `PetNotFoundException`                                             | Edge Case (Security) |
+| `update_existingPet_updatesAllFields`               | Update aller änderbaren Felder     | Alle Felder am Pet aktualisiert                                    | Normal               |
+| `delete_existingPet_callsRepositoryDelete`          | Eigenes Pet löschen                | `rep                                                               |                      |
 
 ## PetControllerTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/web/controller/PetControllerTest.java`
@@ -78,90 +78,90 @@ Datei: `src/test/java/dhbw/heilbronn/pawsitters/web/controller/PetControllerTest
 Integrationstest mit `@WebMvcTest` + `@WithMockUser(roles="OWNER")` gegen
 MockMvc + echte SecurityConfig.
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-|---|---|---|---|
-| `getPets_returnsListView` | GET `/owner/pets` | HTTP 200, View `owner/pets/list`, `pets` im Model | Normal |
-| `getNewForm_returnsFormViewInNewMode` | GET `/owner/pets/new` | HTTP 200, View `owner/pets/form`, `mode=new` | Normal |
-| `postNew_validForm_redirectsToList` | POST mit gültigem Form | HTTP 302 → `/owner/pets`, Service aufgerufen | Normal |
-| `postNew_emptyName_returnsFormWithFieldError` | POST mit leerem Name (`@NotBlank`) | HTTP 200, Field-Error auf `name`, Service NICHT aufgerufen | Edge Case (Validation) |
-| `postNew_chippedWithoutChipNumber_failsAssertTrue` | chipped=true ohne Chip-Nummer | HTTP 200, `@AssertTrue isChipDataConsistent` feuert | Edge Case (Cross-Field) |
-| `getEditForm_existingPet_returnsFormPrefilled` | GET `/owner/pets/{id}/edit` | View `owner/pets/form`, `mode=edit`, `petId` im Model | Normal |
-| `postEdit_validForm_redirectsToList` | Update durchläuft | HTTP 302 → `/owner/pets`, `update()` aufgerufen | Normal |
-| `postEdit_invalidForm_returnsFormInEditModeWithoutUpdate` | POST mit ungültigem Form bei Edit | HTTP 200, Field-Error, kein Update | Edge Case (Validation) |
-| `postDelete_redirectsToList` | POST `/owner/pets/{id}/delete` | HTTP 302 → `/owner/pets`, `delete()` aufgerufen | Normal |
-| `getPets_unauthenticated_redirectsToLogin` | GET ohne Auth | HTTP 302 zu `/login` | Edge Case (Security) |
+| Test                                                      | Was wird getestet                  | Erwartetes Ergebnis                                        | Typ                     |
+|-----------------------------------------------------------|------------------------------------|------------------------------------------------------------|-------------------------|
+| `getPets_returnsListView`                                 | GET `/owner/pets`                  | HTTP 200, View `owner/pets/list`, `pets` im Model          | Normal                  |
+| `getNewForm_returnsFormViewInNewMode`                     | GET `/owner/pets/new`              | HTTP 200, View `owner/pets/form`, `mode=new`               | Normal                  |
+| `postNew_validForm_redirectsToList`                       | POST mit gültigem Form             | HTTP 302 → `/owner/pets`, Service aufgerufen               | Normal                  |
+| `postNew_emptyName_returnsFormWithFieldError`             | POST mit leerem Name (`@NotBlank`) | HTTP 200, Field-Error auf `name`, Service NICHT aufgerufen | Edge Case (Validation)  |
+| `postNew_chippedWithoutChipNumber_failsAssertTrue`        | chipped=true ohne Chip-Nummer      | HTTP 200, `@AssertTrue isChipDataConsistent` feuert        | Edge Case (Cross-Field) |
+| `getEditForm_existingPet_returnsFormPrefilled`            | GET `/owner/pets/{id}/edit`        | View `owner/pets/form`, `mode=edit`, `petId` im Model      | Normal                  |
+| `postEdit_validForm_redirectsToList`                      | Update durchläuft                  | HTTP 302 → `/owner/pets`, `update()` aufgerufen            | Normal                  |
+| `postEdit_invalidForm_returnsFormInEditModeWithoutUpdate` | POST mit ungültigem Form bei Edit  | HTTP 200, Field-Error, kein Update                         | Edge Case (Validation)  |
+| `postDelete_redirectsToList`                              | POST `/owner/pets/{id}/delete`     | HTTP 302 → `/owner/pets`, `delete()` aufgerufen            | Normal                  |
+| `getPets_unauthenticated_redirectsToLogin`                | GET ohne Auth                      | HTTP 302 zu `/login`                                       | Edge Case (Security)    |
 
 ## CareRequestTest (Domain)
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/domain/CareRequestTest.java`
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-  |---|---|---|---|
-| `constructor_setsAllFields` | Konstruktor setzt owner, pet, startDate, endDate | Alle Getter geben übergebene Werte | Normal |
-| `constructor_setsStatusToOpen` | Default-Status nach Konstruktor | Status ist `OPEN` (Workflow-Schutz: nie direkt MATCHED/CLOSED erzeugen) | Normal |
-| `startDate_inPast_failsValidation` | `@Future` auf startDate | Validation-Violation auf `startDate` | Edge Case |
-| `endDate_inPast_failsValidation` | `@Future` auf endDate | Validation-Violation auf `endDate` | Edge Case |
-| `endDate_beforeStartDate_failsAssertTrue` | Cross-Field: Enddatum vor Startdatum | Violation auf `dateRangeValid` | Edge Case (Cross-Field) |
-| `endDate_equalsStartDate_failsAssertTrue` | Boundary: gleicher Tag | Violation auf `dateRangeValid` (Enddatum nicht NACH Startdatum) | Edge Case (Boundary) |
-| `owner_null_failsValidation` | `@NotNull` auf owner | Violation auf `owner` | Edge Case |
-| `pet_null_failsValidation` | `@NotNull` auf pet | Violation auf `pet` | Edge Case |
+| Test                                      | Was wird getestet                                | Erwartetes Ergebnis                                                     | Typ                     |
+  |-------------------------------------------|--------------------------------------------------|-------------------------------------------------------------------------|-------------------------|
+| `constructor_setsAllFields`               | Konstruktor setzt owner, pet, startDate, endDate | Alle Getter geben übergebene Werte                                      | Normal                  |
+| `constructor_setsStatusToOpen`            | Default-Status nach Konstruktor                  | Status ist `OPEN` (Workflow-Schutz: nie direkt MATCHED/CLOSED erzeugen) | Normal                  |
+| `startDate_inPast_failsValidation`        | `@Future` auf startDate                          | Validation-Violation auf `startDate`                                    | Edge Case               |
+| `endDate_inPast_failsValidation`          | `@Future` auf endDate                            | Validation-Violation auf `endDate`                                      | Edge Case               |
+| `endDate_beforeStartDate_failsAssertTrue` | Cross-Field: Enddatum vor Startdatum             | Violation auf `dateRangeValid`                                          | Edge Case (Cross-Field) |
+| `endDate_equalsStartDate_failsAssertTrue` | Boundary: gleicher Tag                           | Violation auf `dateRangeValid` (Enddatum nicht NACH Startdatum)         | Edge Case (Boundary)    |
+| `owner_null_failsValidation`              | `@NotNull` auf owner                             | Violation auf `owner`                                                   | Edge Case               |
+| `pet_null_failsValidation`                | `@NotNull` auf pet                               | Violation auf `pet`                                                     | Edge Case               |
 
 ## CareRequestServiceTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/service/CareRequestServiceTest.java`
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-  |---|---|---|---|
-| `register_validForm_savesRequestWithOpenStatus` | Anfrage-Anlage | Status `OPEN`, owner + pet korrekt verknüpft, save() aufgerufen | Normal |
-| `register_petNotOwnedByUser_propagatesPetNotFound` | Pet gehört nicht dem User | `PetNotFoundException` propagiert, nichts gespeichert | Edge Case (Security) |
-| `findAllByOwner_returnsOwnersRequests` | Liste der Anfragen | Repository liefert nur die des Owners | Normal |
-| `findByIdForOwner_existing_returnsRequest` | Eigene Anfrage per ID | Anfrage wird zurückgegeben | Normal |
-| `findByIdForOwner_notFoundOrNotOwned_throwsCareRequestNotFound` | Anfrage existiert nicht oder fremd | `CareRequestNotFoundException` | Edge Case (Security) |
+| Test                                                            | Was wird getestet                  | Erwartetes Ergebnis                                             | Typ                  |
+  |-----------------------------------------------------------------|------------------------------------|-----------------------------------------------------------------|----------------------|
+| `register_validForm_savesRequestWithOpenStatus`                 | Anfrage-Anlage                     | Status `OPEN`, owner + pet korrekt verknüpft, save() aufgerufen | Normal               |
+| `register_petNotOwnedByUser_propagatesPetNotFound`              | Pet gehört nicht dem User          | `PetNotFoundException` propagiert, nichts gespeichert           | Edge Case (Security) |
+| `findAllByOwner_returnsOwnersRequests`                          | Liste der Anfragen                 | Repository liefert nur die des Owners                           | Normal               |
+| `findByIdForOwner_existing_returnsRequest`                      | Eigene Anfrage per ID              | Anfrage wird zurückgegeben                                      | Normal               |
+| `findByIdForOwner_notFoundOrNotOwned_throwsCareRequestNotFound` | Anfrage existiert nicht oder fremd | `CareRequestNotFoundException`                                  | Edge Case (Security) |
 
 ## CareRequestControllerTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/web/controller/CareRequestControllerTest.java`
 
 Integrationstest mit `@WebMvcTest` + `@WithMockUser(roles="OWNER")` gegen MockMvc + echte SecurityConfig.
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-  |---|---|---|---|
-| `getCareRequests_returnsListView` | GET `/owner/care-requests` | View `owner/care-requests/list`, `careRequests` im Model | Normal |
-| `getNewForm_returnsFormViewWithPetsAndEmptyRequestForm` | GET `/new` | View `owner/care-requests/form`, `careRequestForm` + `pets` im Model | Normal |
-| `postNew_validForm_redirectsToList` | POST mit gültigem Form | HTTP 302 → `/owner/care-requests`, Service aufgerufen | Normal |
-| `postNew_endBeforeStart_returnsFormWithoutRegister` | `@AssertTrue` Cross-Field | View `form`, Service NICHT aufgerufen | Edge Case (Cross-Field) |
-| `postNew_pastStartDate_returnsFormWithFieldError` | `@Future` auf startDate | Field-Error auf `startDate`, kein Service-Call | Edge Case (Validation) |
-| `postNew_missingPetId_returnsFormWithFieldError` | `@NotNull` auf petId | Field-Error auf `petId`, kein Service-Call | Edge Case (Validation) |
-| `getCareRequests_unauthenticated_redirectsToLogin` | GET ohne Auth | HTTP 302 zu `/login` | Edge Case (Security) |
+| Test                                                    | Was wird getestet          | Erwartetes Ergebnis                                                  | Typ                     |
+  |---------------------------------------------------------|----------------------------|----------------------------------------------------------------------|-------------------------|
+| `getCareRequests_returnsListView`                       | GET `/owner/care-requests` | View `owner/care-requests/list`, `careRequests` im Model             | Normal                  |
+| `getNewForm_returnsFormViewWithPetsAndEmptyRequestForm` | GET `/new`                 | View `owner/care-requests/form`, `careRequestForm` + `pets` im Model | Normal                  |
+| `postNew_validForm_redirectsToList`                     | POST mit gültigem Form     | HTTP 302 → `/owner/care-requests`, Service aufgerufen                | Normal                  |
+| `postNew_endBeforeStart_returnsFormWithoutRegister`     | `@AssertTrue` Cross-Field  | View `form`, Service NICHT aufgerufen                                | Edge Case (Cross-Field) |
+| `postNew_pastStartDate_returnsFormWithFieldError`       | `@Future` auf startDate    | Field-Error auf `startDate`, kein Service-Call                       | Edge Case (Validation)  |
+| `postNew_missingPetId_returnsFormWithFieldError`        | `@NotNull` auf petId       | Field-Error auf `petId`, kein Service-Call                           | Edge Case (Validation)  |
+| `getCareRequests_unauthenticated_redirectsToLogin`      | GET ohne Auth              | HTTP 302 zu `/login`                                                 | Edge Case (Security)    |
 
 ## HostProfileTest (Domain)
 
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/domain/HostProfileTest.java`
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-|---|---|---|---|
-| `constructor_setsAllFields` | Konstruktor setzt alle Felder | Alle Getter liefern korrekte Werte | Normal |
-| `constructor_nullAcceptedSpecies_doesNotThrow` | Defensive Null-Behandlung | Konstruktor wirft nicht, Feld ist leeres EnumSet | Edge Case |
-| `constructor_emptyAcceptedSpecies_doesNotThrow` | Regression-Test für `EnumSet.copyOf`-Bug | Konstruktor wirft nicht | Edge Case (Bug-Fix) |
-| `firstName_blank_failsValidation` | `@NotBlank` auf firstName | Violation auf `firstName` | Edge Case |
-| `acceptedSpecies_empty_failsValidation` | `@Size(min=1)` auf Collection | Violation auf `acceptedSpecies` | Edge Case |
-| `availableFrom_inPast_failsValidation` | `@FutureOrPresent` | Violation auf `availableFrom` | Edge Case |
-| `availableUntil_beforeAvailableFrom_failsAssertTrue` | Cross-Field-Reihenfolge | Violation auf `availabilityRangeValid` | Edge Case (Cross-Field) |
-| `availableUntil_equalsAvailableFrom_failsAssertTrue` | Boundary: gleicher Tag | Violation auf `availabilityRangeValid` | Edge Case (Boundary) |
-| `pricePerWeek_zero_failsValidation` | `@DecimalMin(inclusive=false)` | Violation auf `pricePerWeek` | Edge Case |
-| `pricePerWeek_negative_failsValidation` | Negativer Preis | Violation auf `pricePerWeek` | Edge Case |
+| Test                                                 | Was wird getestet                        | Erwartetes Ergebnis                              | Typ                     |
+|------------------------------------------------------|------------------------------------------|--------------------------------------------------|-------------------------|
+| `constructor_setsAllFields`                          | Konstruktor setzt alle Felder            | Alle Getter liefern korrekte Werte               | Normal                  |
+| `constructor_nullAcceptedSpecies_doesNotThrow`       | Defensive Null-Behandlung                | Konstruktor wirft nicht, Feld ist leeres EnumSet | Edge Case               |
+| `constructor_emptyAcceptedSpecies_doesNotThrow`      | Regression-Test für `EnumSet.copyOf`-Bug | Konstruktor wirft nicht                          | Edge Case (Bug-Fix)     |
+| `firstName_blank_failsValidation`                    | `@NotBlank` auf firstName                | Violation auf `firstName`                        | Edge Case               |
+| `acceptedSpecies_empty_failsValidation`              | `@Size(min=1)` auf Collection            | Violation auf `acceptedSpecies`                  | Edge Case               |
+| `availableFrom_inPast_failsValidation`               | `@FutureOrPresent`                       | Violation auf `availableFrom`                    | Edge Case               |
+| `availableUntil_beforeAvailableFrom_failsAssertTrue` | Cross-Field-Reihenfolge                  | Violation auf `availabilityRangeValid`           | Edge Case (Cross-Field) |
+| `availableUntil_equalsAvailableFrom_failsAssertTrue` | Boundary: gleicher Tag                   | Violation auf `availabilityRangeValid`           | Edge Case (Boundary)    |
+| `pricePerWeek_zero_failsValidation`                  | `@DecimalMin(inclusive=false)`           | Violation auf `pricePerWeek`                     | Edge Case               |
+| `pricePerWeek_negative_failsValidation`              | Negativer Preis                          | Violation auf `pricePerWeek`                     | Edge Case               |
 
 ## HostServiceTest
 
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/service/HostServiceTest.java`
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-|---|---|---|---|
-| `register_validForm_savesUserAndProfile` | Registrierung mit gültigem Form | User und HostProfile werden gespeichert | Normal |
-| `register_passwordIsHashed_neverStoresPlaintext` | Passwort-Hashing | Nur BCrypt-Hash, nie Klartext in der Entity | Edge Case (Security) |
-| `register_userRoleIsHost` | Rollen-Schutzregel | User wird mit Rolle `HOST` gespeichert (nie OWNER) | Edge Case (Privilege-Schutz) |
-| `register_emailAlreadyTaken_throwsException` | Doppelte E-Mail | `EmailAlreadyTakenException`, nichts gespeichert | Edge Case (Duplikat) |
-| `findByUserId_existing_returnsProfile` | Profil zu existierender User-ID | Korrektes HostProfile | Normal |
-| `findByUserId_notFound_throwsHostProfileNotFoundException` | Profil fehlt | `HostProfileNotFoundException` | Edge Case |
-| `update_existingProfile_updatesAllFields` | Update aller änderbaren Felder | Alle Felder aktualisiert | Normal |
-| `update_notFound_throwsHostProfileNotFoundException` | Update für nicht existierendes Profil | `HostProfileNotFoundException` | Edge Case |
+| Test                                                       | Was wird getestet                     | Erwartetes Ergebnis                                | Typ                          |
+|------------------------------------------------------------|---------------------------------------|----------------------------------------------------|------------------------------|
+| `register_validForm_savesUserAndProfile`                   | Registrierung mit gültigem Form       | User und HostProfile werden gespeichert            | Normal                       |
+| `register_passwordIsHashed_neverStoresPlaintext`           | Passwort-Hashing                      | Nur BCrypt-Hash, nie Klartext in der Entity        | Edge Case (Security)         |
+| `register_userRoleIsHost`                                  | Rollen-Schutzregel                    | User wird mit Rolle `HOST` gespeichert (nie OWNER) | Edge Case (Privilege-Schutz) |
+| `register_emailAlreadyTaken_throwsException`               | Doppelte E-Mail                       | `EmailAlreadyTakenException`, nichts gespeichert   | Edge Case (Duplikat)         |
+| `findByUserId_existing_returnsProfile`                     | Profil zu existierender User-ID       | Korrektes HostProfile                              | Normal                       |
+| `findByUserId_notFound_throwsHostProfileNotFoundException` | Profil fehlt                          | `HostProfileNotFoundException`                     | Edge Case                    |
+| `update_existingProfile_updatesAllFields`                  | Update aller änderbaren Felder        | Alle Felder aktualisiert                           | Normal                       |
+| `update_notFound_throwsHostProfileNotFoundException`       | Update für nicht existierendes Profil | `HostProfileNotFoundException`                     | Edge Case                    |
 
 ## HostControllerTest
 
@@ -169,77 +169,96 @@ Datei: `src/test/java/dhbw/heilbronn/pawsitters/web/controller/HostControllerTes
 
 Integrationstest mit `@WebMvcTest` + `@WithMockUser(roles="HOST")` gegen MockMvc + echte SecurityConfig.
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-|---|---|---|---|
-| `getRegister_returnsRegisterView` | GET `/host/register` | View `host/register`, `registerForm` + `allSpecies` im Model | Normal |
-| `postRegister_validForm_redirectsToLoginWithFlag` | POST mit gültigem Form | HTTP 302 zu `/login?registered`, Service aufgerufen | Normal |
-| `postRegister_invalidEmail_returnsRegisterWithFieldError` | POST mit ungültiger E-Mail | Field-Error auf `email`, kein Service-Call | Edge Case (Validation) |
-| `postRegister_endBeforeStart_returnsRegisterWithoutCallingService` | Cross-Field availableUntil < availableFrom | Form-View, kein Service-Call | Edge Case (Cross-Field) |
-| `postRegister_emailAlreadyTaken_showsFieldError` | E-Mail-Duplikat | Field-Error auf `email` | Edge Case (Duplikat) |
-| `getProfile_returnsProfileView` | GET `/host/profile` | View `host/profile`, `profile` im Model | Normal |
-| `getEditForm_returnsEditViewPrefilled` | GET `/host/profile/edit` | View `host/profile-edit`, `updateForm` vorbefüllt, `allSpecies` im Model | Normal |
-| `postEditForm_validForm_redirectsToProfile` | POST mit gültigem Form | HTTP 302 zu `/host/profile`, `update()` aufgerufen | Normal |
-| `postEditForm_invalidForm_returnsEditViewWithoutUpdate` | POST mit leerem firstName | Field-Error auf `firstName`, kein Update | Edge Case (Validation) |
-| `getProfile_unauthenticated_redirectsToLogin` | GET ohne Auth | HTTP 302 zu `/login` | Edge Case (Security) |
+| Test                                                               | Was wird getestet                          | Erwartetes Ergebnis                                                      | Typ                     |
+|--------------------------------------------------------------------|--------------------------------------------|--------------------------------------------------------------------------|-------------------------|
+| `getRegister_returnsRegisterView`                                  | GET `/host/register`                       | View `host/register`, `registerForm` + `allSpecies` im Model             | Normal                  |
+| `postRegister_validForm_redirectsToLoginWithFlag`                  | POST mit gültigem Form                     | HTTP 302 zu `/login?registered`, Service aufgerufen                      | Normal                  |
+| `postRegister_invalidEmail_returnsRegisterWithFieldError`          | POST mit ungültiger E-Mail                 | Field-Error auf `email`, kein Service-Call                               | Edge Case (Validation)  |
+| `postRegister_endBeforeStart_returnsRegisterWithoutCallingService` | Cross-Field availableUntil < availableFrom | Form-View, kein Service-Call                                             | Edge Case (Cross-Field) |
+| `postRegister_emailAlreadyTaken_showsFieldError`                   | E-Mail-Duplikat                            | Field-Error auf `email`                                                  | Edge Case (Duplikat)    |
+| `getProfile_returnsProfileView`                                    | GET `/host/profile`                        | View `host/profile`, `profile` im Model                                  | Normal                  |
+| `getEditForm_returnsEditViewPrefilled`                             | GET `/host/profile/edit`                   | View `host/profile-edit`, `updateForm` vorbefüllt, `allSpecies` im Model | Normal                  |
+| `postEditForm_validForm_redirectsToProfile`                        | POST mit gültigem Form                     | HTTP 302 zu `/host/profile`, `update()` aufgerufen                       | Normal                  |
+| `postEditForm_invalidForm_returnsEditViewWithoutUpdate`            | POST mit leerem firstName                  | Field-Error auf `firstName`, kein Update                                 | Edge Case (Validation)  |
+| `getProfile_unauthenticated_redirectsToLogin`                      | GET ohne Auth                              | HTTP 302 zu `/login`                                                     | Edge Case (Security)    |
 
 ## OfferTest (Domain)
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/domain/OfferTest.java`
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-  |---|---|---|---|
-| `constructor_setsAllFields` | Konstruktor setzt host, careRequest, weeklyPrice | Alle Getter liefern korrekte Werte | Normal |
-| `constructor_setsStatusToPending` | Default-Status nach Konstruktor | Status ist `PENDING` (Workflow-Schutz, nie direkt ACCEPTED/REJECTED) | Normal |
-| `host_null_failsValidation` | `@NotNull` auf host | Violation auf `host` | Edge Case |
-| `careRequest_null_failsValidation` | `@NotNull` auf careRequest | Violation auf `careRequest` | Edge Case |
-| `weeklyPrice_zero_failsValidation` | `@DecimalMin(inclusive=false)` | Violation auf `weeklyPrice` | Edge Case |
-| `weeklyPrice_negative_failsValidation` | Negativer Preis | Violation auf `weeklyPrice` | Edge Case |
+| Test                                   | Was wird getestet                                | Erwartetes Ergebnis                                                  | Typ       |
+  |----------------------------------------|--------------------------------------------------|----------------------------------------------------------------------|-----------|
+| `constructor_setsAllFields`            | Konstruktor setzt host, careRequest, weeklyPrice | Alle Getter liefern korrekte Werte                                   | Normal    |
+| `constructor_setsStatusToPending`      | Default-Status nach Konstruktor                  | Status ist `PENDING` (Workflow-Schutz, nie direkt ACCEPTED/REJECTED) | Normal    |
+| `host_null_failsValidation`            | `@NotNull` auf host                              | Violation auf `host`                                                 | Edge Case |
+| `careRequest_null_failsValidation`     | `@NotNull` auf careRequest                       | Violation auf `careRequest`                                          | Edge Case |
+| `weeklyPrice_zero_failsValidation`     | `@DecimalMin(inclusive=false)`                   | Violation auf `weeklyPrice`                                          | Edge Case |
+| `weeklyPrice_negative_failsValidation` | Negativer Preis                                  | Violation auf `weeklyPrice`                                          | Edge Case |
 
 ## CareRequestRepositoryTest (Integration, @DataJpaTest)
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/repository/CareRequestRepositoryTest.java`
 
 Integrationstest mit `@DataJpaTest` gegen In-Memory-H2 — verifiziert die JPQL-Matching-Query gegen echte SQL-Ausführung.
 
-| Test | Was wird getestet | Erwartetes Ergebnis | Typ |
-  |---|---|---|---|
-| `findMatchingForHost_speciesAndDateMatch_returnsRequest` | Happy Path — alle 4 Filter passen | CareRequest erscheint im Ergebnis | Normal |
-| `findMatchingForHost_speciesMismatch_returnsEmpty` | Filter: Species-Check | Pet-Species nicht in acceptedSpecies → ausgefiltert | Edge Case (Filter-Pfad) |
-| `findMatchingForHost_dateOutsideAvailability_returnsEmpty` | Filter: Datum-Range | CareRequest-Range außerhalb Host-Verfügbarkeit → ausgefiltert | Edge Case (Filter-Pfad) |
-| `findMatchingForHost_hostAlreadyOffered_excludesRequest` | Filter: NOT EXISTS-Subquery | Host hat schon Offer → ausgefiltert | Edge Case (Filter-Pfad) |
-| `findMatchingForHost_closedRequest_returnsEmpty` | Filter: Status OPEN | MATCHED/CLOSED-Requests werden ausgefiltert | Edge Case (Filter-Pfad) |
+| Test                                                       | Was wird getestet                 | Erwartetes Ergebnis                                           | Typ                     |
+  |------------------------------------------------------------|-----------------------------------|---------------------------------------------------------------|-------------------------|
+| `findMatchingForHost_speciesAndDateMatch_returnsRequest`   | Happy Path — alle 4 Filter passen | CareRequest erscheint im Ergebnis                             | Normal                  |
+| `findMatchingForHost_speciesMismatch_returnsEmpty`         | Filter: Species-Check             | Pet-Species nicht in acceptedSpecies → ausgefiltert           | Edge Case (Filter-Pfad) |
+| `findMatchingForHost_dateOutsideAvailability_returnsEmpty` | Filter: Datum-Range               | CareRequest-Range außerhalb Host-Verfügbarkeit → ausgefiltert | Edge Case (Filter-Pfad) |
+| `findMatchingForHost_hostAlreadyOffered_excludesRequest`   | Filter: NOT EXISTS-Subquery       | Host hat schon Offer → ausgefiltert                           | Edge Case (Filter-Pfad) |
+| `findMatchingForHost_closedRequest_returnsEmpty`           | Filter: Status OPEN               | MATCHED/CLOSED-Requests werden ausgefiltert                   | Edge Case (Filter-Pfad) |
 
 ## OfferServiceTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/service/OfferServiceTest.java`
 
-| Test | Was wird getestet                                                                              | Erwartetes Ergebnis                                                  | Typ                  |
-  |---|------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|----------------------|
-| `findMatchingRequests_returnsResultsFromRepo` | Pass-Through zur Repo-Matching-Query                                                           | Repository-Ergebnis wird durchgereicht                               | Normal               |
-| `findOffersByHost_returnsHostsOffers` | Eigene Offers eines Hosts                                                                      | Repository-Ergebnis wird durchgereicht                               | Normal               |
-| `findOffersByCareRequest_ownedByUser_returnsOffers` | Owner sieht Offers für eigene CareRequest                                                      | Liste der Offers                                                     | Normal               |
-| `findOffersByCareRequest_notOwnedByUser_throwsCareRequestNotFound` | Fremde CareRequest per URL-Manipulation                                                        | `CareRequestNotFoundException`, kein Offer-Lookup                    | Edge Case (Security) 
+| Test                                                               | Was wird getestet                                                                              | Erwartetes Ergebnis                                                    | Typ                  |
+  |--------------------------------------------------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|----------------------|
+| `findMatchingRequests_returnsResultsFromRepo`                      | Pass-Through zur Repo-Matching-Query                                                           | Repository-Ergebnis wird durchgereicht                                 | Normal               |
+| `findOffersByHost_returnsHostsOffers`                              | Eigene Offers eines Hosts                                                                      | Repository-Ergebnis wird durchgereicht                                 | Normal               |
+| `findOffersByCareRequest_ownedByUser_returnsOffers`                | Owner sieht Offers für eigene CareRequest                                                      | Liste der Offers                                                       | Normal               |
+| `findOffersByCareRequest_notOwnedByUser_throwsCareRequestNotFound` | Fremde CareRequest per URL-Manipulation                                                        | `CareRequestNotFoundException`, kein Offer-Lookup                      | Edge Case (Security) |
 |
-| `createOffer_matchingRequest_savesOfferWithPendingStatus` | Happy Path                                                                                     | Offer mit korrekten Feldern gespeichert                              | Normal               |
-| `createOffer_careRequestNotFound_throwsException` | CareRequest-ID existiert nicht                                                                 | `CareRequestNotFoundException`                                       | Edge Case            |
-| `createOffer_notMatching_throwsOfferNotEligible` | CareRequest existiert, passt aber nicht (URL-Manipulation)                                     | `OfferNotEligibleException`, kein Save                               | Edge Case (Security) |
-| `accept_pending_setsOfferAcceptedAndRequestMatched` | Happy Path: Offer PENDING→ACCEPTED, CareRequest OPEN→MATCHED                                   | Status-Wechsel beider Entities korrekt                               | Normal               |
-| `accept_cascadeRejectsOtherPendingOffers` | #9 Kaskade: 3 PENDING-Offers, eins wird angenommen                                             | Akzeptiertes Offer ACCEPTED, andere zwei REJECTED, CareRequest MATCHED | Normal |
-| `accept_offerNotFound_throwsOfferNotFound` | Offer-ID existiert nicht                                                                       | `OfferNotFoundException`, kein Status-Wechsel                        | Edge Case                                                    |
-| `accept_offerNotOwnedByUser_throwsOfferNotFound` | Owner                                                        versucht fremdes Offer anzunehmen | `OfferNotFoundException` (gleiche Exception, kein Info-Leak)         | Edge Case (Security) |
-| `accept_offerAlreadyAccepted_throwsOfferNotPending` | Offer ist schon ACCEPTED/REJECTED                                                              |`OfferNotPendingException` | Edge Case                                                                                      |
-| `accept_careRequestAlreadyMatched_throwsOfferNotPending`| CareRequest schon MATCHED (Race-Condition) |`OfferNotPendingException` | Edge Case                                                                                      |
+| `createOffer_matchingRequest_savesOfferWithPendingStatus`          | Happy Path                                                                                     | Offer mit korrekten Feldern gespeichert                                | Normal               |
+| `createOffer_careRequestNotFound_throwsException`                  | CareRequest-ID existiert nicht                                                                 | `CareRequestNotFoundException`                                         | Edge Case            |
+| `createOffer_notMatching_throwsOfferNotEligible`                   | CareRequest existiert, passt aber nicht (URL-Manipulation)                                     | `OfferNotEligibleException`, kein Save                                 | Edge Case (Security) |
+| `accept_pending_setsOfferAcceptedAndRequestMatched`                | Happy Path: Offer PENDING→ACCEPTED, CareRequest OPEN→MATCHED                                   | Status-Wechsel beider Entities korrekt                                 | Normal               |
+| `accept_cascadeRejectsOtherPendingOffers`                          | #9 Kaskade: 3 PENDING-Offers, eins wird angenommen                                             | Akzeptiertes Offer ACCEPTED, andere zwei REJECTED, CareRequest MATCHED | Normal               |
+| `accept_offerNotFound_throwsOfferNotFound`                         | Offer-ID existiert nicht                                                                       | `OfferNotFoundException`, kein Status-Wechsel                          | Edge Case            |
+| `accept_offerNotOwnedByUser_throwsOfferNotFound`                   | Owner                                                        versucht fremdes Offer anzunehmen | `OfferNotFoundException` (gleiche Exception, kein Info-Leak)           | Edge Case (Security) |
+| `accept_offerAlreadyAccepted_throwsOfferNotPending`                | Offer ist schon ACCEPTED/REJECTED                                                              | `OfferNotPendingException`                                             | Edge Case            |
+| `accept_careRequestAlreadyMatched_throwsOfferNotPending`           | CareRequest schon MATCHED (Race-Condition)                                                     | `OfferNotPendingException`                                             | Edge Case            |
 
 ## OfferControllerTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/web/controller/OfferControllerTest.java`
 
 Integrationstest mit `@WebMvcTest` — gemischte Rollen (HOST und OWNER), pro Test per `@WithMockUser` gesetzt.
 
-| Test | Was wird getestet                              | Erwartetes Ergebnis                                                                | Typ |
-  |---|------------------------------------------------|------------------------------------------------------------------------------------|---|
-| `getBrowseMatchingRequests_returnsListView` | GET `/host/care-requests` (Host)               | View `host/care-requests/list`, `matchingRequests` im Model                        | Normal |
-| `getOfferForm_returnsFormViewWithCareRequestId` | GET `/host/care-requests/{id}/offer`           | View, `offerForm` + `careRequestId` im Model                                       | Normal |
-| `postCreateOffer_validForm_redirectsToHostOffers` | POST mit gültigem Form                         | HTTP 302 → `/host/offers`, Service aufgerufen                                      | Normal |
+| Test                                                         | Was wird getestet                              | Erwartetes Ergebnis                                                                | Typ                    |
+  |--------------------------------------------------------------|------------------------------------------------|------------------------------------------------------------------------------------|------------------------|
+| `getBrowseMatchingRequests_returnsListView`                  | GET `/host/care-requests` (Host)               | View `host/care-requests/list`, `matchingRequests` im Model                        | Normal                 |
+| `getOfferForm_returnsFormViewWithCareRequestId`              | GET `/host/care-requests/{id}/offer`           | View, `offerForm` + `careRequestId` im Model                                       | Normal                 |
+| `postCreateOffer_validForm_redirectsToHostOffers`            | POST mit gültigem Form                         | HTTP 302 → `/host/offers`, Service aufgerufen                                      | Normal                 |
 | `postCreateOffer_invalidPrice_returnsFormViewWithoutService` | weeklyPrice = 0                                | Field-Error auf `weeklyPrice`, kein Service-Call                                   | Edge Case (Validation) |
-| `getHostOffers_returnsHostOffersView` | GET `/host/offers`                             | View `host/offers/list`, `offers` im Model                                         | Normal |
-| `getOwnerOffers_returnsOwnerOffersView` | GET `/owner/care-requests/{id}/offers` (Owner) | View `owner/care-requests/offers`, `offers` + `careRequestId` im Model             | Normal |
-| `getBrowseMatchingRequests_unauthenticated_redirectsToLogin` | GET ohne Auth                                  | HTTP 302 zu `/login`                                                               | Edge Case (Security) |
-| `postAcceptOffer_validOffer_redirectsToCareRequests` | POST `/owner/offers/{id}/accept` als Owner     | HTTP 302 → `/owner/care-requests`, Service mit korrektem offerId+userId aufgerufen | Normal |
-  ---
+| `getHostOffers_returnsHostOffersView`                        | GET `/host/offers`                             | View `host/offers/list`, `offers` im Model                                         | Normal                 |
+| `getOwnerOffers_returnsOwnerOffersView`                      | GET `/owner/care-requests/{id}/offers` (Owner) | View `owner/care-requests/offers`, `offers` + `careRequestId` im Model             | Normal                 |
+| `getBrowseMatchingRequests_unauthenticated_redirectsToLogin` | GET ohne Auth                                  | HTTP 302 zu `/login`                                                               | Edge Case (Security)   |
+| `postAcceptOffer_validOffer_redirectsToCareRequests`         | POST `/owner/offers/{id}/accept` als Owner     | HTTP 302 → `/owner/care-requests`, Service mit korrektem offerId+userId aufgerufen | Normal                 |
+
+
+## GlobalExceptionHandlerTest
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/web/contro
+  ller/GlobalExceptionHandlerTest.java`
+
+Integrationstest mit `@WebMvcTest` +
+Top-Level-`ThrowingTestController` der gezielt jede
+gemappte Exception wirft. So wird der Handler-Pfad
+isoliert getestet ohne die echten Controller zu mocken.
+
+| Test                                 | Exception                      | Erwartetes Ergebnis                            | Typ       |
+  |--------------------------------------|--------------------------------|------------------------------------------------|-----------|
+| `petNotFound_returns404View`         | `PetNotFoundException`         | HTTP 404, View `error/404`, `message` im Model | Edge Case |
+| `careRequestNotFound_returns404View` | `CareRequestNotFoundException` | HTTP 404, View `error/404`                     | Edge Case |
+| `offerNotFound_returns404View`       | `OfferNotFoundException`       | HTTP 404, View `error/404`                     | Edge Case |
+| `hostProfileNotFound_returns404View` | `HostProfileNotFoundException` | HTTP 404, View                   `error/404`   | Edge Case |
+| `offerNotPending_returns409View`     | `OfferNotPendingException`     | HTTP 409, View `error/409`                     | Edge Case |
+| `offerNotEligible_returns409View`    | `OfferNotEligibleException`    | HTTP 409, View `error/409`                     | Edge Case |
+---

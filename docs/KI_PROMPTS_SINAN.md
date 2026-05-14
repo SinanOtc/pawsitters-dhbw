@@ -178,3 +178,33 @@
 - **Verifikation:** Alle 124 Tests grün, manuelle
   Code-Reviews,
   Verständnisprüfung durch Nachfragen.
+
+  ## Global Exception Handler (#57)
+    - **Datum:** 14.05.2026
+    - **Tool:** Claude Opus 4.7
+    - **Prompts:**
+        - Begründung warum `@ControllerAdvice` jetzt sinnvoll
+          ist (5+ Stellen mit
+          custom Exceptions, Vergleichsgruppe
+          `Software-Engineering-Projekt-WI24A3`
+          hat ein zentrales `ApiExceptionHandler`)
+        - Mapping-Strategie: `*NotFoundException` → 404,
+          State-Exceptions
+          (`OfferNotPending/NotEligible`) → 409, sonstige
+          RuntimeExceptions bewusst
+          ungefangen → Spring-Default-500 damit echte Bugs
+          sichtbar bleiben
+        - Debug: `@ResponseStatus` auf `@ExceptionHandler`
+          triggert intern
+          `sendError()` → BasicErrorController übernimmt das
+          Rendering und unsere
+          View wird verworfen. Fix: `ModelAndView` mit
+          explizitem `setStatus(...)`
+        - Debug: Inner `@Controller`-Klassen werden von
+          `@WebMvcTest` Component-Scan
+          nicht erfasst → 6 Tests hingen auf Spring's
+          Default-404. Fix: Top-Level
+          `ThrowingTestController` im Test-Source-Set
+    - **Verifikation:** Alle 130 Tests grün, manuelle
+      Code-Reviews,
+      Verständnisprüfung durch Nachfragen.

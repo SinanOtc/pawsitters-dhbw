@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>404 — Nicht gefunden (TODO Frontend)</title>
+</head>
+<body>
+<!-- TODO Frontend: 404-Page mit Styling und Link zurück zum Dashboard. Model: message (deutscher Fehlertext aus der Exception, kein Stacktrace). -->
+<h1>404 — Nicht gefunden</h1>
+<p th:text="${message}">Die angeforderte Ressource
+    existiert nicht.</p>
+<p><a th:href="@{/dashboard}">Zurück zum Dashboard</a></p>
+</body>
+</html>
