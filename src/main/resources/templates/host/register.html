@@ -1,11 +1,112 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-    <meta charset="UTF-8">
-    <title>Host-Registrierung (TODO Frontend)</title>
+    <title>Gastgeber registrieren</title>
 </head>
 <body>
-<!-- TODO Frontend: Registrierungsformular für Host.Model: registerForm (E-Mail, Passwort, firstName, lastName,address,acceptedSpecies, availableFrom, availableUntil, pricePerWeek), allSpecies (PetSpecies-Enum-Werte für Multi-Select). POST /host/register -->
-<h1>Host-Registrierung</h1>
+<section>
+    <h1>Gastgeber-Profil erstellen</h1>
+
+    <form th:action="@{/host/register}" th:object="${registerForm}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+        <p>
+            <label for="email">E-Mail</label>
+            <input type="email"
+                   th:field="*{email}"
+                   autocomplete="email"
+                   maxlength="254"
+                   required>
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="field-error"></span>
+        </p>
+
+        <p>
+            <label for="password">Passwort</label>
+            <input type="password"
+                   th:field="*{password}"
+                   autocomplete="new-password"
+                   minlength="8"
+                   maxlength="100"
+                   required>
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="field-error"></span>
+        </p>
+
+        <p>
+            <label for="firstName">Vorname</label>
+            <input type="text"
+                   th:field="*{firstName}"
+                   autocomplete="given-name"
+                   maxlength="100"
+                   required>
+            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="field-error"></span>
+        </p>
+
+        <p>
+            <label for="lastName">Nachname</label>
+            <input type="text"
+                   th:field="*{lastName}"
+                   autocomplete="family-name"
+                   maxlength="100"
+                   required>
+            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="field-error"></span>
+        </p>
+
+        <p>
+            <label for="address">Adresse</label>
+            <input type="text"
+                   th:field="*{address}"
+                   autocomplete="street-address"
+                   maxlength="256"
+                   required>
+            <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="field-error"></span>
+        </p>
+
+        <fieldset class="checkbox-list">
+            <legend>Akzeptierte Tierarten</legend>
+            <label th:each="species : ${allSpecies}" class="checkbox-option">
+                <input type="checkbox"
+                       th:field="*{acceptedSpecies}"
+                       th:value="${species}">
+                <span th:text="${#strings.capitalize(#strings.toLowerCase(species.name()))}">Dog</span>
+            </label>
+            <span th:if="${#fields.hasErrors('acceptedSpecies')}" th:errors="*{acceptedSpecies}" class="field-error"></span>
+        </fieldset>
+
+        <p>
+            <label for="availableFrom">Verfügbar ab</label>
+            <input type="date"
+                   th:field="*{availableFrom}"
+                   required>
+            <span th:if="${#fields.hasErrors('availableFrom')}" th:errors="*{availableFrom}" class="field-error"></span>
+        </p>
+
+        <p>
+            <label for="availableUntil">Verfügbar bis</label>
+            <input type="date"
+                   th:field="*{availableUntil}"
+                   required>
+            <span th:if="${#fields.hasErrors('availableUntil')}" th:errors="*{availableUntil}" class="field-error"></span>
+            <span th:if="${#fields.hasErrors('availabilityRangeValid')}" th:errors="*{availabilityRangeValid}" class="field-error"></span>
+        </p>
+
+        <p>
+            <label for="pricePerWeek">Preis pro Woche</label>
+            <input type="number"
+                   th:field="*{pricePerWeek}"
+                   min="0.01"
+                   step="0.01"
+                   inputmode="decimal"
+                   required>
+            <span th:if="${#fields.hasErrors('pricePerWeek')}" th:errors="*{pricePerWeek}" class="field-error"></span>
+        </p>
+
+        <div class="form-actions">
+            <button type="submit">Profil erstellen</button>
+            <a th:href="@{/login}">Zum Login</a>
+        </div>
+    </form>
+</section>
 </body>
 </html>

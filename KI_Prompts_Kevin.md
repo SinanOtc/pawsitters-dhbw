@@ -1,6 +1,6 @@
 # KI-Nutzung im Projekt - Kevin
 
-Diese Datei dokumentiert meinen KI-Einsatz im Pawsitters-Projekt am 2026-05-12.
+Diese Datei dokumentiert meinen KI-Einsatz im Pawsitters-Projekt ab 2026-05-12.
 
 ## Verwendete Tools
 
@@ -56,6 +56,13 @@ Für jeden nennenswerten KI-Einsatz wird unten ein Eintrag erstellt mit:
 - **Prompt** (sinngemäß): `KI_Prompts_Kevin.md` im Stil der vorhandenen KI-Dokumentation erstellen, aber mit eigenen Inhalten.
 - **Ergebnis & Anpassung**: Datei erstellt und auf die heutigen KI-Einsätze reduziert.
 - **Eigenanteil**: Inhalt geprüft und gekürzt.
+
+### 2026-05-14 - Frontend: Host-Profil-Seite
+
+- **Zweck**: Issue #23 umsetzen: Formular und Anzeige für das Gastgeber-Profil im Frontend erstellen.
+- **Prompt** (sinngemäß): Mit dem Host-Profil-Issue weitermachen und die Änderungen in kleinen Commits umsetzen.
+- **Ergebnis & Anpassung**: Host-Registrierungsformular, Profilanzeige und Bearbeitungsformular mit Thymeleaf umgesetzt. Mehrfachauswahl für Tierarten, Datepicker für Verfügbarkeit und Preisfeld wurden an die bestehenden Backend-Forms angebunden.
+- **Eigenanteil**: Scope auf Frontend begrenzt, Commit-Schritte festgelegt und Akzeptanzkriterien gegen die vorhandenen Backend-Endpunkte geprüft.
 
 ---
 
