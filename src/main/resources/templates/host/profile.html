@@ -1,11 +1,58 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-  <meta charset="UTF-8">
-  <title>Host-Profil (TODO Frontend)</title>
+  <title>Mein Gastgeber-Profil</title>
 </head>
 <body>
-<!-- TODO Frontend: Anzeige des Host-Profils (alle Felder), Link zum Edit. Model: profile -->
-<h1>Mein Profil</h1>
+<section>
+  <h1>Mein Gastgeber-Profil</h1>
+
+  <p class="muted">Eingeloggt als <span sec:authentication="name"></span></p>
+
+  <p class="profile-name">
+    <span th:text="${profile.firstName}">Max</span>
+    <span th:text="${profile.lastName}">Mustermann</span>
+  </p>
+
+  <table>
+    <tr>
+      <th scope="row">E-Mail:</th>
+      <td th:text="${profile.user.email}"></td>
+    </tr>
+    <tr>
+      <th scope="row">Adresse:</th>
+      <td th:text="${profile.address}"></td>
+    </tr>
+    <tr>
+      <th scope="row">Akzeptierte Tierarten:</th>
+      <td>
+        <span th:if="${profile.acceptedSpecies.empty}">Keine</span>
+        <span th:each="species, iterStat : ${profile.acceptedSpecies}">
+          <span th:text="${#strings.capitalize(#strings.toLowerCase(species.name()))}">Dog</span><span th:if="${!iterStat.last}">, </span>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">Verfügbar ab:</th>
+      <td th:text="${#temporals.format(profile.availableFrom, 'dd.MM.yyyy')}"></td>
+    </tr>
+    <tr>
+      <th scope="row">Verfügbar bis:</th>
+      <td th:text="${#temporals.format(profile.availableUntil, 'dd.MM.yyyy')}"></td>
+    </tr>
+    <tr>
+      <th scope="row">Preis pro Woche:</th>
+      <td><span th:text="${profile.pricePerWeek}"></span> €</td>
+    </tr>
+  </table>
+
+  <div class="form-actions">
+    <a th:href="@{/host/profile/edit}">Profil bearbeiten</a>
+    <a th:href="@{/dashboard}">Zum Dashboard</a>
+  </div>
+</section>
 </body>
 </html>
