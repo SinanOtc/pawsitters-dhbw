@@ -46,9 +46,9 @@ Für jeden nennenswerten KI-Einsatz wird unten ein Eintrag erstellt mit:
 ### 2026-05-12 - Frontend: PetOwner-Profil-Seite
 
 - **Zweck**: Issue #22 umsetzen: Formular und Anzeige für das PetOwner-Profil verbessern.
-- **Prompt** (sinngemäß): Mit Issue #22 weitermachen, PetOwner-Profilseite erstellen bzw. verbessern und Adresse in Straße, Straßennummer, PLZ und Ort aufteilen.
-- **Ergebnis & Anpassung**: Registrierungs- und Bearbeitungsformular erweitert, Profilanzeige angepasst und Adressfelder getrennt dargestellt. Backend-/Controller-Änderungen wurden wieder verworfen, weil ich nur am Frontend arbeiten sollte; die Adressfelder werden deshalb per JavaScript in das bestehende Backend-Feld `address` zusammengeführt. Nach Review wurden ein No-JavaScript-Fallback, sichtbare Fehlermeldungen, eine defensivere Adressaufteilung und ein Fallback für nicht parsebare Bestandsadressen ergänzt.
-- **Eigenanteil**: Feldaufteilung für Adresse vorgegeben, Frontend-only Scope korrigiert, Änderungen geprüft und Testergebnis (`mvn test`, 92 Tests) kontrolliert.
+- **Prompt** (sinngemäß): Mit Issue #22 weitermachen und die PetOwner-Profilseite im Frontend überarbeiten.
+- **Ergebnis & Anpassung**: Registrierungs- und Bearbeitungsformular sowie die Profilanzeige im Frontend überarbeitet. Vorschläge mit Backend-/Controller-Änderungen wurden wieder verworfen, weil ich nur am Frontend arbeiten sollte; übernommen wurden nur die Änderungen, die zum tatsächlichen PR-Stand passen.
+- **Eigenanteil**: Frontend-only Scope klargestellt, Änderungen geprüft und Testergebnis (`mvn test`, 92 Tests) kontrolliert.
 
 ### 2026-05-12 - Dokumentation der KI-Nutzung
 
