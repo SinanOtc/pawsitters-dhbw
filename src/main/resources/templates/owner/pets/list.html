@@ -30,9 +30,9 @@
         <tr th:each="pet : ${pets}">
             <td th:text="${pet.name}">Bello</td>
             <td th:text="${#strings.capitalize(#strings.toLowerCase(pet.species.name()))}">Dog</td>
-            <td th:text="${pet.breed ?: '-'}">Labrador</td>
+            <td th:text="${#strings.isEmpty(pet.breed) ? '-' : pet.breed}">Labrador</td>
             <td th:text="${pet.birthYear ?: '-'}">2020</td>
-            <td th:text="${pet.description ?: '-'}">Verträgt sich gut mit Katzen.</td>
+            <td th:text="${#strings.isEmpty(pet.description) ? '-' : pet.description}">Verträgt sich gut mit Katzen.</td>
             <td>
                 <a th:href="@{/owner/pets/{id}/edit(id=${pet.id})}">Bearbeiten</a>
                 <form th:action="@{/owner/pets/{id}/delete(id=${pet.id})}" method="post">
