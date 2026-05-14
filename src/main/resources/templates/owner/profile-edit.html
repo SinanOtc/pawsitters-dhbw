@@ -35,70 +35,22 @@
             class="field-error"></span>
     </p>
 
-    <noscript>
-      <p class="message message-success">
-        JavaScript ist deaktiviert. Bitte die Adresse vollständig im Feld "Adresse" eingeben.
-      </p>
-    </noscript>
-
-    <p data-address-fallback-group>
+    <p>
       <label for="address">Adresse</label>
       <input type="text"
              th:field="*{address}"
              autocomplete="street-address"
              maxlength="256"
-             required
-             data-composed-address>
+             required>
+      <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"
+            class="field-error"></span>
     </p>
-    <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"
-          class="field-error"></span>
-
-    <div data-address-split hidden>
-    <p>
-      <label for="street">Straße</label>
-      <input type="text"
-             id="street"
-             autocomplete="address-line1"
-             data-address-field="street"
-             maxlength="100">
-    </p>
-
-    <p>
-      <label for="streetNumber">Straßennummer</label>
-      <input type="text"
-             id="streetNumber"
-             autocomplete="address-line2"
-             data-address-field="streetNumber"
-             maxlength="20">
-    </p>
-
-    <p>
-      <label for="postalCode">PLZ</label>
-      <input type="text"
-             id="postalCode"
-             autocomplete="postal-code"
-             inputmode="numeric"
-             data-address-field="postalCode"
-             pattern="[0-9]{5}"
-             maxlength="5">
-    </p>
-
-    <p>
-      <label for="city">Ort</label>
-      <input type="text"
-             id="city"
-             autocomplete="address-level2"
-             data-address-field="city"
-             maxlength="100">
-    </p>
-    </div>
 
     <div class="form-actions">
       <button type="submit">Speichern</button>
       <a th:href="@{/owner/profile}">Abbrechen</a>
     </div>
   </form>
-  <script th:src="@{/js/owner-address.js}"></script>
 </section>
 </body>
 </html>
