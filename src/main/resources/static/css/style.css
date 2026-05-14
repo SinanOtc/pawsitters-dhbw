@@ -121,6 +121,25 @@ label {
     margin-top: 0.25rem;
 }
 
+.form-actions {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.profile-name {
+    color: #102a43;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.muted {
+    color: #52606d;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;

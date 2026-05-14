@@ -43,6 +43,13 @@ Für jeden nennenswerten KI-Einsatz wird unten ein Eintrag erstellt mit:
 - **Ergebnis & Anpassung**: `mvn test` lief nach erneuter Ausführung erfolgreich durch (64 Tests). Anwendung mit `mvn spring-boot:run` gestartet.
 - **Eigenanteil**: Testergebnis geprüft und Seite lokal unter `http://localhost:8080` kontrolliert.
 
+### 2026-05-12 - Frontend: PetOwner-Profil-Seite
+
+- **Zweck**: Issue #22 umsetzen: Formular und Anzeige für das PetOwner-Profil verbessern.
+- **Prompt** (sinngemäß): Mit Issue #22 weitermachen und die PetOwner-Profilseite im Frontend überarbeiten.
+- **Ergebnis & Anpassung**: Registrierungs- und Bearbeitungsformular sowie die Profilanzeige im Frontend überarbeitet. Vorschläge mit Backend-/Controller-Änderungen wurden wieder verworfen, weil ich nur am Frontend arbeiten sollte; übernommen wurden nur die Änderungen, die zum tatsächlichen PR-Stand passen.
+- **Eigenanteil**: Frontend-only Scope klargestellt, Änderungen geprüft und Testergebnis (`mvn test`, 92 Tests) kontrolliert.
+
 ### 2026-05-12 - Dokumentation der KI-Nutzung
 
 - **Zweck**: Eigene KI-Nutzung für den Frontend-Teil dokumentieren.

@@ -10,17 +10,14 @@
 <section>
     <h1>Mein Besitzerprofil</h1>
 
-    <p>Eingeloggt als <span sec:authentication="name"></span></p>
+    <p class="muted">Eingeloggt als <span sec:authentication="name"></span></p>
+
+    <p class="profile-name">
+        <span th:text="${profile.firstName}">Max</span>
+        <span th:text="${profile.lastName}">Mustermann</span>
+    </p>
 
     <table>
-      <tr>
-        <th scope="row">Vorname:</th>
-        <td th:text="${profile.firstName}"></td>
-      </tr>
-      <tr>
-        <th scope="row">Nachname:</th>
-        <td th:text="${profile.lastName}"></td>
-      </tr>
       <tr>
         <th scope="row">E-Mail:</th>
         <td th:text="${profile.user.email}"></td>
@@ -31,8 +28,10 @@
       </tr>
     </table>
 
-    <p><a th:href="@{/owner/profile/edit}">Profil bearbeiten</a></p>
-    <p><a th:href="@{/dashboard}">Zurück zum Dashboard</a></p>
+    <div class="form-actions">
+        <a th:href="@{/owner/profile/edit}">Profil bearbeiten</a>
+        <a th:href="@{/dashboard}">Zum Dashboard</a>
+    </div>
 </section>
 </body>
 </html>

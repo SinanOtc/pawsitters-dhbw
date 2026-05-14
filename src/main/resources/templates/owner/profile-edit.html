@@ -15,29 +15,42 @@
 
     <p>
       <label for="firstName">Vorname</label>
-      <input type="text" th:field="*{firstName}" required>
+      <input type="text"
+             th:field="*{firstName}"
+             autocomplete="given-name"
+             maxlength="100"
+             required>
       <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
             class="field-error"></span>
     </p>
 
     <p>
       <label for="lastName">Nachname</label>
-      <input type="text" th:field="*{lastName}" required>
+      <input type="text"
+             th:field="*{lastName}"
+             autocomplete="family-name"
+             maxlength="100"
+             required>
       <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
             class="field-error"></span>
     </p>
 
     <p>
       <label for="address">Adresse</label>
-      <input type="text" th:field="*{address}" required>
+      <input type="text"
+             th:field="*{address}"
+             autocomplete="street-address"
+             maxlength="256"
+             required>
       <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"
             class="field-error"></span>
     </p>
 
-    <button type="submit">Speichern</button>
+    <div class="form-actions">
+      <button type="submit">Speichern</button>
+      <a th:href="@{/owner/profile}">Abbrechen</a>
+    </div>
   </form>
-
-  <p><a th:href="@{/owner/profile}">Abbrechen</a></p>
 </section>
 </body>
 </html>
