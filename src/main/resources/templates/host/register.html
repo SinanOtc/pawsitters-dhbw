@@ -17,7 +17,7 @@
             <input type="email"
                    th:field="*{email}"
                    autocomplete="email"
-                   maxlength="254"
+                   maxlength="256"
                    required>
             <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="field-error"></span>
         </p>
