@@ -64,6 +64,13 @@ Für jeden nennenswerten KI-Einsatz wird unten ein Eintrag erstellt mit:
 - **Ergebnis & Anpassung**: Host-Registrierungsformular, Profilanzeige und Bearbeitungsformular mit Thymeleaf umgesetzt. Mehrfachauswahl für Tierarten, Datepicker für Verfügbarkeit und Preisfeld wurden an die bestehenden Backend-Forms angebunden.
 - **Eigenanteil**: Scope auf Frontend begrenzt, Commit-Schritte festgelegt und Akzeptanzkriterien gegen die vorhandenen Backend-Endpunkte geprüft.
 
+### 2026-05-14 - Frontend: Pet-Registrierungs-Formular
+
+- **Zweck**: Issue #24 umsetzen: Formular zur Registrierung eines Haustiers durch den Tierhalter erstellen.
+- **Prompt** (sinngemäß): Mit dem Pet-Registrierungsformular weitermachen und die Änderungen wieder in kleinen Commits umsetzen.
+- **Ergebnis & Anpassung**: Formular für Haustiere mit Name, Tierart-Dropdown, Geburtsjahr, Besonderheiten und den vorhandenen Backend-Feldern erstellt. Zusätzlich wurde eine einfache Haustier-Übersicht mit Link zum Registrierungsformular ergänzt.
+- **Eigenanteil**: Bestehende Backend-Form geprüft, Pflichtfelder übernommen und die zusätzlichen Felder gegen den Issue-Scope abgewogen.
+
 ---
 
 ## Reflexion
