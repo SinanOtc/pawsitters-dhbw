@@ -1,9 +1,7 @@
 package dhbw.heilbronn.pawsitters.web.controller;
 
 import dhbw.heilbronn.pawsitters.config.SecurityConfig;
-import dhbw.heilbronn.pawsitters.domain.User;
-import dhbw.heilbronn.pawsitters.domain.UserRole;
-import dhbw.heilbronn.pawsitters.repository.UserRepository;
+import dhbw.heilbronn.pawsitters.security.CurrentUserResolver;
 import dhbw.heilbronn.pawsitters.service.CareRequestService;
 import dhbw.heilbronn.pawsitters.service.PetService;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -19,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -32,7 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 // @WebMvcTest bootet nur die Web Schicht für CareRequestController.
-// Services + UserRepository werden gemockt → Controller komplett von DB entkoppelt.
+// Services + CurrentUserResolver werden gemockt → Controller komplett von DB entkoppelt.
 // @WithMockUser auf Klassenebene → jeder Test läuft als eingeloggter Owner,
 // einzelne Tests überschreiben das mit @WithAnonymousUser
 @WebMvcTest(CareRequestController.class)
@@ -41,7 +39,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser(username = "owner@test.de", roles = "OWNER")
 class CareRequestControllerTest {
 
-    private static final String EMAIL = "owner@test.de";
     private static final Long USER_ID = 1L;
     private static final Long PET_ID = 42L;
 
@@ -55,15 +52,12 @@ class CareRequestControllerTest {
     private PetService petService;
 
     @MockitoBean
-    private UserRepository userRepository;
+    private CurrentUserResolver currentUserResolver;
 
-    // currentUserId(...) im Controller braucht den User aus dem Repository.
-    // Default-Setup für jeden Test: eingeloggter Owner mit ID 1
+    // Default-Setup für jeden Test: Resolver gibt USER_ID für jeden Principal zurück.
     @BeforeEach
     void mockAuthenticatedUser() {
-        User user = new User(EMAIL, "hash", UserRole.OWNER);
-        user.setId(USER_ID);
-        when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.of(user));
+        when(currentUserResolver.userId(any(UserDetails.class))).thenReturn(USER_ID);
     }
 
     // === Liste ===
