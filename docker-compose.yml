@@ -1,0 +1,10 @@
+services:
+  app:
+    build: .
+    container_name: pawsitters-app
+    ports:
+      - "8080:8080"
+    environment:
+    # Aktiviert Demo-Seed + H2 in-memory (siehe DevUsersConfig).
+      SPRING_PROFILES_ACTIVE: dev
+    restart: unless-stopped
