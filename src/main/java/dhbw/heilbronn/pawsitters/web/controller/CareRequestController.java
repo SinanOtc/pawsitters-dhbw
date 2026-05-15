@@ -1,6 +1,6 @@
 package dhbw.heilbronn.pawsitters.web.controller;
 
-import dhbw.heilbronn.pawsitters.repository.UserRepository;
+import dhbw.heilbronn.pawsitters.security.CurrentUserResolver;
 import dhbw.heilbronn.pawsitters.service.CareRequestService;
 import dhbw.heilbronn.pawsitters.service.PetService;
 import dhbw.heilbronn.pawsitters.web.form.CareRequestForm;
@@ -25,26 +25,27 @@ public class CareRequestController {
 
     private final CareRequestService careRequestService;
     private final PetService petService;
-    private final UserRepository userRepository;
+    private final CurrentUserResolver currentUserResolver;
 
-    public CareRequestController(CareRequestService careRequestService, PetService petService, UserRepository userRepository) {
+    public CareRequestController(CareRequestService careRequestService, PetService petService, CurrentUserResolver currentUserResolver) {
         this.careRequestService = careRequestService;
         this.petService = petService;
-        this.userRepository = userRepository;
+        this.currentUserResolver = currentUserResolver;
     }
 
     // === Liste ===
     @GetMapping
     public String list(@AuthenticationPrincipal UserDetails principal, Model model) {
-        Long userId = currentUserId(principal);
+        Long userId = currentUserResolver.userId(principal);
         model.addAttribute("careRequests", careRequestService.findAllByOwner(userId));
         return LIST_VIEW;
     }
 
     // === Anlegen ===
+    @SuppressWarnings({"DataFlowIssue, java:S2637"})
     @GetMapping("/new")
     public String newForm(@AuthenticationPrincipal UserDetails principal, Model model) {
-        Long userId = currentUserId(principal);
+        Long userId = currentUserResolver.userId(principal);
 
         // leeres Form Objekt damit Thymeleaf binden kann
         model.addAttribute("careRequestForm", new CareRequestForm(null, null, null));
@@ -58,7 +59,7 @@ public class CareRequestController {
     @PostMapping("/new")
     public String createSubmit(@Valid @ModelAttribute("careRequestForm") CareRequestForm form, BindingResult bindingResult, @AuthenticationPrincipal UserDetails principal, Model model) {
 
-        Long userId = currentUserId(principal);
+        Long userId = currentUserResolver.userId(principal);
 
         // Bei Validierungsfehlern zurück zum Form
         if(bindingResult.hasErrors()) {
@@ -70,14 +71,4 @@ public class CareRequestController {
         careRequestService.register(userId, form);
         return REDIRECT_LIST;
     }
-
-    // === Hilfsfunktionen ===
-
-    // Email aus Principal -> User aus DB -> UserID
-    private Long currentUserId(UserDetails principal) {
-        return userRepository.findByEmail(principal.getUsername())
-                .orElseThrow(() -> new IllegalStateException("Eingeloggter User nicht gefunden"))
-                .getId();
-    }
-
 }

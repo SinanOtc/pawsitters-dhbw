@@ -1,7 +1,7 @@
 package dhbw.heilbronn.pawsitters.web.controller;
 
 import dhbw.heilbronn.pawsitters.domain.OwnerProfile;
-import dhbw.heilbronn.pawsitters.repository.UserRepository;
+import dhbw.heilbronn.pawsitters.security.CurrentUserResolver;
 import dhbw.heilbronn.pawsitters.service.OwnerService;
 import dhbw.heilbronn.pawsitters.service.exception.EmailAlreadyTakenException;
 import dhbw.heilbronn.pawsitters.web.form.RegisterOwnerForm;
@@ -31,11 +31,11 @@ public class OwnerController {
     private static final String EDIT_VIEW = "owner/profile-edit";
 
     private final OwnerService ownerService;
-    private final UserRepository userRepository;
+    private final CurrentUserResolver currentUserResolver;
 
-    public OwnerController(OwnerService ownerService, UserRepository userRepository) {
+    public OwnerController(OwnerService ownerService, CurrentUserResolver currentUserResolver) {
         this.ownerService = ownerService;
-        this.userRepository = userRepository;
+        this.currentUserResolver = currentUserResolver;
     }
 
     // === Registrierung ===
@@ -69,7 +69,7 @@ public class OwnerController {
     // === Profil anzeigen ====
     @GetMapping("/profile")
     public String profile(@AuthenticationPrincipal UserDetails principal, Model model) {
-        OwnerProfile profile = loadProfileByEmail(principal.getUsername());
+        OwnerProfile profile = loadProfile(principal);
         model.addAttribute("profile", profile);
         return "owner/profile";
     }
@@ -77,7 +77,7 @@ public class OwnerController {
     // === Profil bearbeiten ===
     @GetMapping("/profile/edit")
     public String editForm(@AuthenticationPrincipal UserDetails principal, Model model) {
-        OwnerProfile profile = loadProfileByEmail(principal.getUsername());
+        OwnerProfile profile = loadProfile(principal);
         // Form mit Werten befüllen
         model.addAttribute("updateForm", new UpdateOwnerForm(
                 profile.getFirstName(),
@@ -92,21 +92,14 @@ public class OwnerController {
         if(bindingResult.hasErrors()) {
             return EDIT_VIEW;
         }
-        Long userId = userRepository.findByEmail(principal.getUsername())
-                .orElseThrow(() -> new IllegalStateException("Eingeloggter User nicht gefunden"))
-                .getId();
-        ownerService.update(userId, updateForm);
+        ownerService.update(currentUserResolver.userId(principal), updateForm);
         return "redirect:/owner/profile";
     }
 
     // === Helper ===
-    // E-Mail aus Principal → User aus DB → Profil
-    // notwendig, weil Spring nur die E-Mail kennt, aber nicht die dazugehörige UserID
-    private OwnerProfile loadProfileByEmail(String email) {
-        Long userId = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalStateException("Eingeloggter User nicht gefunden"))
-                .getId();
-        return ownerService.findByUserId(userId);
+    // Principal → UserID (via CurrentUserResolver) → Profil
+    private OwnerProfile loadProfile(UserDetails principal) {
+        return ownerService.findByUserId(currentUserResolver.userId(principal));
     }
 
 }

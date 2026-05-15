@@ -1,12 +1,11 @@
 package dhbw.heilbronn.pawsitters.web.controller;
 
 import dhbw.heilbronn.pawsitters.domain.Pet;
-import dhbw.heilbronn.pawsitters.repository.UserRepository;
 import dhbw.heilbronn.pawsitters.service.PetService;
 import dhbw.heilbronn.pawsitters.web.form.PetForm;
+import dhbw.heilbronn.pawsitters.security.CurrentUserResolver;
 import jakarta.validation.Valid;
-import
-        org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,17 +31,17 @@ public class PetController {
     private static final String REDIRECT_LIST = "redirect:/owner/pets";
 
     private final PetService petService;
-    private final UserRepository userRepository;
+    private final CurrentUserResolver currentUserResolver;
 
-    public PetController(PetService petService, UserRepository userRepository) {
+    public PetController(PetService petService, CurrentUserResolver currentUserResolver) {
         this.petService = petService;
-        this.userRepository = userRepository;
+        this.currentUserResolver = currentUserResolver;
     }
 
     // === Liste ===
     @GetMapping
     public String list(@AuthenticationPrincipal UserDetails principal, Model model) {
-        Long userId = currentUserId(principal);
+        Long userId = currentUserResolver.userId(principal);
         model.addAttribute("pets", petService.findAllByOwner(userId));
         return LIST_VIEW;
     }
@@ -64,7 +63,7 @@ public class PetController {
             model.addAttribute("mode", "new");
             return FORM_VIEW;
         }
-        Long userId = currentUserId(principal);
+        Long userId = currentUserResolver.userId(principal);
         petService.register(userId, petForm);
         return REDIRECT_LIST;
     }
@@ -72,7 +71,7 @@ public class PetController {
     // === Bearbeiten ===
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal, Model model) {
-        Long userId = currentUserId(principal);
+        Long userId = currentUserResolver.userId(principal);
         // findByIdOwner prüft die Zugehörigkeit --> fremde Pets erzeugen PetNotFoundException
         Pet pet = petService.findByIdForOwner(id, userId);
         // Form mit aktuellen Werten vorbefüllen
@@ -89,7 +88,7 @@ public class PetController {
             model.addAttribute("petId", id);
             return FORM_VIEW;
         }
-        Long userId = currentUserId(principal);
+        Long userId = currentUserResolver.userId(principal);
         petService.update(id, userId, petForm);
         return REDIRECT_LIST;
     }
@@ -97,23 +96,14 @@ public class PetController {
     // === Löschen ===
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) {
-        Long userId = currentUserId(principal);
+        Long userId = currentUserResolver.userId(principal);
         petService.delete(id, userId);
         return REDIRECT_LIST;
     }
 
-    // === Hilfsfunktionen ===
 
-    // E-Mail aus Principal -> User aus DB -> UserID
-    // Spring kennt nur die Mail aber der Service brucht aber die UserID
-    private Long currentUserId(UserDetails principal) {
-        return userRepository.findByEmail(principal.getUsername())
-                .orElseThrow(() -> new IllegalStateException("Eingeloggter User nicht gefunden"))
-                .getId();
-    }
-
-    // leeres PetForm für /new (alle Felder null bzw. false)
-    // leeres PetForm für GET /new — Felder sind null weil der User noch nichts ausgewählt hat
+    // Leeres PetForm für /new (alle Felder null bzw. false).
+    // Leeres PetForm für GET /new — Felder sind null weil der User noch nichts ausgewählt hat
     // Bean Validation läuft erst beim POST über @Valid, nicht im Konstruktor -> null ist hier sicher
     @SuppressWarnings({"DataFlowIssue", "java:S2637"})
     private PetForm emptyForm() {

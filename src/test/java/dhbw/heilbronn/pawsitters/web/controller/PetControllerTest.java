@@ -7,7 +7,8 @@ import dhbw.heilbronn.pawsitters.domain.PetGender;
 import dhbw.heilbronn.pawsitters.domain.PetSpecies;
 import dhbw.heilbronn.pawsitters.domain.User;
 import dhbw.heilbronn.pawsitters.domain.UserRole;
-import dhbw.heilbronn.pawsitters.repository.UserRepository;
+import dhbw.heilbronn.pawsitters.security.CurrentUserResolver;
+import org.springframework.security.core.userdetails.UserDetails;
 import dhbw.heilbronn.pawsitters.service.PetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 // @WebMvcTest bootet nur die Web Schicht für PetController.
-// PetService + UserRepository werden gemockt → Controller komplett von DB entkoppelt.
+// PetService + CurrentUserResolver werden gemockt → Controller komplett von DB entkoppelt.
 // @WithMockUser auf Klassenebene → jeder Test läuft als eingeloggter Owner,
 // einzelne Tests überschreiben das mit @WithAnonymousUser
 @WebMvcTest(PetController.class)
@@ -54,16 +54,12 @@ class PetControllerTest {
     private PetService petService;
 
     @MockitoBean
-    private UserRepository userRepository;
+    private CurrentUserResolver currentUserResolver;
 
-    // currentUserId(...) im Controller braucht den User aus dem Repository.
-    // Default-Setup für jeden Test: eingeloggter Owner mit ID 1
+    // Default-Setup für jeden Test: Resolver gibt USER_ID für jeden Principal zurück.
     @BeforeEach
     void mockAuthenticatedUser() {
-        User user = new User(EMAIL, "hash", UserRole.OWNER);
-        user.setId(USER_ID);
-
-        when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.of(user));
+        when(currentUserResolver.userId(any(UserDetails.class))).thenReturn(USER_ID);
     }
 
     // === Liste ===

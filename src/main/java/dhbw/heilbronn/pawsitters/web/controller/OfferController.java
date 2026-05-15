@@ -2,7 +2,7 @@ package dhbw.heilbronn.pawsitters.web.controller;
 
 import dhbw.heilbronn.pawsitters.domain.CareRequest;
 import dhbw.heilbronn.pawsitters.domain.Offer;
-import dhbw.heilbronn.pawsitters.repository.UserRepository;
+import dhbw.heilbronn.pawsitters.security.CurrentUserResolver;
 import dhbw.heilbronn.pawsitters.service.OfferService;
 import dhbw.heilbronn.pawsitters.web.form.OfferForm;
 import jakarta.validation.Valid;
@@ -36,17 +36,17 @@ public class OfferController {
 
 
     private final OfferService offerService;
-    private final UserRepository userRepository;
+    private final CurrentUserResolver currentUserResolver;
 
-    public OfferController(OfferService offerService, UserRepository userRepository) {
+    public OfferController(OfferService offerService, CurrentUserResolver currentUserResolver) {
         this.offerService = offerService;
-        this.userRepository = userRepository;
+        this.currentUserResolver = currentUserResolver;
     }
 
     // === Host: passende Anfragen browsen ===
     @GetMapping("/host/care-requests")
     public String browseMatchingRequests(@AuthenticationPrincipal UserDetails principal, Model model){
-        Long userId = currentUserId(principal);
+        Long userId = currentUserResolver.userId(principal);
         List<CareRequest> matching = offerService.findMatchingRequests(userId);
         model.addAttribute("matchingRequests", matching);
         return HOST_BROWSE_VIEW;
@@ -71,7 +71,7 @@ public class OfferController {
             return HOST_OFFER_FORM_VIEW;
         }
 
-        Long userId = currentUserId(principal);
+        Long userId = currentUserResolver.userId(principal);
         offerService.createOffer(userId, id, form);
         return REDIRECT_HOST_OFFERS;
     }
@@ -79,7 +79,7 @@ public class OfferController {
     // === Host: Eigene gesendete Offer ===
     @GetMapping("/host/offers")
     public String hostOffers(@AuthenticationPrincipal UserDetails principal, Model model) {
-        Long userId = currentUserId(principal);
+        Long userId = currentUserResolver.userId(principal);
         List<Offer> offers = offerService.findOffersByHost(userId);
         model.addAttribute("offers", offers);
         return HOST_OFFERS_VIEW;
@@ -88,7 +88,7 @@ public class OfferController {
     // === Owner: Eingegangene Offers pro CareRequest ===
     @GetMapping("/owner/care-requests/{id}/offers")
     public String careRequestOffers(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal, Model model){
-        Long userId = currentUserId(principal);
+        Long userId = currentUserResolver.userId(principal);
         List<Offer> offers = offerService.findOffersByCareRequest(userId, id);
         model.addAttribute("offers", offers);
         model.addAttribute("careRequestId", id);
@@ -98,7 +98,7 @@ public class OfferController {
     // === Owner: Offer annehmen
     @PostMapping("/owner/offers/{offerId}/accept")
     public String acceptOffer(@PathVariable Long offerId, @AuthenticationPrincipal UserDetails principal) {
-        Long userId = currentUserId(principal);
+        Long userId = currentUserResolver.userId(principal);
         offerService.accept(offerId, userId);
         // Zurück zur CareRequest Liste, diese zeigt jetzt den Status MATCHED
         return REDIRECT_OWNER_CARE_REQUESTS;
@@ -106,14 +106,7 @@ public class OfferController {
 
     // === Hilfsfunktionen ===
 
-    // Email aus Principal -> User aus DB -> UserID
-    private Long currentUserId(UserDetails principal) {
-        return userRepository.findByEmail(principal.getUsername())
-                .orElseThrow(() -> new IllegalStateException("Eingeloggter User nicht gefunden"))
-                .getId();
-    }
-
-    // leeres OfferFOrm für GET weeklyPrice ist null, Validation läuft erst beim POST
+    // Leeres OfferForm für GET weeklyPrice ist null, Validation läuft erst beim POST
     @SuppressWarnings({"DataFlowIssue", "java:S2637"})
     private OfferForm emptyOfferForm() {
         return new OfferForm(null);

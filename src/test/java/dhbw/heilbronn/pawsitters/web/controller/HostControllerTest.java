@@ -5,7 +5,7 @@ import dhbw.heilbronn.pawsitters.domain.HostProfile;
 import dhbw.heilbronn.pawsitters.domain.PetSpecies;
 import dhbw.heilbronn.pawsitters.domain.User;
 import dhbw.heilbronn.pawsitters.domain.UserRole;
-import dhbw.heilbronn.pawsitters.repository.UserRepository;
+import dhbw.heilbronn.pawsitters.security.CurrentUserResolver;
 import dhbw.heilbronn.pawsitters.service.HostService;
 import dhbw.heilbronn.pawsitters.service.exception.EmailAlreadyTakenException;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -22,7 +23,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.EnumSet;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -52,13 +52,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             private HostService hostService;
 
             @MockitoBean
-            private UserRepository userRepository;
+            private CurrentUserResolver currentUserResolver;
 
             @BeforeEach
             void mockAuthenticatedUser() {
-                User user = new User(EMAIL, "hash", UserRole.HOST);
-                user.setId(USER_ID);
-                when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.of(user));
+                when(currentUserResolver.userId(any(UserDetails.class))).thenReturn(USER_ID);
             }
 
             // === Registrierung ===

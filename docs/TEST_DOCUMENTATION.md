@@ -226,6 +226,7 @@ Datei: `src/test/java/dhbw/heilbronn/pawsitters/service/OfferServiceTest.java`
 | `accept_offerNotOwnedByUser_throwsOfferNotFound`                   | Owner                                                        versucht fremdes Offer anzunehmen | `OfferNotFoundException` (gleiche Exception, kein Info-Leak)           | Edge Case (Security) |
 | `accept_offerAlreadyAccepted_throwsOfferNotPending`                | Offer ist schon ACCEPTED/REJECTED                                                              | `OfferNotPendingException`                                             | Edge Case            |
 | `accept_careRequestAlreadyMatched_throwsOfferNotPending`           | CareRequest schon MATCHED (Race-Condition)                                                     | `OfferNotPendingException`                                             | Edge Case            |
+---
 
 ## OfferControllerTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/web/controller/OfferControllerTest.java`
@@ -242,7 +243,7 @@ Integrationstest mit `@WebMvcTest` — gemischte Rollen (HOST und OWNER), pro Te
 | `getOwnerOffers_returnsOwnerOffersView`                      | GET `/owner/care-requests/{id}/offers` (Owner) | View `owner/care-requests/offers`, `offers` + `careRequestId` im Model             | Normal                 |
 | `getBrowseMatchingRequests_unauthenticated_redirectsToLogin` | GET ohne Auth                                  | HTTP 302 zu `/login`                                                               | Edge Case (Security)   |
 | `postAcceptOffer_validOffer_redirectsToCareRequests`         | POST `/owner/offers/{id}/accept` als Owner     | HTTP 302 → `/owner/care-requests`, Service mit korrektem offerId+userId aufgerufen | Normal                 |
-
+---
 
 ## GlobalExceptionHandlerTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/web/contro
@@ -261,4 +262,18 @@ isoliert getestet ohne die echten Controller zu mocken.
 | `hostProfileNotFound_returns404View` | `HostProfileNotFoundException` | HTTP 404, View                   `error/404`   | Edge Case |
 | `offerNotPending_returns409View`     | `OfferNotPendingException`     | HTTP 409, View `error/409`                     | Edge Case |
 | `offerNotEligible_returns409View`    | `OfferNotEligibleException`    | HTTP 409, View `error/409`                     | Edge Case |
+---
+
+## CurrentUserResolverTest
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/security/C
+  urrentUserResolverTest.java`
+
+Reine Unit-Tests mit Mockito — keine Spring-Context-Last.
+Testet den zentralen Helper der `UserDetails` →
+`User-ID`-Auflösung übernimmt.
+
+| Test                                              | Was wird getestet                                  | Erwartetes Ergebnis                                    | Typ                          |
+  |---------------------------------------------------|----------------------------------------------------|--------------------------------------------------------|------------------------------|
+| `userId_userExists_returnsId`                     | Happy Path mit existierendem User                  | Liefert die ID des gefundenen Users                    | Normal                       |
+| `userId_userNotFound_throwsIllegalStateException` | Eingeloggter User existiert nicht (mehr) in der DB | `IllegalStateException` — keine `NullPointerException` | Edge Case (Defense-in-Depth) |
 ---

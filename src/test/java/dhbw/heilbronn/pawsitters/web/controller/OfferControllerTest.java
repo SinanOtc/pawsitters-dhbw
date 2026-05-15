@@ -1,9 +1,7 @@
 package dhbw.heilbronn.pawsitters.web.controller;
 
 import dhbw.heilbronn.pawsitters.config.SecurityConfig;
-import dhbw.heilbronn.pawsitters.domain.User;
-import dhbw.heilbronn.pawsitters.domain.UserRole;
-import dhbw.heilbronn.pawsitters.repository.UserRepository;
+import dhbw.heilbronn.pawsitters.security.CurrentUserResolver;
 import dhbw.heilbronn.pawsitters.service.OfferService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,9 +15,9 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -50,20 +48,16 @@ class OfferControllerTest {
     private OfferService offerService;
 
     @MockitoBean
-    private UserRepository userRepository;
+    private CurrentUserResolver currentUserResolver;
 
-    // Mocks für beide Rollen — pro Test wird per @WithMockUser entschieden welche aktiv ist
+    // Mocks für beide Rollen — pro Test wird per @WithMockUser entschieden welche aktiv ist.
+    // argThat-Matcher mappen anhand des Principal-Usernames auf die jeweilige UserID.
     @BeforeEach
     void mockUsers() {
-        User host = new User(HOST_EMAIL, "hash",
-                UserRole.HOST);
-        host.setId(HOST_USER_ID);
-        when(userRepository.findByEmail(HOST_EMAIL)).thenReturn(Optional.of(host));
-
-        User owner = new User(OWNER_EMAIL, "hash",
-                UserRole.OWNER);
-        owner.setId(OWNER_USER_ID);
-        when(userRepository.findByEmail(OWNER_EMAIL)).thenReturn(Optional.of(owner));
+        when(currentUserResolver.userId(argThat(p -> p != null && HOST_EMAIL.equals(p.getUsername()))))
+                .thenReturn(HOST_USER_ID);
+        when(currentUserResolver.userId(argThat(p -> p != null && OWNER_EMAIL.equals(p.getUsername()))))
+                .thenReturn(OWNER_USER_ID);
     }
 
     // === Host: Browse passende Anfragen ===
