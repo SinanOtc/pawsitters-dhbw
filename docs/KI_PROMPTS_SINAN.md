@@ -208,3 +208,43 @@
     - **Verifikation:** Alle 130 Tests grün, manuelle
       Code-Reviews,
       Verständnisprüfung durch Nachfragen.
+
+## CurrentUserResolver Refactor (#58)
+- **Datum:** 15.05.2026
+- **Tool:** Claude Opus 4.7
+- **Prompts:**
+    - DRY-Analyse der
+      `currentUserId(UserDetails)`-Helper-Methode die in 5
+      Controllern wortwörtlich kopiert war (Pet,
+      CareRequest, Host, Offer,
+      Owner — letzterer mit Variante
+      `loadProfileByEmail(String)`)
+    - Entscheidung für `@Component CurrentUserResolver`
+      statt
+      `HandlerMethodArgumentResolver` (zweiteres wäre
+      Spring-idiomatischer,
+      aber für ein Schulprojekt unnötiger Setup-Aufwand und
+      schlechter zu
+      erklären in der Verteidigung)
+    - Ablage in `security/`-Package (neben
+      `CustomUserDetailsService`) statt
+      `web/controller/` — die Klasse löst
+      Auth-/Principal-Belange auf,
+      ist kein Web-Controller
+    - Test-Strategie: 2 Unit-Tests (happy path +
+      missing-user edge case)
+      statt Integration. Mock UserDetails statt echtem
+      Principal.
+    - Test-Refactor: 5 Controller-Tests umgestellt von
+      `@MockitoBean
+          UserRepository` auf `@MockitoBean
+  CurrentUserResolver`. Bei
+      `OfferControllerTest` mit zwei Rollen mussten
+      `argThat`-Matcher
+      verwendet werden um anhand des Principal-Usernames auf
+      die jeweilige
+      UserID zu mappen.
+- **Verifikation:** Alle 132 Tests grün (130 alte + 2 neue
+  für
+  `CurrentUserResolverTest`), `mvn test` lokal
+  durchgelaufen und selbstständige Recherche zu dem Thema.
