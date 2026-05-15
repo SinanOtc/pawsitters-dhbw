@@ -4,6 +4,8 @@ Plattform zur Vermittlung von Tierbetreuung während Urlauben — Tierhalter pub
 
 **DHBW Heilbronn** · Software-Engineering-Projekt · 3er-Team
 
+> 🔥 **Aktuelle Phase:** [Engineering Excellence](https://github.com/SinanOtc/pawsitters-dhbw/issues/80) — Production-grade Polish über die bestehende MVC-Architektur. Live-Deployment, PostgreSQL, ArchUnit, HTMX, Observability. Tracking-Issue mit allen Tasks: [#80](https://github.com/SinanOtc/pawsitters-dhbw/issues/80).
+
 ---
 
 ## 👥 Team & Rollen
