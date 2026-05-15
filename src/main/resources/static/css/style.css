@@ -65,6 +65,17 @@ button:hover {
     background: #eef4f8;
 }
 
+.btn-primary {
+    background: #0f5e9c;
+    border-color: #0f5e9c;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: #0c4a7c;
+    border-color: #0c4a7c;
+}
+
 .logout-form {
     margin: 0;
 }

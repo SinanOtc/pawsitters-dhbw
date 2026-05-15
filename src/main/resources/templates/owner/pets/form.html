@@ -107,7 +107,9 @@
         </p>
 
         <p class="form-actions">
-            <button type="submit" th:text="${mode == 'edit'} ? 'Haustier speichern' : 'Haustier registrieren'">
+            <button type="submit"
+                    class="btn-primary"
+                    th:text="${mode == 'edit'} ? 'Haustier speichern' : 'Haustier registrieren'">
                 Haustier registrieren
             </button>
             <a th:href="@{/owner/pets}">Abbrechen</a>
