@@ -4,6 +4,12 @@ Plattform zur Vermittlung von Tierbetreuung während Urlauben — Tierhalter pub
 
 **DHBW Heilbronn** · Software-Engineering-Projekt · 3er-Team
 
+## 🌐 Live-Demo
+
+**→ [https://pawcation.up.railway.app](https://pawcation.up.railway.app) ←**
+
+Mit den Demo-Logins unten direkt einloggen — Daten werden beim Container-Restart automatisch neu geseedet.
+
 > 🔥 **Aktuelle Phase:** [Engineering Excellence](https://github.com/SinanOtc/pawsitters-dhbw/issues/80) — Production-grade Polish über die bestehende MVC-Architektur. Live-Deployment, PostgreSQL, ArchUnit, HTMX, Observability. Tracking-Issue mit allen Tasks: [#80](https://github.com/SinanOtc/pawsitters-dhbw/issues/80).
 
 ---
@@ -130,3 +136,29 @@ Aktuell **133 Tests, 100 % grün**. Verteilung:
 | `prod` | Production | PostgreSQL (Env-Vars) | ❌ |
 
 Profil wechseln via `SPRING_PROFILES_ACTIVE=prod` oder in `application.yaml`.
+
+---
+
+## 🐳 Deployment
+
+Live unter **[pawcation.up.railway.app](https://pawcation.up.railway.app)** — deployed via [Railway](https://railway.app) mit Auto-Deploy bei jedem `main`-Push.
+
+### Stack
+- **Multi-stage `Dockerfile`** (~250 MB Final-Image, Non-root User)
+- **Railway** (Free-Tier via GitHub Student Pack)
+- **Auto-Deploy**: Push zu `main` → Railway baut Image → live nach ~3 Min
+
+### Lokal mit Docker testen
+```bash
+docker build -t pawsitters:local .
+docker run --rm -p 8080:8080 -e SPRING_PROFILES_ACTIVE=dev pawsitters:local
+```
+Oder mit Compose:
+```bash
+docker-compose up
+```
+
+### Aktueller Stand
+Live-Demo läuft mit `dev`-Profil + H2 in-memory + DevUsersConfig-Seed → Demo-Daten regenerieren bei jedem Container-Restart.
+
+→ **Persistente PostgreSQL** kommt in [#72](https://github.com/SinanOtc/pawsitters-dhbw/issues/72) (Production-DB-Switch mit Flyway-Migrations).
