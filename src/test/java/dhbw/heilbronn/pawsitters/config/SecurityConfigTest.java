@@ -44,8 +44,8 @@ class SecurityConfigTest {
     @Test
     void validLoginRedirectsToDashboard() throws Exception {
         mockMvc.perform(formLogin("/login")
-                        .user("dummyOwner@test.de")
-                        .password("testPWD123"))
+                        .user("demo-owner@test.de")
+                        .password("demo12345"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/dashboard"));
     }
@@ -53,7 +53,7 @@ class SecurityConfigTest {
     @Test
     void invalidLoginRedirectsWithError() throws Exception {
         mockMvc.perform(formLogin("/login")
-                .user("dummyOwner@test.de")
+                .user("demo-owner@test.de")
                 .password("falschesPasswort"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login?error"));

@@ -6,6 +6,7 @@ import dhbw.heilbronn.pawsitters.domain.UserRole;
 import dhbw.heilbronn.pawsitters.repository.OwnerProfileRepository;
 import dhbw.heilbronn.pawsitters.repository.UserRepository;
 import dhbw.heilbronn.pawsitters.service.exception.EmailAlreadyTakenException;
+import dhbw.heilbronn.pawsitters.service.exception.OwnerProfileNotFoundException;
 import dhbw.heilbronn.pawsitters.web.form.RegisterOwnerForm;
 import dhbw.heilbronn.pawsitters.web.form.UpdateOwnerForm;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,17 +54,15 @@ public class OwnerService {
     }
 
     /**
-     * Lädt das Profil zu einer User ID
-     *
-     * readOnly für Optimierung damit Caches interne Caches abgeschaltet werden
-     *
-     * Wirft Exception, wenn kein Profil gefunden wird, Jeder User braucht also eine ID
+     * Lädt das Profil zu einer User ID.
+     * readOnly = true → Optimierung, kein Dirty-Check nötig.
+     * Wirft OwnerProfileNotFoundException wenn kein Profil existiert — wird im
+     * GlobalExceptionHandler auf 404 gemapped (User-freundlich, kein Stacktrace).
      */
-    //TODO: Exceptionwurf ändern in Prod auf eine User freundliche ausgabe - hier nur um Tests zu vereinfachen
     @Transactional(readOnly = true)
     public OwnerProfile findByUserId(Long userId) {
         return ownerProfileRepository.findByUserId(userId)
-                .orElseThrow(() -> new IllegalStateException("Kein OwnerProfile zu UserID"));
+                .orElseThrow(() -> new OwnerProfileNotFoundException(userId));
     }
 
     /**
@@ -72,7 +71,7 @@ public class OwnerService {
     @Transactional
     public OwnerProfile update(Long userId, UpdateOwnerForm form) {
         OwnerProfile profile = ownerProfileRepository.findByUserId(userId)
-                .orElseThrow(() -> new IllegalStateException("Kein OwnerProfile zu UserID"));
+                .orElseThrow(() -> new OwnerProfileNotFoundException(userId));
         profile.setFirstName(form.firstName());
         profile.setLastName(form.lastName());
         profile.setAddress(form.address());

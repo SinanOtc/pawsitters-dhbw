@@ -75,6 +75,14 @@ class GlobalExceptionHandlerTest {
                 .andExpect(model().attributeExists("message"));
     }
 
+    @Test
+    void ownerProfileNotFound_returns404View() throws Exception {
+        mockMvc.perform(get("/test/owner-profile-not-found"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("error/404"))
+                .andExpect(model().attributeExists("message"));
+    }
+
     // === 409-Handler ===
 
     @Test

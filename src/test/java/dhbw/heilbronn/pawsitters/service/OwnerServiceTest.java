@@ -6,6 +6,7 @@ import dhbw.heilbronn.pawsitters.domain.UserRole;
 import dhbw.heilbronn.pawsitters.repository.OwnerProfileRepository;
 import dhbw.heilbronn.pawsitters.repository.UserRepository;
 import dhbw.heilbronn.pawsitters.service.exception.EmailAlreadyTakenException;
+import dhbw.heilbronn.pawsitters.service.exception.OwnerProfileNotFoundException;
 import dhbw.heilbronn.pawsitters.web.form.RegisterOwnerForm;
 import dhbw.heilbronn.pawsitters.web.form.UpdateOwnerForm;
 import org.junit.jupiter.api.BeforeEach;
@@ -134,11 +135,11 @@ class OwnerServiceTest {
     }
 
     @Test
-    void findByUserId_notFound_throwsIllegalStateException() {
+    void findByUserId_notFound_throwsOwnerProfileNotFoundException() {
         when(ownerProfileRepository.findByUserId(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> ownerService.findByUserId(99L))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(OwnerProfileNotFoundException.class);
     }
 
     @Test

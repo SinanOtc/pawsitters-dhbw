@@ -29,7 +29,8 @@ public class GlobalExceptionHandler {
             PetNotFoundException.class,
             CareRequestNotFoundException.class,
             OfferNotFoundException.class,
-            HostProfileNotFoundException.class
+            HostProfileNotFoundException.class,
+            OwnerProfileNotFoundException.class
     })
     public ModelAndView handleNotFound(RuntimeException e){
         ModelAndView mav = new ModelAndView("error/404");

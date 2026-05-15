@@ -5,6 +5,7 @@ import dhbw.heilbronn.pawsitters.service.exception.HostProfileNotFoundException;
 import dhbw.heilbronn.pawsitters.service.exception.OfferNotEligibleException;
 import dhbw.heilbronn.pawsitters.service.exception.OfferNotFoundException;
 import dhbw.heilbronn.pawsitters.service.exception.OfferNotPendingException;
+import dhbw.heilbronn.pawsitters.service.exception.OwnerProfileNotFoundException;
 import dhbw.heilbronn.pawsitters.service.exception.PetNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,11 @@ class ThrowingTestController {
     @GetMapping("/test/host-profile-not-found")
     public String throwHostProfileNotFound() {
         throw new HostProfileNotFoundException(42L);
+    }
+
+    @GetMapping("/test/owner-profile-not-found")
+    public String throwOwnerProfileNotFound() {
+        throw new OwnerProfileNotFoundException(42L);
     }
 
     @GetMapping("/test/offer-not-pending")

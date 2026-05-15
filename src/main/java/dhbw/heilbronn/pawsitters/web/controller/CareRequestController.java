@@ -42,7 +42,7 @@ public class CareRequestController {
     }
 
     // === Anlegen ===
-    @SuppressWarnings({"DataFlowIssue, java:S2637"})
+    @SuppressWarnings({"DataFlowIssue", "java:S2637"})
     @GetMapping("/new")
     public String newForm(@AuthenticationPrincipal UserDetails principal, Model model) {
         Long userId = currentUserResolver.userId(principal);
