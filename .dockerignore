@@ -1,0 +1,24 @@
+# Build-Output
+  target/
+
+  # IDE
+  .idea/
+  .vscode/
+  *.iml
+
+  # Git
+  .git/
+  .github/
+  .gitignore
+
+  # OS
+  .DS_Store
+  Thumbs.db
+
+  # Docs
+  docs/
+  *.md
+  HELP.md
+
+  # Lokale Configs
+  *.log
