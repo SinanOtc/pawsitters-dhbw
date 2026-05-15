@@ -46,6 +46,7 @@ a {
 
 .navbar a,
 .logout-form button,
+.form-actions a,
 button {
     border: 1px solid #bcccdc;
     border-radius: 6px;
@@ -59,6 +60,7 @@ button {
 
 .navbar a:hover,
 .logout-form button:hover,
+.form-actions a:hover,
 button:hover {
     background: #eef4f8;
 }
