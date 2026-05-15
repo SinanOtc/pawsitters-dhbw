@@ -2,7 +2,7 @@ package dhbw.heilbronn.pawsitters.web.controller;
 
 import dhbw.heilbronn.pawsitters.config.SecurityConfig;
 import org.springframework.context.annotation.Import;
-import dhbw.heilbronn.pawsitters.repository.UserRepository;
+import dhbw.heilbronn.pawsitters.security.CurrentUserResolver;
 import dhbw.heilbronn.pawsitters.service.OwnerService;
 import dhbw.heilbronn.pawsitters.service.exception.EmailAlreadyTakenException;
 import org.junit.jupiter.api.Test;
@@ -31,13 +31,15 @@ class OwnerControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    // OwnerService und UserRepository werden gemockt, der Controller wird
-    // damit komplett von der Datenbank entkoppelt
+    // OwnerService und CurrentUserResolver werden gemockt, der Controller wird
+    // damit komplett von der Datenbank entkoppelt.
+    // CurrentUserResolver wird nur fürs Autowiring gebraucht — die Register-Tests
+    // benutzen ihn nicht direkt.
     @MockitoBean
     private OwnerService ownerService;
 
     @MockitoBean
-    private UserRepository userRepository;
+    private CurrentUserResolver currentUserResolver;
 
     @Test
     void getRegister_returnsRegisterView() throws Exception {
