@@ -14,9 +14,6 @@ spring:
 server:
   # PORT-Env-Var von der Hosting-Plattform (Railway/Fly) — Fallback 8080 lokal
   port: ${PORT:8080}
-  error:
-    include-stacktrace: never
-    include-message: always
 
 logging:
   level:
