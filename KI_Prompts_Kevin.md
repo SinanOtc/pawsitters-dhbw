@@ -71,6 +71,13 @@ Für jeden nennenswerten KI-Einsatz wird unten ein Eintrag erstellt mit:
 - **Ergebnis & Anpassung**: Formular für Haustiere mit Name, Tierart-Dropdown, Geburtsjahr, Besonderheiten und den vorhandenen Backend-Feldern erstellt. Zusätzlich wurde eine einfache Haustier-Übersicht mit Link zum Registrierungsformular ergänzt.
 - **Eigenanteil**: Bestehende Backend-Form geprüft, Pflichtfelder übernommen und die zusätzlichen Felder gegen den Issue-Scope abgewogen.
 
+### 2026-05-15 - Frontend: Login- und Registrierungsseiten
+
+- **Zweck**: Issue #29 umsetzen: Login-UI und Registrierung mit Rollenauswahl verbessern.
+- **Prompt** (sinngemäß): Issue #29 aus GitHub ansehen und frontendseitig umsetzen.
+- **Ergebnis & Anpassung**: Login-Formular um klarere Fehlermeldung und Formularattribute ergänzt. Rollenauswahl für PetOwner und Host über die vorhandenen Registrierungsseiten eingebunden.
+- **Eigenanteil**: Frontend-only Scope beachtet und keine neuen Backend-Routen erstellt.
+
 ---
 
 ## Reflexion
