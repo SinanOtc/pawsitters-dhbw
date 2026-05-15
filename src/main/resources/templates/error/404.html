@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-    <meta charset="UTF-8">
-    <title>404 — Nicht gefunden (TODO Frontend)</title>
+    <title>404 — Nicht gefunden</title>
 </head>
 <body>
-<!-- TODO Frontend: 404-Page mit Styling und Link zurück zum Dashboard. Model: message (deutscher Fehlertext aus der Exception, kein Stacktrace). -->
-<h1>404 — Nicht gefunden</h1>
-<p th:text="${message}">Die angeforderte Ressource
-    existiert nicht.</p>
-<p><a th:href="@{/dashboard}">Zurück zum Dashboard</a></p>
+<section>
+    <h1>404 — Nicht gefunden</h1>
+    <p th:text="${message}">Die angeforderte Ressource existiert nicht.</p>
+    <p class="form-actions">
+        <a th:href="@{/dashboard}">Zurück zum Dashboard</a>
+    </p>
+</section>
 </body>
 </html>

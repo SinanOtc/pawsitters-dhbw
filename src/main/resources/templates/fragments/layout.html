@@ -15,10 +15,15 @@
     <a th:href="@{/}" class="brand">Pawsitters</a>
 
     <nav class="navbar" th:fragment="navbar">
-        <a th:href="@{/login}">Login</a>
-        <a th:href="@{/owner/profile}">Profil</a>
-        <a th:href="@{/owner/care-requests}">Anfragen</a>
-        <a th:href="@{/owner/offers}">Angebote</a>
+        <a sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a>
+
+        <a sec:authorize="hasRole('OWNER')" th:href="@{/owner/profile}">Profil</a>
+        <a sec:authorize="hasRole('OWNER')" th:href="@{/owner/pets}">Haustiere</a>
+        <a sec:authorize="hasRole('OWNER')" th:href="@{/owner/care-requests}">Anfragen</a>
+
+        <a sec:authorize="hasRole('HOST')" th:href="@{/host/profile}">Profil</a>
+        <a sec:authorize="hasRole('HOST')" th:href="@{/host/care-requests}">Anfragen</a>
+        <a sec:authorize="hasRole('HOST')" th:href="@{/host/offers}">Angebote</a>
 
         <form sec:authorize="isAuthenticated()"
               th:action="@{/logout}"

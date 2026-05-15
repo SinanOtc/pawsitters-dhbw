@@ -12,7 +12,8 @@
 
     <p>Eingeloggt als <span sec:authentication="name"></span></p>
 
-    <p><a th:href="@{/owner/profile}">Mein Profil</a></p>
+    <p sec:authorize="hasRole('OWNER')"><a th:href="@{/owner/profile}">Mein Profil</a></p>
+    <p sec:authorize="hasRole('HOST')"><a th:href="@{/host/profile}">Mein Profil</a></p>
 </section>
 </body>
 </html>
