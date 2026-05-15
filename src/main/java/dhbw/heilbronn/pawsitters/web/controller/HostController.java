@@ -2,7 +2,7 @@ package dhbw.heilbronn.pawsitters.web.controller;
 
 import dhbw.heilbronn.pawsitters.domain.HostProfile;
 import dhbw.heilbronn.pawsitters.domain.PetSpecies;
-import dhbw.heilbronn.pawsitters.repository.UserRepository;
+import dhbw.heilbronn.pawsitters.security.CurrentUserResolver;
 import dhbw.heilbronn.pawsitters.service.HostService;
 import dhbw.heilbronn.pawsitters.service.exception.EmailAlreadyTakenException;
 import dhbw.heilbronn.pawsitters.web.form.RegisterHostForm;
@@ -33,11 +33,11 @@ public class HostController {
     private static final String EDIT_VIEW = "host/profile-edit";
 
     private final HostService hostService;
-    private final UserRepository userRepository;
+    private final CurrentUserResolver currentUserResolver;
 
-    public HostController(HostService hostService, UserRepository userRepository) {
+    public HostController(HostService hostService, CurrentUserResolver currentUserResolver) {
         this.hostService = hostService;
-        this.userRepository = userRepository;
+        this.currentUserResolver = currentUserResolver;
     }
 
     // === Registrierung ===
@@ -76,7 +76,7 @@ public class HostController {
     // === Profil anzeigen ===
     @GetMapping("/profile")
     public String profile(@AuthenticationPrincipal UserDetails principal, Model model) {
-        HostProfile profile = hostService.findByUserId(currentUserId(principal));
+        HostProfile profile = hostService.findByUserId(currentUserResolver.userId(principal));
         model.addAttribute("profile", profile);
 
         return PROFILE_VIEW;
@@ -85,7 +85,7 @@ public class HostController {
     // === Profil bearbeiten ===
     @GetMapping("/profile/edit")
     public String editForm(@AuthenticationPrincipal UserDetails principal, Model model){
-        HostProfile profile = hostService.findByUserId(currentUserId(principal));
+        HostProfile profile = hostService.findByUserId(currentUserResolver.userId(principal));
         model.addAttribute("updateForm", toForm(profile));
         model.addAttribute("allSpecies", PetSpecies.values());
 
@@ -99,20 +99,11 @@ public class HostController {
 
             return EDIT_VIEW;
         }
-        hostService.update(currentUserId(principal), form);
+        hostService.update(currentUserResolver.userId(principal), form);
         return "redirect:/host/profile";
     }
 
     // === Hilfsfunktionen ===
-
-    // E-Mail aus Principal -> User aus DB -> UserID
-    // Spring kennt nur die Mail, Service braucht aber die UserID
-    private Long currentUserId(UserDetails principal) {
-        return userRepository.findByEmail(principal.getUsername())
-                .orElseThrow(() -> new
-                        IllegalStateException("Eingeloggter User nicht gefunden"))
-                .getId();
-    }
 
     // leeres RegisterHostForm für GET /register
     @SuppressWarnings({"DataFlowIssue", "java:S2637"})
