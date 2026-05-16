@@ -21,6 +21,11 @@ public class SecurityConfig {
                 // Startseite, Loginseite, assets
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/owner/register", "/host/register", "/css/**","/js/**").permitAll()
+                        /**
+                         * Health und Infoendpoints für Railway Probes;
+                         * sensible Endpoints sind in application.yaml gar nicht exposed
+                         */
+                        .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                         // alle Ownerroutes nur für eingeloggte PetOwner
                         .requestMatchers("/owner/**").hasRole("OWNER")
                         .requestMatchers("/host/**").hasRole("HOST")
