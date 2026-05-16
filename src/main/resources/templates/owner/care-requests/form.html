@@ -8,7 +8,59 @@
 <body>
 <section>
   <h1>Neue Betreuungsanfrage</h1>
-  <p><a th:href="@{/owner/care-requests}">Zurück zu den Anfragen</a></p>
+
+  <p th:if="${#lists.isEmpty(pets)}" class="message message-error">
+    Bitte zuerst ein Haustier registrieren.
+  </p>
+
+  <p th:if="${#lists.isEmpty(pets)}">
+    <a th:href="@{/owner/pets/new}">Haustier registrieren</a>
+  </p>
+
+  <form th:unless="${#lists.isEmpty(pets)}"
+        th:action="@{/owner/care-requests/new}"
+        th:object="${careRequestForm}"
+        method="post"
+        data-care-request-form>
+    <p>
+      <label for="petId">Haustier</label>
+      <select th:field="*{petId}" required>
+        <option value="">Haustier wählen</option>
+        <option th:each="pet : ${pets}"
+                th:value="${pet.id}"
+                th:text="${#strings.isEmpty(pet.breed) ? pet.name : pet.name + ' (' + pet.breed + ')'}">
+          Bello (Labrador)
+        </option>
+      </select>
+      <span th:if="${#fields.hasErrors('petId')}" th:errors="*{petId}" class="field-error"></span>
+    </p>
+
+    <p>
+      <label for="startDate">Startdatum</label>
+      <input type="date"
+             th:field="*{startDate}"
+             required
+             data-start-date>
+      <span th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" class="field-error"></span>
+    </p>
+
+    <p>
+      <label for="endDate">Enddatum</label>
+      <input type="date"
+             th:field="*{endDate}"
+             required
+             data-end-date>
+      <span th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}" class="field-error"></span>
+      <span th:if="${#fields.hasErrors('dateRangeValid')}" th:errors="*{dateRangeValid}" class="field-error"></span>
+    </p>
+
+    <div class="form-actions">
+      <button type="submit">Anfrage erstellen</button>
+      <a th:href="@{/owner/care-requests}">Abbrechen</a>
+    </div>
+  </form>
+
+  <script th:src="@{/js/care-request.js}"></script>
 </section>
 </body>
 </html>
