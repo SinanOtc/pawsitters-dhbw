@@ -1,4 +1,4 @@
-package dhbw.heilbronn.pawsitters.web.form;
+package dhbw.heilbronn.pawsitters.dto;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;

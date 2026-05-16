@@ -8,7 +8,7 @@ import dhbw.heilbronn.pawsitters.domain.User;
 import dhbw.heilbronn.pawsitters.domain.UserRole;
 import dhbw.heilbronn.pawsitters.repository.PetRepository;
 import dhbw.heilbronn.pawsitters.service.exception.PetNotFoundException;
-import dhbw.heilbronn.pawsitters.web.form.PetForm;
+import dhbw.heilbronn.pawsitters.dto.PetForm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

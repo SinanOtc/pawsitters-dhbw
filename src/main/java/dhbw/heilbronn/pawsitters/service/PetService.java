@@ -4,7 +4,7 @@ import dhbw.heilbronn.pawsitters.domain.OwnerProfile;
 import dhbw.heilbronn.pawsitters.domain.Pet;
 import dhbw.heilbronn.pawsitters.repository.PetRepository;
 import dhbw.heilbronn.pawsitters.service.exception.PetNotFoundException;
-import dhbw.heilbronn.pawsitters.web.form.PetForm;
+import dhbw.heilbronn.pawsitters.dto.PetForm;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
