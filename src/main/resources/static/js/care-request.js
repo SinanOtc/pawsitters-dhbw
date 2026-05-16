@@ -46,6 +46,8 @@
             var tomorrow = addDays(today(), 1);
             var startDate = parseDate(startDateInput.value);
             var endDate = parseDate(endDateInput.value);
+            var startMessage = "";
+            var endMessage = "";
 
             setMin(startDateInput, formatDate(tomorrow));
             if (startDate) {
@@ -54,11 +56,23 @@
                 setMin(endDateInput, formatDate(tomorrow));
             }
 
-            if (startDate && endDate && endDate <= startDate) {
-                endDateInput.setCustomValidity("Enddatum muss nach Startdatum liegen");
-            } else {
-                endDateInput.setCustomValidity("");
+            if (startDate && startDate < tomorrow) {
+                startMessage = "Startdatum muss in der Zukunft liegen";
             }
+
+            if (endDate && endDate < tomorrow) {
+                endMessage = "Enddatum muss in der Zukunft liegen";
+            }
+
+            if (startDate && endDate && endDate <= startDate) {
+                if (!startMessage) {
+                    startMessage = "Startdatum muss vor dem Enddatum liegen";
+                }
+                endMessage = "Enddatum muss nach Startdatum liegen";
+            }
+
+            startDateInput.setCustomValidity(startMessage);
+            endDateInput.setCustomValidity(endMessage);
         }
 
         startDateInput.addEventListener("input", validateDateRange);
