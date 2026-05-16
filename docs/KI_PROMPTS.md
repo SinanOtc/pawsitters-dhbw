@@ -19,7 +19,7 @@ Pro Einsatz: **Zweck → Prompt → Ergebnis & Anpassung → Eigenanteil**.
 # 📝 Inhalt nach Teammitgliedern
 
 - [Sinan — Backend](#sinan--backend-entities-services-controller-tests)
-- [Kevin — Frontend](KI_Prompts_Kevin.md) (eigene Datei)
+- [Kevin — Frontend](#kevin--frontend-templates-styling) (eigene Datei)
 - [Vincent — Planung & Doku](#vincent--planung--doku)
 
 ---

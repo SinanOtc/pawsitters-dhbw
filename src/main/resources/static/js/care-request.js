@@ -24,6 +24,12 @@
         return new Date(now.getFullYear(), now.getMonth(), now.getDate());
     }
 
+    function setMin(input, value) {
+        if (input.min !== value) {
+            input.min = value;
+        }
+    }
+
     function initCareRequestForm() {
         var form = document.querySelector("[data-care-request-form]");
         if (!form) {
@@ -41,11 +47,11 @@
             var startDate = parseDate(startDateInput.value);
             var endDate = parseDate(endDateInput.value);
 
-            startDateInput.min = formatDate(tomorrow);
+            setMin(startDateInput, formatDate(tomorrow));
             if (startDate) {
-                endDateInput.min = formatDate(addDays(startDate, 1));
+                setMin(endDateInput, formatDate(addDays(startDate, 1)));
             } else {
-                endDateInput.min = formatDate(tomorrow);
+                setMin(endDateInput, formatDate(tomorrow));
             }
 
             if (startDate && endDate && endDate <= startDate) {
