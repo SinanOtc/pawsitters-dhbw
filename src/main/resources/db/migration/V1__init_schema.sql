@@ -77,3 +77,10 @@ CREATE TABLE offers (
                         CONSTRAINT fk_offers_care_request FOREIGN KEY
                             (care_request_id) REFERENCES care_requests(id)
 );
+
+-- Indices für häufige Queries (Spalten die in finder-Methoden als WHERE-Filter dienen)
+CREATE INDEX idx_pets_owner_id          ON pets(owner_id);
+CREATE INDEX idx_care_requests_owner_id ON care_requests(owner_id);
+CREATE INDEX idx_care_requests_status   ON care_requests(status);
+CREATE INDEX idx_offers_host_id         ON offers(host_id);
+CREATE INDEX idx_offers_care_request_id ON offers(care_request_id);
