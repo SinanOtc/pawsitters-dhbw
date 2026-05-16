@@ -337,6 +337,13 @@ Pro Einsatz: **Zweck → Prompt → Ergebnis & Anpassung → Eigenanteil**.
 - **Ergebnis & Anpassung**: Login-Formular um klarere Fehlermeldung und Formularattribute ergänzt. Rollenauswahl für PetOwner und Host über die vorhandenen Registrierungsseiten eingebunden.
 - **Eigenanteil**: Frontend-only Scope beachtet und keine neuen Backend-Routen erstellt.
 
+### 2026-05-16 - Frontend: Betreuungsanfrage erstellen
+
+- **Zweck**: Issue #25 umsetzen: Formular zur Erstellung einer Betreuungsanfrage durch den Tierhalter.
+- **Prompt** (sinngemäß): Mit Issue #25 weitermachen und wieder in kleinen Commits umsetzen.
+- **Ergebnis & Anpassung**: Formular mit Haustierauswahl und Datepickern erstellt, Frontend-Validierung für den Zeitraum ergänzt und eine Bestätigungsanzeige nach erfolgreicher Erstellung eingebunden.
+- **Eigenanteil**: Bestehende Backend-Form geprüft, Scope auf Frontend gehalten und die Bestätigung ohne Controller-Änderung umgesetzt.
+
 ---
 
 ## Reflexion
