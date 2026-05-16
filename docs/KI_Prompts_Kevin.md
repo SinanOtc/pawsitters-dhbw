@@ -73,9 +73,9 @@ Format: **Zweck → Prompt → Ergebnis & Anpassung → Eigenanteil**.
 ### 2026-05-16 - Frontend: Betreuungsanfrage erstellen
 
 - **Zweck**: Issue #25 umsetzen: Formular zur Erstellung einer Betreuungsanfrage durch den Tierhalter.
-- **Prompt** (sinngemäß): Issue #25 — der Tierhalter soll für ein bestimmtes Haustier einen Betreuungs-Zeitraum anfragen. Backend-Form `CareRequestForm` (Pet-ID + Start-/End-Datum) gibt es schon. Im Frontend brauche ich eine Haustier-Auswahl (alle Haustiere des eingeloggten Owners als Dropdown) und zwei Datepicker. Nach dem erfolgreichen Absenden würde ich gerne eine Bestätigung anzeigen — geht das ohne Controller-Änderung, z.B. über ein Flash-Attribute oder einen Query-Param?
-- **Ergebnis & Anpassung**: Formular mit Haustierauswahl und Datepickern erstellt, Frontend-Validierung für den Zeitraum ergänzt und eine Bestätigungsanzeige nach erfolgreicher Erstellung eingebunden.
-- **Eigenanteil**: Bestehende Backend-Form geprüft, Scope auf Frontend gehalten und die Bestätigung ohne Controller-Änderung umgesetzt.
+- **Prompt** (sinngemäß): Issue #25 — der Tierhalter soll für ein bestimmtes Haustier einen Betreuungs-Zeitraum anfragen. Backend-Form `CareRequestForm` (Pet-ID + Start-/End-Datum) gibt es schon. Im Frontend brauche ich eine Haustier-Auswahl und zwei Datepicker. Bitte prüfe auch, ob eine Bestätigung nach erfolgreicher Erstellung robust ohne Controller-Änderung möglich ist.
+- **Ergebnis & Anpassung**: Formular mit Haustierauswahl und Datepickern erstellt, Frontend-Validierung für den Zeitraum ergänzt und eine einfache Übersicht der Betreuungsanfragen eingebunden. Eine rein clientseitige Bestätigung wurde nach Review wieder entfernt, weil sie ohne Server-Feedback falsche Erfolgsmeldungen anzeigen kann.
+- **Eigenanteil**: Bestehende Backend-Form geprüft, Scope auf Frontend gehalten und entschieden, dass eine robuste Bestätigung später mit Flash-Attribut oder Query-Param im Controller umgesetzt werden sollte.
 
 ---
 

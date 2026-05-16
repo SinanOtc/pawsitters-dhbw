@@ -31,14 +31,12 @@
             return;
         }
 
-        var tomorrow = addDays(new Date(), 1);
-        startDateInput.min = formatDate(tomorrow);
-        endDateInput.min = formatDate(tomorrow);
-
         function validateDateRange() {
+            var tomorrow = addDays(new Date(), 1);
             var startDate = parseDate(startDateInput.value);
             var endDate = parseDate(endDateInput.value);
 
+            startDateInput.min = formatDate(tomorrow);
             if (startDate) {
                 endDateInput.min = formatDate(addDays(startDate, 1));
             } else {
