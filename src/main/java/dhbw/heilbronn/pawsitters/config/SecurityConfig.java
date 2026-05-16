@@ -43,7 +43,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // BCrypt verschlüsselt Passwörter. Nur der Hashwert wird gespeichert
+    // BCrypt verschlüsselt Passwörter. Nur der Hashwert wird gespeichert.
     // Bei Login wird der eingegebene Wert direkt mit dem Hash verglichen
     @Bean
     public PasswordEncoder passwordEncoder() {
