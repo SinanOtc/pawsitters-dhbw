@@ -30,7 +30,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health.info
+        include: health,info #BRUDER EINFACH WEGEN EINEM KOMMA HAHAHAHAUAHADSJOKSLJAKS AMK
   endpoint:
     health:
       show-details: when-authorized
