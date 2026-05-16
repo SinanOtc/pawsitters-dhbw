@@ -77,6 +77,13 @@ Format: **Zweck → Prompt → Ergebnis & Anpassung → Eigenanteil**.
 - **Ergebnis & Anpassung**: Formular mit Haustierauswahl und Datepickern erstellt, Frontend-Validierung für den Zeitraum ergänzt und eine einfache Übersicht der Betreuungsanfragen eingebunden. Eine rein clientseitige Bestätigung wurde nach Review wieder entfernt, weil sie ohne Server-Feedback falsche Erfolgsmeldungen anzeigen kann.
 - **Eigenanteil**: Bestehende Backend-Form geprüft, Scope auf Frontend gehalten und entschieden, dass eine robuste Bestätigung später mit Flash-Attribut oder Query-Param im Controller umgesetzt werden sollte.
 
+### 2026-05-16 - Frontend: Host-Dashboard (passende Anfragen & Angebote)
+
+- **Zweck**: Issue #26 umsetzen: Host-Seite mit Liste passender Anfragen, Form zum Angebot-Senden und Übersicht der eigenen gesendeten Angebote.
+- **Prompt** (sinngemäß): Issue #26 — der Host soll alle Anfragen sehen, die zu seinem Profil passen, daraus eine auswählen, einen Wochenpreis eingeben und das Angebot abschicken. Außerdem soll er später sehen, was er bisher angeboten hat und in welchem Status. Backend ist schon da: `OfferController` liefert `matchingRequests`, `offerForm` und `offers` ins Model. Welche Felder zeige ich pro Anfrage sinnvoll (Tierart, Zeitraum, Tierhalter — siehe Akzeptanzkriterien) und wie verlinke ich zur Offer-Form? Im Issue steht auch „optionale Nachricht" — das `OfferForm` hat aber nur `weeklyPrice`, also lasse ich das raus, sonst müsste das Backend angepasst werden (nicht mein Scope).
+- **Ergebnis & Anpassung**: Drei Templates ausgebaut: `host/care-requests/list.html` (Tabelle mit Haustier, Tierart, Zeitraum, Tierhalter + „Angebot senden"-Link), `host/care-requests/offer-form.html` (Preisfeld mit `btn-primary`-Submit) und `host/offers/list.html` (Tabelle mit Haustier, Zeitraum, Tierhalter, Preis, Status). Stil aus `pets/list.html` übernommen (Tabelle + `#lists.isEmpty`-Fallback).
+- **Eigenanteil**: Akzeptanzkriterien gegen den Backend-Stand abgeglichen, „optionale Nachricht" bewusst rausgelassen weil Frontend-only Scope, Commit-Schritte pro Template festgelegt.
+
 ---
 
 ## Reflexion
