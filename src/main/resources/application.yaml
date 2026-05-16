@@ -20,6 +20,20 @@ logging:
     root: INFO
     dhbw.heilbronn.pawsitters: DEBUG
 
+# === ACTUATOR ===
+  # Nur /health und /info öffentlich exponiert; sensible Endpoints
+  # (env, beans, configprops, ...) bleiben standardmäßig deaktiviert.
+  # Health-Details nur für authentifizierte User — Railway-Probe bekommt
+  # bloß "UP", eingeloggte Entwickler sehen DB/Disk-Status für Debugging.
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health.info
+  endpoint:
+    health:
+      show-details: when-authorized
 ---
 # === DEV-Profil ===
 # H2 in-memory, Schema wird beim Start automatisch erstellt.
