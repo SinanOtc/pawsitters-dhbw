@@ -19,6 +19,11 @@
         return copy;
     }
 
+    function today() {
+        var now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    }
+
     function initCareRequestForm() {
         var form = document.querySelector("[data-care-request-form]");
         if (!form) {
@@ -32,7 +37,7 @@
         }
 
         function validateDateRange() {
-            var tomorrow = addDays(new Date(), 1);
+            var tomorrow = addDays(today(), 1);
             var startDate = parseDate(startDateInput.value);
             var endDate = parseDate(endDateInput.value);
 
