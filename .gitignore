@@ -32,5 +32,36 @@ build/
 ### VS Code ###
 .vscode/
 
+### IntelliJ alternative output (when not using Maven build) ###
+out/
+
+### Environment / Secrets ###
+# Lokale Env-Files dürfen NIE ins Repo — könnten DB-Credentials, API-Tokens etc. enthalten
+.env
+.env.local
+.env.*.local
+
+### Logs ###
+*.log
+logs/
+
+### JVM crash dumps ###
+hs_err_pid*
+replay_pid*
+
+### Coverage reports (JaCoCo, kommt mit #60) ###
+*.exec
+
+### Editor temp & backup files ###
+*.bak
+*.orig
+*.swp
+*~
+
+### OS-specific ###
 .DS_Store
+Thumbs.db
+Desktop.ini
+
+### Project-spezifisch ###
 java-upgrade/
