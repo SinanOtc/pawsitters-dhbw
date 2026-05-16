@@ -1,11 +1,48 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
     <meta charset="UTF-8">
-    <title>Passende Anfragen (TODO Frontend)</title>
+    <title>Passende Anfragen</title>
 </head>
 <body>
-<!-- TODO Frontend: Liste der passenden CareRequests (matchingRequests). Pro Request: Pet, Zeitraum, Link zu /host/care-requests/{id}/offer für Offer senden. -->
-<h1>Passende Anfragen</h1>
+<section>
+    <h1>Passende Anfragen</h1>
+
+    <p th:if="${#lists.isEmpty(matchingRequests)}">
+        Aktuell gibt es keine passenden Betreuungsanfragen für dein Profil.
+    </p>
+
+    <table th:unless="${#lists.isEmpty(matchingRequests)}">
+        <thead>
+        <tr>
+            <th scope="col">Haustier</th>
+            <th scope="col">Tierart</th>
+            <th scope="col">Zeitraum</th>
+            <th scope="col">Tierhalter</th>
+            <th scope="col">Aktion</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="request : ${matchingRequests}">
+            <td th:text="${request.pet.name}">Bello</td>
+            <td th:text="${#strings.capitalize(#strings.toLowerCase(request.pet.species.name()))}">Dog</td>
+            <td>
+                <span th:text="${#temporals.format(request.startDate, 'dd.MM.yyyy')}">01.01.2026</span>
+                &ndash;
+                <span th:text="${#temporals.format(request.endDate, 'dd.MM.yyyy')}">07.01.2026</span>
+            </td>
+            <td>
+                <span th:text="${request.owner.firstName}">Max</span>
+                <span th:text="${request.owner.lastName}">Mustermann</span>
+            </td>
+            <td>
+                <a th:href="@{/host/care-requests/{id}/offer(id=${request.id})}">Angebot senden</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
 </body>
 </html>
