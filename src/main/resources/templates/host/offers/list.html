@@ -1,11 +1,53 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-    <meta charset="UTF-8">
-    <title>Meine Angebote (TODO Frontend)</title>
+    <title>Meine Angebote</title>
 </head>
 <body>
-<!-- TODO Frontend: Liste der eigenen gesendeten Offers (offers). Pro Offer: zugehörige CareRequest, Pet, Preis, Status (PENDING/ACCEPTED/REJECTED). -->
-<h1>Meine Angebote</h1>
+<section>
+    <h1>Meine Angebote</h1>
+
+    <p class="form-actions">
+        <a th:href="@{/host/care-requests}">Passende Anfragen ansehen</a>
+    </p>
+
+    <p th:if="${#lists.isEmpty(offers)}">
+        Du hast bisher noch keine Angebote gesendet.
+    </p>
+
+    <table th:unless="${#lists.isEmpty(offers)}">
+        <thead>
+        <tr>
+            <th scope="col">Haustier</th>
+            <th scope="col">Tierart</th>
+            <th scope="col">Zeitraum</th>
+            <th scope="col">Tierhalter</th>
+            <th scope="col">Wochenpreis</th>
+            <th scope="col">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="offer : ${offers}">
+            <td th:text="${offer.careRequest.pet.name}">Bello</td>
+            <td th:text="${#strings.capitalize(#strings.toLowerCase(offer.careRequest.pet.species.name()))}">Dog</td>
+            <td>
+                <span th:text="${#temporals.format(offer.careRequest.startDate, 'dd.MM.yyyy')}">01.01.2026</span>
+                &ndash;
+                <span th:text="${#temporals.format(offer.careRequest.endDate, 'dd.MM.yyyy')}">07.01.2026</span>
+            </td>
+            <td>
+                <span th:text="${offer.careRequest.owner.firstName}">Max</span>
+                <span th:text="${offer.careRequest.owner.lastName}">Mustermann</span>
+            </td>
+            <td>
+                <span th:text="${#numbers.formatDecimal(offer.weeklyPrice, 1, 'POINT', 2, 'COMMA')}">0,00</span> €
+            </td>
+            <td th:text="${#strings.capitalize(#strings.toLowerCase(offer.status.name()))}">Pending</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
 </body>
 </html>
