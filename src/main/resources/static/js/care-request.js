@@ -66,5 +66,20 @@
         });
     }
 
-    document.addEventListener("DOMContentLoaded", initCareRequestForm);
+    function initCreatedMessage() {
+        var message = document.querySelector("[data-care-request-created-message]");
+        if (!message) {
+            return;
+        }
+
+        if (sessionStorage.getItem("careRequestCreated") === "true") {
+            message.hidden = false;
+            sessionStorage.removeItem("careRequestCreated");
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        initCareRequestForm();
+        initCreatedMessage();
+    });
 })();
