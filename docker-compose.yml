@@ -1,10 +1,45 @@
+# Lokales Verifizieren der Prod-Pipeline.
+# Flyway Migration läuft gegen reales PostgreSQL -> Hibernate Validate
+# prüft das Schema -> App ist startfähig. Spiegelt das Railway setup wider.
+#
+# Für Dev Workflow mit H2 weiterhin einfach ./mvnw spring-boot:run nutzen
+# Docker Compose ist explizit der Production Parity Test
+
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pawsitters-postgres
+    environment:
+      POSTGRES_DB: pawsitters
+      POSTGRES_USER: pawsitters
+      POSTGRES_PASSWORD: dev_only_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pawsitters -d pawsitters"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   app:
     build: .
     container_name: pawsitters-app
     ports:
       - "8080:8080"
     environment:
-    # Aktiviert Demo-Seed + H2 in-memory (siehe DevUsersConfig).
-      SPRING_PROFILES_ACTIVE: dev
+      # Prod Profil aktiviert Flyway + erwartet PG* Env Vars
+      SPRING_PROFILES_ACTIVE: prod
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: pawsitters
+      PGUSER: pawsitters
+      PGPASSWORD: dev_only_password
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
+
+volumes:
+  postgres-data:
