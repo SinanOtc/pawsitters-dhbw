@@ -75,9 +75,12 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<!-- Flyway: Spring Boot 4 hat das Auto-Config-Modul ausgelagert,
+		     daher Starter statt nur flyway-core. flyway-database-postgresql
+		     ergänzt PostgreSQL-Support (seit Flyway 10 separat). -->
 		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-flyway</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
