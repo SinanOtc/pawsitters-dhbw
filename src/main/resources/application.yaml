@@ -28,6 +28,8 @@ spring:
   config:
     activate:
       on-profile: dev
+  flyway:
+    enabled: false
   datasource:
     url: jdbc:h2:mem:pawsitters;DB_CLOSE_DELAY=-1
     driver-class-name: org.h2.Driver
@@ -49,6 +51,8 @@ spring:
   config:
     activate:
       on-profile: test
+  flyway:
+    enabled: false
   datasource:
     url: jdbc:h2:mem:pawsitters-test;DB_CLOSE_DELAY=-1
     driver-class-name: org.h2.Driver
@@ -60,16 +64,20 @@ spring:
 
 ---
 # === PROD-Profil ===
-# PostgreSQL via Env-Vars (Railway/Fly.io setzt DATABASE_URL).
-# Flyway managed das Schema (kommt in nächster Phase).
+# PostgreSQL via Standard-PG*-Env-Vars (Railway setzt sie automatisch
+# wenn der Postgres-Service als Reference verlinkt wird).
+# Flyway managed das Schema (V1__init_schema.sql + folgende Migrations).
 spring:
   config:
     activate:
       on-profile: prod
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
   datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    url: jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}
+    username: ${PGUSER}
+    password: ${PGPASSWORD}
   jpa:
     hibernate:
       ddl-auto: validate
