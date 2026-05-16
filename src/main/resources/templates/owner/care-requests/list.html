@@ -9,10 +9,6 @@
 <section>
   <h1>Betreuungsanfragen</h1>
 
-  <p class="message message-success" data-care-request-created-message hidden>
-    Betreuungsanfrage wurde erstellt.
-  </p>
-
   <p><a th:href="@{/owner/care-requests/new}">Neue Anfrage erstellen</a></p>
 
   <p th:if="${#lists.isEmpty(careRequests)}">Es sind noch keine Betreuungsanfragen vorhanden.</p>
@@ -31,12 +27,10 @@
       <td th:text="${careRequest.pet.name}">Bello</td>
       <td th:text="${#temporals.format(careRequest.startDate, 'dd.MM.yyyy')}">20.05.2026</td>
       <td th:text="${#temporals.format(careRequest.endDate, 'dd.MM.yyyy')}">27.05.2026</td>
-      <td th:text="${careRequest.status}">OPEN</td>
+      <td th:text="${#strings.capitalize(#strings.toLowerCase(careRequest.status.name()))}">Open</td>
     </tr>
     </tbody>
   </table>
-
-  <script th:src="@{/js/care-request.js}" defer></script>
 </section>
 </body>
 </html>

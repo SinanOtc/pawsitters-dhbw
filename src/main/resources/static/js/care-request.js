@@ -25,8 +25,6 @@
             return;
         }
 
-        sessionStorage.removeItem("careRequestCreated");
-
         var startDateInput = form.querySelector("[data-start-date]");
         var endDateInput = form.querySelector("[data-end-date]");
         if (!startDateInput || !endDateInput) {
@@ -57,29 +55,7 @@
         startDateInput.addEventListener("input", validateDateRange);
         endDateInput.addEventListener("input", validateDateRange);
         validateDateRange();
-
-        form.addEventListener("submit", function () {
-            validateDateRange();
-            if (form.checkValidity()) {
-                sessionStorage.setItem("careRequestCreated", "true");
-            }
-        });
     }
 
-    function initCreatedMessage() {
-        var message = document.querySelector("[data-care-request-created-message]");
-        if (!message) {
-            return;
-        }
-
-        if (sessionStorage.getItem("careRequestCreated") === "true") {
-            message.hidden = false;
-            sessionStorage.removeItem("careRequestCreated");
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        initCareRequestForm();
-        initCreatedMessage();
-    });
+    document.addEventListener("DOMContentLoaded", initCareRequestForm);
 })();

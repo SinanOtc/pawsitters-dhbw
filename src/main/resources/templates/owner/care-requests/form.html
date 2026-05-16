@@ -30,8 +30,8 @@
         <option value="">Haustier wählen</option>
         <option th:each="pet : ${pets}"
                 th:value="${pet.id}"
-                th:text="${pet.name}">
-          Bello
+                th:text="${#strings.isEmpty(pet.breed) ? pet.name : pet.name + ' (' + pet.breed + ')'}">
+          Bello (Labrador)
         </option>
       </select>
       <span th:if="${#fields.hasErrors('petId')}" th:errors="*{petId}" class="field-error"></span>
@@ -62,7 +62,7 @@
     </div>
   </form>
 
-  <script th:src="@{/js/care-request.js}" defer></script>
+  <script th:src="@{/js/care-request.js}"></script>
 </section>
 </body>
 </html>
