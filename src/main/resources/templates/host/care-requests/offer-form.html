@@ -1,11 +1,37 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-  <meta charset="UTF-8">
-  <title>Offer senden (TODO Frontend)</title>
+    <meta charset="UTF-8">
+    <title>Angebot abgeben</title>
 </head>
 <body>
-<!-- TODO Frontend: Form zum Offer senden. Model: offerForm (weeklyPrice), careRequestId (für Action-URL). POST /host/care-requests/{careRequestId}/offer -->
-<h1>Angebot abgeben</h1>
+<section>
+    <h1>Angebot abgeben</h1>
+
+    <form th:action="@{/host/care-requests/{id}/offer(id=${careRequestId})}"
+          th:object="${offerForm}"
+          method="post">
+
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+        <p>
+            <label for="weeklyPrice">Wochenpreis (€)</label>
+            <input type="number"
+                   th:field="*{weeklyPrice}"
+                   min="0.01"
+                   step="0.01"
+                   inputmode="decimal"
+                   required>
+            <span th:if="${#fields.hasErrors('weeklyPrice')}" th:errors="*{weeklyPrice}" class="field-error"></span>
+        </p>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Angebot senden</button>
+            <a th:href="@{/host/care-requests}">Abbrechen</a>
+        </div>
+    </form>
+</section>
 </body>
 </html>
