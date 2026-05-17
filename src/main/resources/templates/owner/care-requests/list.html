@@ -20,6 +20,7 @@
       <th scope="col">Startdatum</th>
       <th scope="col">Enddatum</th>
       <th scope="col">Status</th>
+      <th scope="col">Aktion</th>
     </tr>
     </thead>
     <tbody>
@@ -32,6 +33,9 @@
         <span th:case="'MATCHED'">Vermittelt</span>
         <span th:case="'CLOSED'">Geschlossen</span>
         <span th:case="*">Unbekannt</span>
+      </td>
+      <td>
+        <a th:href="@{/owner/care-requests/{id}/offers(id=${careRequest.id})}">Angebote ansehen</a>
       </td>
     </tr>
     </tbody>
