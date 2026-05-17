@@ -84,6 +84,13 @@ Format: **Zweck → Prompt → Ergebnis & Anpassung → Eigenanteil**.
 - **Ergebnis & Anpassung**: Drei Templates ausgebaut: `host/care-requests/list.html` (Tabelle mit Haustier, Tierart, Zeitraum, Tierhalter + „Angebot senden"-Link), `host/care-requests/offer-form.html` (Preisfeld mit `btn-primary`-Submit) und `host/offers/list.html` (Tabelle mit Haustier, Zeitraum, Tierhalter, Preis, Status). Stil aus `pets/list.html` übernommen (Tabelle + `#lists.isEmpty`-Fallback).
 - **Eigenanteil**: Akzeptanzkriterien gegen den Backend-Stand abgeglichen, „optionale Nachricht" bewusst rausgelassen weil Frontend-only Scope, Commit-Schritte pro Template festgelegt.
 
+### 2026-05-17 - Frontend: PetOwner-Dashboard (Angebote annehmen)
+
+- **Zweck**: Issue #27 umsetzen: Owner soll alle eingegangenen Angebote zu einer Anfrage sehen und annehmen können.
+- **Prompt** (sinngemäß): Issue #27 — der Tierhalter braucht eine Übersicht, wer welches Angebot für seine Anfrage abgegeben hat. Akzeptanzkriterien: pro Angebot Host, Preis und Verfügbarkeit zeigen, Annehmen-/Ablehnen-Button und ein visuelles Feedback nach der Annahme. Backend hat schon `GET /owner/care-requests/{id}/offers` (Liste) und `POST /owner/offers/{offerId}/accept`. Reject-Endpoint gibt es nicht — Accept rejected die anderen Offers ja automatisch (siehe Sinans Auto-Reject-Kaskade). Ich würde den Reject-Button daher erstmal weglassen und ein Backend-Issue dafür anlegen, analog zur Nachricht in #26. Visuelles Feedback würde ich über Status-Badges pro Offer lösen (PENDING gelb, ACCEPTED grün, REJECTED grau), das geht ganz ohne Controller-Änderung.
+- **Ergebnis & Anpassung**: `owner/care-requests/list.html` um „Angebote ansehen"-Spalte ergänzt, `owner/care-requests/offers.html` mit Tabelle (Host, Adresse, Verfügbarkeit, Preis, Status) gebaut, Annehmen-Form nur sichtbar bei PENDING-Offer + OPEN-CareRequest. Status-Badges `.status-pending/.status-accepted/.status-rejected` ins `style.css` ergänzt.
+- **Eigenanteil**: Akzeptanzkriterien gegen Backend abgeglichen, fehlenden Reject-Endpoint als eigenes Backend-Issue ausgelagert, Badge-Farben passend zur bestehenden Farbpalette (`message-success`/`message-error`) gewählt, Commit-Schritte pro Datei festgelegt.
+
 ---
 
 ## Reflexion
