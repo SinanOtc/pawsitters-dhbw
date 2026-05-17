@@ -91,6 +91,13 @@ Format: **Zweck → Prompt → Ergebnis & Anpassung → Eigenanteil**.
 - **Ergebnis & Anpassung**: `owner/care-requests/list.html` um „Angebote ansehen"-Spalte ergänzt, `owner/care-requests/offers.html` mit Tabelle (Host, Adresse, Verfügbarkeit, Preis, Status) gebaut, Annehmen-Form nur sichtbar bei PENDING-Offer + OPEN-CareRequest. Status-Badges `.status-pending/.status-accepted/.status-rejected` ins `style.css` ergänzt.
 - **Eigenanteil**: Akzeptanzkriterien gegen Backend abgeglichen, fehlenden Reject-Endpoint als eigenes Backend-Issue ausgelagert, Badge-Farben passend zur bestehenden Farbpalette (`message-success`/`message-error`) gewählt, Commit-Schritte pro Datei festgelegt.
 
+### 2026-05-17 - Frontend: Anfrage-Status-Anzeige
+
+- **Zweck**: Issue #28 umsetzen: Status einer Betreuungsanfrage sichtbar machen — Badge pro Anfrage in der Übersicht und Detailseite mit Statusverlauf.
+- **Prompt** (sinngemäß): Issue #28 — der Owner soll auf einen Blick sehen, wo seine Anfrage gerade steht. Akzeptanzkriterien: Status-Badge pro Anfrage in der Übersicht und eine Detailseite mit Statushistorie. Mein Gedanke: Eine echte Historie geht ohne Backend-Audit-Log und Timestamps gar nicht (`CareRequest` hat aktuell keine `createdAt`/`updatedAt`). Was Frontend-only realistisch ist: ein **visueller Stepper**, der die drei `RequestStatus`-Werte OPEN → MATCHED → CLOSED zeigt und den aktuellen Status hervorhebt. Für die Detailseite selbst fehlt aber ein `GET /owner/care-requests/{id}`-Endpoint — den lege ich als Backend-Issue für Sinan an. Das Template kann ich aber schon fertig bauen, weil es nur auf `${careRequest}` zugreift.
+- **Ergebnis & Anpassung**: `owner/care-requests/list.html` zeigt den Status jetzt als farbiges Badge (gelb / grün / grau) statt als Plain-Text. Neue Detailseite `owner/care-requests/detail.html` mit Pet-Info, Datumstabelle, aktuellem Status-Badge und einem Stepper, der OPEN → Vermittelt → Geschlossen visualisiert. Erreichte Schritte werden grün, der aktuelle bekommt zusätzlich einen Glow. Haustier-Name in der Liste verlinkt jetzt auf die Detailseite. CSS-seitig wurden `.status-open/.status-matched/.status-closed` und der `.status-stepper`-Block ergänzt.
+- **Eigenanteil**: Akzeptanzkriterien gegen Domain abgeglichen (keine echte Historie möglich → Stepper als Workaround), fehlenden Detail-Endpoint als Backend-Issue ausgelagert, Stepper-Logik (`step-active` vs. `step-current`) selbst durchgedacht, Farben wieder konsistent zur bestehenden Palette gewählt.
+
 ---
 
 ## Reflexion
