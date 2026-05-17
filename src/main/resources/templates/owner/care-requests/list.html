@@ -28,11 +28,13 @@
       <td th:text="${careRequest.pet.name}">Bello</td>
       <td th:text="${#temporals.format(careRequest.startDate, 'dd.MM.yyyy')}">20.05.2026</td>
       <td th:text="${#temporals.format(careRequest.endDate, 'dd.MM.yyyy')}">27.05.2026</td>
-      <td th:switch="${careRequest.status.name()}">
-        <span th:case="'OPEN'">Offen</span>
-        <span th:case="'MATCHED'">Vermittelt</span>
-        <span th:case="'CLOSED'">Geschlossen</span>
-        <span th:case="*">Unbekannt</span>
+      <td>
+        <span th:switch="${careRequest.status.name()}">
+          <span th:case="'OPEN'" class="status-badge status-open">Offen</span>
+          <span th:case="'MATCHED'" class="status-badge status-matched">Vermittelt</span>
+          <span th:case="'CLOSED'" class="status-badge status-closed">Geschlossen</span>
+          <span th:case="*" class="status-badge">Unbekannt</span>
+        </span>
       </td>
       <td>
         <a th:href="@{/owner/care-requests/{id}/offers(id=${careRequest.id})}">Angebote ansehen</a>
