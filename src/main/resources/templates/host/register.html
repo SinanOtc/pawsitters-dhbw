@@ -9,7 +9,7 @@
 <section>
     <h1>Gastgeber-Profil erstellen</h1>
 
-    <form th:action="@{/host/register}" th:object="${registerForm}" method="post">
+    <form th:action="@{/host/register}" th:object="${registerForm}" method="post" data-date-range>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
         <p>
@@ -78,7 +78,8 @@
             <label for="availableFrom">Verfügbar ab</label>
             <input type="date"
                    th:field="*{availableFrom}"
-                   required>
+                   required
+                   data-date-range-start>
             <span th:if="${#fields.hasErrors('availableFrom')}" th:errors="*{availableFrom}" class="field-error"></span>
         </p>
 
@@ -86,7 +87,8 @@
             <label for="availableUntil">Verfügbar bis</label>
             <input type="date"
                    th:field="*{availableUntil}"
-                   required>
+                   required
+                   data-date-range-end>
             <span th:if="${#fields.hasErrors('availableUntil')}" th:errors="*{availableUntil}" class="field-error"></span>
             <span th:if="${#fields.hasErrors('availabilityRangeValid')}" th:errors="*{availabilityRangeValid}" class="field-error"></span>
         </p>
@@ -107,6 +109,8 @@
             <a th:href="@{/login}">Zum Login</a>
         </div>
     </form>
+
+    <script th:src="@{/js/date-range.js}"></script>
 </section>
 </body>
 </html>
