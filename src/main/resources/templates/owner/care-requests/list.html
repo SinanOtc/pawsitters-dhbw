@@ -25,7 +25,10 @@
     </thead>
     <tbody>
     <tr th:each="careRequest : ${careRequests}">
-      <td th:text="${careRequest.pet.name}">Bello</td>
+      <td>
+        <a th:href="@{/owner/care-requests/{id}(id=${careRequest.id})}"
+           th:text="${careRequest.pet.name}">Bello</a>
+      </td>
       <td th:text="${#temporals.format(careRequest.startDate, 'dd.MM.yyyy')}">20.05.2026</td>
       <td th:text="${#temporals.format(careRequest.endDate, 'dd.MM.yyyy')}">27.05.2026</td>
       <td>
