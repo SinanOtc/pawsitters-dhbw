@@ -2,7 +2,7 @@ package dhbw.heilbronn.pawsitters.web.controller;
 
 import dhbw.heilbronn.pawsitters.domain.Pet;
 import dhbw.heilbronn.pawsitters.service.PetService;
-import dhbw.heilbronn.pawsitters.web.form.PetForm;
+import dhbw.heilbronn.pawsitters.dto.PetForm;
 import dhbw.heilbronn.pawsitters.security.CurrentUserResolver;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

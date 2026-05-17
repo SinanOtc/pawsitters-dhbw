@@ -1,4 +1,4 @@
-package dhbw.heilbronn.pawsitters.web.form;
+package dhbw.heilbronn.pawsitters.dto;
 
 import dhbw.heilbronn.pawsitters.domain.PetGender;
 import dhbw.heilbronn.pawsitters.domain.PetSpecies;

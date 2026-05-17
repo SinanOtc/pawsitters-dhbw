@@ -1,4 +1,4 @@
-package dhbw.heilbronn.pawsitters.web.form;
+package dhbw.heilbronn.pawsitters.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

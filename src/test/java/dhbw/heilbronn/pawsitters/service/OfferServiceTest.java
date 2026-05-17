@@ -7,7 +7,7 @@ import dhbw.heilbronn.pawsitters.service.exception.CareRequestNotFoundException;
 import dhbw.heilbronn.pawsitters.service.exception.OfferNotEligibleException;
 import dhbw.heilbronn.pawsitters.service.exception.OfferNotFoundException;
 import dhbw.heilbronn.pawsitters.service.exception.OfferNotPendingException;
-import dhbw.heilbronn.pawsitters.web.form.OfferForm;
+import dhbw.heilbronn.pawsitters.dto.OfferForm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

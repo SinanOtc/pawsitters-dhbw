@@ -4,7 +4,7 @@ import dhbw.heilbronn.pawsitters.domain.CareRequest;
 import dhbw.heilbronn.pawsitters.domain.Offer;
 import dhbw.heilbronn.pawsitters.security.CurrentUserResolver;
 import dhbw.heilbronn.pawsitters.service.OfferService;
-import dhbw.heilbronn.pawsitters.web.form.OfferForm;
+import dhbw.heilbronn.pawsitters.dto.OfferForm;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;

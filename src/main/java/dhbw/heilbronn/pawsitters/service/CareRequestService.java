@@ -5,7 +5,7 @@ import dhbw.heilbronn.pawsitters.domain.OwnerProfile;
 import dhbw.heilbronn.pawsitters.domain.Pet;
 import dhbw.heilbronn.pawsitters.repository.CareRequestRepository;
 import dhbw.heilbronn.pawsitters.service.exception.CareRequestNotFoundException;
-import dhbw.heilbronn.pawsitters.web.form.CareRequestForm;
+import dhbw.heilbronn.pawsitters.dto.CareRequestForm;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

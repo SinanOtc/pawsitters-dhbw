@@ -11,7 +11,7 @@ import dhbw.heilbronn.pawsitters.domain.UserRole;
 import dhbw.heilbronn.pawsitters.repository.CareRequestRepository;
 import dhbw.heilbronn.pawsitters.service.exception.CareRequestNotFoundException;
 import dhbw.heilbronn.pawsitters.service.exception.PetNotFoundException;
-import dhbw.heilbronn.pawsitters.web.form.CareRequestForm;
+import dhbw.heilbronn.pawsitters.dto.CareRequestForm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

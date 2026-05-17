@@ -3,7 +3,7 @@ package dhbw.heilbronn.pawsitters.web.controller;
 import dhbw.heilbronn.pawsitters.security.CurrentUserResolver;
 import dhbw.heilbronn.pawsitters.service.CareRequestService;
 import dhbw.heilbronn.pawsitters.service.PetService;
-import dhbw.heilbronn.pawsitters.web.form.CareRequestForm;
+import dhbw.heilbronn.pawsitters.dto.CareRequestForm;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
