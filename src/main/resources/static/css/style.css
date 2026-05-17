@@ -170,6 +170,29 @@ legend {
     margin-top: 1rem;
 }
 
+.status-badge {
+    border-radius: 999px;
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+}
+
+.status-pending {
+    background: #fff9db;
+    color: #946800;
+}
+
+.status-accepted {
+    background: #f0fff4;
+    color: #1f7a3f;
+}
+
+.status-rejected {
+    background: #f1f3f5;
+    color: #52606d;
+}
+
 .profile-name {
     color: #102a43;
     font-size: 1.25rem;

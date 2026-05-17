@@ -1,11 +1,68 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-  <meta charset="UTF-8">
-  <title>Eingegangene Angebote (TODO Frontend)</title>
+    <title>Eingegangene Angebote</title>
 </head>
 <body>
-<!-- TODO Frontend: Eingegangene Offers für eine CareRequest (offers). Pro Offer: Host (Name, Adresse), Preis, Status. Später: Accept/Reject-Buttons (#8). -->
-<h1>Eingegangene Angebote</h1>
+<section>
+    <h1>Eingegangene Angebote</h1>
+
+    <p class="form-actions">
+        <a th:href="@{/owner/care-requests}">Zurück zu den Anfragen</a>
+    </p>
+
+    <p th:if="${#lists.isEmpty(offers)}">
+        Für diese Anfrage sind noch keine Angebote eingegangen.
+    </p>
+
+    <table th:unless="${#lists.isEmpty(offers)}">
+        <thead>
+        <tr>
+            <th scope="col">Gastgeber</th>
+            <th scope="col">Adresse</th>
+            <th scope="col">Verfügbarkeit</th>
+            <th scope="col">Wochenpreis</th>
+            <th scope="col">Status</th>
+            <th scope="col">Aktion</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="offer : ${offers}">
+            <td>
+                <span th:text="${offer.host.firstName}">Max</span>
+                <span th:text="${offer.host.lastName}">Mustermann</span>
+            </td>
+            <td th:text="${offer.host.address}">Musterstraße 1, 12345 Musterstadt</td>
+            <td>
+                <span th:text="${#temporals.format(offer.host.availableFrom, 'dd.MM.yyyy')}">01.01.2026</span>
+                &ndash;
+                <span th:text="${#temporals.format(offer.host.availableUntil, 'dd.MM.yyyy')}">31.12.2026</span>
+            </td>
+            <td>
+                <span th:text="${#numbers.formatDecimal(offer.weeklyPrice, 1, 'POINT', 2, 'COMMA')}">0,00</span> €
+            </td>
+            <td>
+                <span th:switch="${offer.status.name()}">
+                    <span th:case="'PENDING'" class="status-badge status-pending">Offen</span>
+                    <span th:case="'ACCEPTED'" class="status-badge status-accepted">Angenommen</span>
+                    <span th:case="'REJECTED'" class="status-badge status-rejected">Abgelehnt</span>
+                </span>
+            </td>
+            <td>
+                <form th:if="${offer.status.name() == 'PENDING' and offer.careRequest.status.name() == 'OPEN'}"
+                      th:action="@{/owner/offers/{offerId}/accept(offerId=${offer.id})}"
+                      method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <button type="submit" class="btn-primary">Annehmen</button>
+                </form>
+                <span th:unless="${offer.status.name() == 'PENDING' and offer.careRequest.status.name() == 'OPEN'}"
+                      class="muted">&mdash;</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
 </body>
 </html>
