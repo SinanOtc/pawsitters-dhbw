@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
+<head>
+    <title>Anfrage-Details</title>
+</head>
+<body>
+<section>
+    <h1>Betreuungsanfrage</h1>
+
+    <p class="form-actions">
+        <a th:href="@{/owner/care-requests}">Zurück zur Übersicht</a>
+    </p>
+
+    <p class="profile-name">
+        <span th:text="${careRequest.pet.name}">Bello</span>
+        <span class="muted">
+            &ndash;
+            <span th:text="${#strings.capitalize(#strings.toLowerCase(careRequest.pet.species.name()))}">Dog</span>
+        </span>
+    </p>
+
+    <table>
+        <tr>
+            <th scope="row">Startdatum:</th>
+            <td th:text="${#temporals.format(careRequest.startDate, 'dd.MM.yyyy')}">20.05.2026</td>
+        </tr>
+        <tr>
+            <th scope="row">Enddatum:</th>
+            <td th:text="${#temporals.format(careRequest.endDate, 'dd.MM.yyyy')}">27.05.2026</td>
+        </tr>
+        <tr>
+            <th scope="row">Aktueller Status:</th>
+            <td>
+                <span th:switch="${careRequest.status.name()}">
+                    <span th:case="'OPEN'" class="status-badge status-open">Offen</span>
+                    <span th:case="'MATCHED'" class="status-badge status-matched">Vermittelt</span>
+                    <span th:case="'CLOSED'" class="status-badge status-closed">Geschlossen</span>
+                </span>
+            </td>
+        </tr>
+    </table>
+
+    <h2>Statusverlauf</h2>
+
+    <ol class="status-stepper" th:with="status=${careRequest.status.name()}">
+        <li th:class="|step step-active${status == 'OPEN' ? ' step-current' : ''}|">
+            <span class="step-label">Offen</span>
+        </li>
+        <li th:class="|step${status == 'MATCHED' or status == 'CLOSED' ? ' step-active' : ''}${status == 'MATCHED' ? ' step-current' : ''}|">
+            <span class="step-label">Vermittelt</span>
+        </li>
+        <li th:class="|step${status == 'CLOSED' ? ' step-active step-current' : ''}|">
+            <span class="step-label">Geschlossen</span>
+        </li>
+    </ol>
+
+    <p class="form-actions">
+        <a th:href="@{/owner/care-requests/{id}/offers(id=${careRequest.id})}">Eingegangene Angebote ansehen</a>
+    </p>
+</section>
+</body>
+</html>
