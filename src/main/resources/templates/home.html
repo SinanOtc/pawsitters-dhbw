@@ -7,21 +7,60 @@
 </head>
 <body>
 <section>
-    <h1>Pawsitters</h1>
-    <p>Tierbetreuung einfach organisieren.</p>
-    <p>
-        <a th:href="@{/login}">Zum Login</a>
-    </p>
+    <div class="hero">
+        <h1>Tierbetreuung einfach organisieren</h1>
+        <p class="hero-subtitle">
+            Pawsitters bringt Tierhalter und Tierbetreuer zusammen &mdash;
+            für entspannte Urlaubsplanung mit deinem Haustier.
+        </p>
+        <form method="get" class="hero-cta">
+            <button type="submit" class="btn-primary" th:formaction="@{/owner/register}">
+                Als Tierhalter registrieren
+            </button>
+            <button type="submit" th:formaction="@{/host/register}">
+                Als Gastgeber registrieren
+            </button>
+        </form>
+        <p class="hero-login muted">
+            Schon registriert?
+            <a th:href="@{/login}">Zum Login</a>
+        </p>
+    </div>
 
-    <form method="get" class="role-selection">
-        <fieldset>
-            <legend>Registrieren als</legend>
-            <div class="form-actions">
-                <button type="submit" th:formaction="@{/owner/register}">PetOwner</button>
-                <button type="submit" th:formaction="@{/host/register}">Host</button>
-            </div>
-        </fieldset>
-    </form>
+    <div class="feature-grid">
+        <article class="feature-card">
+            <h2>Für Tierhalter</h2>
+            <ul>
+                <li>Profil und Haustier-Daten anlegen</li>
+                <li>Betreuungsanfragen für deinen Urlaub erstellen</li>
+                <li>Passende Angebote von Gastgebern einsehen und annehmen</li>
+            </ul>
+        </article>
+        <article class="feature-card">
+            <h2>Für Gastgeber</h2>
+            <ul>
+                <li>Profil mit akzeptierten Tierarten und Verfügbarkeit pflegen</li>
+                <li>Passende Anfragen automatisch vorgeschlagen bekommen</li>
+                <li>Wochenpreise individuell festlegen</li>
+            </ul>
+        </article>
+    </div>
+
+    <h2>So funktioniert's</h2>
+    <ol class="landing-steps">
+        <li>
+            <h3>Registrieren</h3>
+            <p>Account anlegen und Rolle wählen &mdash; als Tierhalter oder Gastgeber.</p>
+        </li>
+        <li>
+            <h3>Anfragen oder Angebote</h3>
+            <p>Tierhalter stellen Betreuungsanfragen, Gastgeber bekommen passende Anfragen vorgeschlagen.</p>
+        </li>
+        <li>
+            <h3>Vermittlung</h3>
+            <p>Tierhalter wählt aus den eingegangenen Angeboten &mdash; fertig.</p>
+        </li>
+    </ol>
 </section>
 </body>
 </html>

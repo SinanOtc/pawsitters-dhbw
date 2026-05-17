@@ -98,6 +98,13 @@ Format: **Zweck → Prompt → Ergebnis & Anpassung → Eigenanteil**.
 - **Ergebnis & Anpassung**: `owner/care-requests/list.html` zeigt den Status jetzt als farbiges Badge (gelb / grün / grau) statt als Plain-Text. Neue Detailseite `owner/care-requests/detail.html` mit Pet-Info, Datumstabelle, aktuellem Status-Badge und einem Stepper, der OPEN → Vermittelt → Geschlossen visualisiert. Erreichte Schritte werden grün, der aktuelle bekommt zusätzlich einen Glow. Haustier-Name in der Liste verlinkt jetzt auf die Detailseite. CSS-seitig wurden `.status-open/.status-matched/.status-closed` und der `.status-stepper`-Block ergänzt.
 - **Eigenanteil**: Akzeptanzkriterien gegen Domain abgeglichen (keine echte Historie möglich → Stepper als Workaround), fehlenden Detail-Endpoint als Backend-Issue ausgelagert, Stepper-Logik (`step-active` vs. `step-current`) selbst durchgedacht, Farben wieder konsistent zur bestehenden Palette gewählt.
 
+### 2026-05-17 - Frontend: Landing Page
+
+- **Zweck**: Issue #30 umsetzen: Einstiegsseite mit kurzer Plattform-Erklärung und Call-to-Action zur Registrierung.
+- **Prompt** (sinngemäß): Issue #30 — die aktuelle Startseite ist sehr karg (nur Headline + Login-Link + zwei Registrieren-Buttons). Das wirkt nicht wie eine richtige Landing Page. Mein Gedanke: Drei Sektionen wären sinnvoll — eine Hero mit klarer Headline und CTAs (Tierhalter / Gastgeber), zwei Feature-Kacheln nebeneinander (was kann ich als Tierhalter / als Gastgeber tun) und ein „So funktioniert's" mit drei Schritten (Registrieren → Anfragen oder Angebote → Vermittlung). Brauche kein Bildmaterial, nur Text + sauberes Layout. Farben sollen zur bestehenden Palette passen (helles Grau-Blau).
+- **Ergebnis & Anpassung**: `home.html` komplett neu aufgebaut mit Hero-Sektion (Headline, Subtitle, zwei CTAs, Login-Hinweis darunter), zwei Feature-Cards für die Zielgruppen und einer nummerierten Step-Liste mit Kreis-Counter (`counter-reset` / `::before` mit `content: counter(...)`). CSS-seitig die Sektionen `.hero / .feature-grid / .landing-steps` ergänzt, auf Mobile-Breakpoint die Hero-Headline verkleinert.
+- **Eigenanteil**: Inhaltliche Struktur (drei Sektionen) selbst entschieden, Texte für die Feature-Kacheln aus den bisherigen Issues abgeleitet (was der User auf der Plattform wirklich machen kann), Farbschema bewusst konsistent zum Rest der App gewählt.
+
 ---
 
 ## Reflexion
