@@ -193,6 +193,21 @@ legend {
     color: #52606d;
 }
 
+.status-open {
+    background: #fff9db;
+    color: #946800;
+}
+
+.status-matched {
+    background: #f0fff4;
+    color: #1f7a3f;
+}
+
+.status-closed {
+    background: #f1f3f5;
+    color: #52606d;
+}
+
 .profile-name {
     color: #102a43;
     font-size: 1.25rem;
