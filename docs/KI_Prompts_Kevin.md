@@ -105,6 +105,13 @@ Format: **Zweck → Prompt → Ergebnis & Anpassung → Eigenanteil**.
 - **Ergebnis & Anpassung**: `home.html` komplett neu aufgebaut mit Hero-Sektion (Headline, Subtitle, zwei CTAs, Login-Hinweis darunter), zwei Feature-Cards für die Zielgruppen und einer nummerierten Step-Liste mit Kreis-Counter (`counter-reset` / `::before` mit `content: counter(...)`). CSS-seitig die Sektionen `.hero / .feature-grid / .landing-steps` ergänzt, auf Mobile-Breakpoint die Hero-Headline verkleinert.
 - **Eigenanteil**: Inhaltliche Struktur (drei Sektionen) selbst entschieden, Texte für die Feature-Kacheln aus den bisherigen Issues abgeleitet (was der User auf der Plattform wirklich machen kann), Farbschema bewusst konsistent zum Rest der App gewählt.
 
+### 2026-05-17 - Frontend: Datumsfelder gegen ungültige Bereiche absichern
+
+- **Zweck**: Issue #96 (selbst angelegt) umsetzen: Im Host-Registrierungsformular und im Profil-Edit konnte man im Browser ein „Verfügbar ab" eingeben, das nach „Verfügbar bis" liegt. Backend-Validation fängt das zwar, aber UX-mäßig sollte der Browser das schon verhindern.
+- **Prompt** (sinngemäß): Issue #96 — Browser soll bei den zwei Datumsfeldern (Verfügbar ab / bis bei Host, Start / End bei CareRequest) selbst verhindern, dass ein End-Datum vor dem Start-Datum gewählt wird. Es gibt schon ein `care-request.js`, das genau das für die CareRequest-Form macht. Da das gleiche Pattern jetzt an drei Stellen gebraucht wird (Host-Register, Host-Profil-Edit, CareRequest), wäre es sinnvoller, das Script zu generalisieren statt zu kopieren. Mein Gedanke: Container mit `data-date-range` markieren, Inputs mit `data-date-range-start` / `data-date-range-end`, plus ein optionales `data-date-range-min="today|tomorrow"` für den Unterschied zwischen @FutureOrPresent (Host) und @Future (CareRequest). So muss man pro Form nur drei Attribute setzen und das Script bedient sie automatisch.
+- **Ergebnis & Anpassung**: `care-request.js` zu `date-range.js` generalisiert: Script findet alle `[data-date-range]`-Container, zieht das `min` des Endfelds dynamisch nach (Startwert + 1 Tag), zeigt Custom-Validity-Messages und unterscheidet via `data-date-range-min` ob heute oder morgen als frühestmögliches Datum gilt. CareRequest-Form, Host-Register und Host-Profil-Edit auf das neue Pattern umgestellt.
+- **Eigenanteil**: Refactor-Entscheidung (generalisieren statt kopieren) selbst getroffen, Attribute-Naming durchdacht (`data-date-range-*` als sprechendes Pattern), Today-vs-Tomorrow-Unterscheidung als Konfigurationsoption durchgezogen, damit das eine Script beide Backend-Constraints abdeckt.
+
 ---
 
 ## Reflexion
