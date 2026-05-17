@@ -21,7 +21,8 @@
         th:action="@{/owner/care-requests/new}"
         th:object="${careRequestForm}"
         method="post"
-        data-care-request-form>
+        data-date-range
+        data-date-range-min="tomorrow">
     <p>
       <label for="petId">Haustier</label>
       <select th:field="*{petId}" required>
@@ -40,7 +41,7 @@
       <input type="date"
              th:field="*{startDate}"
              required
-             data-start-date>
+             data-date-range-start>
       <span th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" class="field-error"></span>
     </p>
 
@@ -49,7 +50,7 @@
       <input type="date"
              th:field="*{endDate}"
              required
-             data-end-date>
+             data-date-range-end>
       <span th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}" class="field-error"></span>
       <span th:if="${#fields.hasErrors('dateRangeValid')}" th:errors="*{dateRangeValid}" class="field-error"></span>
     </p>
@@ -60,7 +61,7 @@
     </div>
   </form>
 
-  <script th:src="@{/js/care-request.js}"></script>
+  <script th:src="@{/js/date-range.js}"></script>
 </section>
 </body>
 </html>
