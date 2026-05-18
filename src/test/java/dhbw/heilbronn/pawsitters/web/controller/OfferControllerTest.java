@@ -19,6 +19,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -184,14 +185,23 @@ class OfferControllerTest {
     // === Owner: Offer annehmen ===
     @Test
     @WithMockUser(username = OWNER_EMAIL, roles = "OWNER")
-    void postAcceptOffer_validOffer_redirectsToCareRequests()
+    void postAcceptOffer_validOffer_redirectsToOffersOfCareRequest()
             throws Exception {
+        // Mock-Offer mit CareRequest, dessen ID wir im Redirect-Pfad erwarten.
+        // Entity-Konstruktoren sind protected — daher Mockito-mock() statt new.
+        dhbw.heilbronn.pawsitters.domain.CareRequest cr =
+                mock(dhbw.heilbronn.pawsitters.domain.CareRequest.class);
+        when(cr.getId()).thenReturn(CARE_REQUEST_ID);
+        dhbw.heilbronn.pawsitters.domain.Offer accepted =
+                mock(dhbw.heilbronn.pawsitters.domain.Offer.class);
+        when(accepted.getCareRequest()).thenReturn(cr);
+        when(offerService.accept(OFFER_ID, OWNER_USER_ID)).thenReturn(accepted);
+
         mockMvc.perform(post("/owner/offers/{offerId}/accept",
                         OFFER_ID)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-
-                .andExpect(redirectedUrl("/owner/care-requests"));
+                .andExpect(redirectedUrl("/owner/care-requests/" + CARE_REQUEST_ID + "/offers"));
 
         verify(offerService).accept(OFFER_ID, OWNER_USER_ID);
     }

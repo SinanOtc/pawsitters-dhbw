@@ -99,9 +99,12 @@ public class OfferController {
     @PostMapping("/owner/offers/{offerId}/accept")
     public String acceptOffer(@PathVariable Long offerId, @AuthenticationPrincipal UserDetails principal) {
         Long userId = currentUserResolver.userId(principal);
-        offerService.accept(offerId, userId);
-        // Zurück zur CareRequest Liste, diese zeigt jetzt den Status MATCHED
-        return REDIRECT_OWNER_CARE_REQUESTS;
+        Offer accepted = offerService.accept(offerId, userId);
+        // Zurück zur Offers-Seite derselben CareRequest, damit der User
+        // direkt die aktualisierten Status-Badges (ACCEPTED / REJECTED) sieht.
+        // careRequestId aus dem zurückgegebenen Offer ableiten — keine User-Eingabe
+        // nötig, daher kein zusätzlicher Form-Parameter (kein IDOR-Vektor).
+        return "redirect:/owner/care-requests/" + accepted.getCareRequest().getId() + "/offers";
     }
 
     // === Hilfsfunktionen ===
