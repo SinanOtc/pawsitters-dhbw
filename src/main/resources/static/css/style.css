@@ -315,60 +315,60 @@ fieldset {
 .status-stepper {
     display: flex;
     list-style: none;
-    margin: 1rem 0 1.5rem;
+    margin: 1.5rem 0;
     padding: 0;
 }
 
 .step {
     align-items: center;
-    color: #bcccdc;
+    color: var(--pw-ink-500);
     display: flex;
     flex: 1;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.625rem;
     position: relative;
     text-align: center;
 }
 
 .step::before {
-    background: #ffffff;
-    border: 2px solid #bcccdc;
+    background: var(--pw-bg-surface);
+    border: 2px solid var(--pw-ink-300);
     border-radius: 50%;
     content: "";
-    height: 1rem;
-    width: 1rem;
+    height: 1.125rem;
+    width: 1.125rem;
     z-index: 1;
 }
 
 .step:not(:first-child)::after {
-    background: #bcccdc;
+    background: var(--pw-ink-300);
     content: "";
     height: 2px;
     left: -50%;
     position: absolute;
-    top: 0.45rem;
+    top: 0.5rem;
     width: 100%;
 }
 
 .step-active {
-    color: #102a43;
+    color: var(--pw-ink-900);
 }
 
 .step-active::before {
-    background: #1f7a3f;
-    border-color: #1f7a3f;
+    background: var(--pw-accent);
+    border-color: var(--pw-accent);
 }
 
 .step-active:not(:first-child)::after {
-    background: #1f7a3f;
+    background: var(--pw-accent);
 }
 
 .step-current::before {
-    box-shadow: 0 0 0 4px rgba(31, 122, 63, 0.2);
+    box-shadow: 0 0 0 5px var(--pw-accent-soft);
 }
 
 .step-label {
-    font-size: 0.85rem;
+    font-size: 0.8125rem;
     font-weight: 700;
 }
 
