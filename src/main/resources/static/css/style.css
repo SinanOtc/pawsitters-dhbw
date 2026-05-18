@@ -473,17 +473,23 @@ tr:hover td {
 
 .hero-photo {
     aspect-ratio: 4 / 5;
-    background: radial-gradient(ellipse at 50% 40%, #d4a373 0%, #b08866 55%, #8a6a4d 100%);
+    background: var(--pw-bg-shell);
     border-radius: 14rem 14rem 1.125rem 1.125rem;
     box-shadow: 0 1.25rem 3rem -1rem rgba(58, 47, 35, 0.35);
     overflow: hidden;
     position: relative;
 }
 
+.hero-photo-image {
+    display: block;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+}
+
 .hero-photo::after {
-    background:
-        radial-gradient(ellipse 26% 14% at 50% 38%, rgba(70, 50, 32, 0.55), transparent 70%),
-        radial-gradient(ellipse 10% 18% at 50% 56%, rgba(40, 28, 18, 0.6), transparent 75%);
+    background: linear-gradient(180deg, transparent 55%, rgba(26, 20, 16, 0.35));
     content: "";
     inset: 0;
     position: absolute;
