@@ -112,6 +112,13 @@ Format: **Zweck → Prompt → Ergebnis & Anpassung → Eigenanteil**.
 - **Ergebnis & Anpassung**: `care-request.js` zu `date-range.js` generalisiert: Script findet alle `[data-date-range]`-Container, zieht das `min` des Endfelds dynamisch nach (Startwert + 1 Tag), zeigt Custom-Validity-Messages und unterscheidet via `data-date-range-min` ob heute oder morgen als frühestmögliches Datum gilt. CareRequest-Form, Host-Register und Host-Profil-Edit auf das neue Pattern umgestellt.
 - **Eigenanteil**: Refactor-Entscheidung (generalisieren statt kopieren) selbst getroffen, Attribute-Naming durchdacht (`data-date-range-*` als sprechendes Pattern), Today-vs-Tomorrow-Unterscheidung als Konfigurationsoption durchgezogen, damit das eine Script beide Backend-Constraints abdeckt.
 
+### 2026-05-18 - Frontend: Design-System (cream + terracotta)
+
+- **Zweck**: Pawsitters-Design aus Claude Design (claude.ai/design) im Frontend umsetzen — kompletter Visual-Wechsel von der bisherigen blau-grauen Palette zu einem warmen Cream-Hintergrund mit Terracotta-Akzent, plus neue Schriftarten (Manrope/Fraunces).
+- **Prompt** (sinngemäß): Ich habe ein Design-System aus Claude Design exportiert — kannst du das nach und nach im Projekt umsetzen? Bitte mit kleinen Commits, weil das ein größeres Refactor ist, und in einer logischen Reihenfolge (Foundations → Building Blocks → zusammengesetzte Komponenten → Brand). Bestehende Templates möglichst nicht anfassen, nur die CSS umbauen — sonst bricht zu viel auf einmal.
+- **Ergebnis & Anpassung**: 10 kleine Commits auf `feature/design-system`: Tokens als `:root`-Block (Schritt 1), Google Fonts ins Layout (Schritt 2), Body + Headings auf Manrope/Fraunces (Schritt 3), Buttons zu Pill mit Terracotta (Schritt 4), Forms mit dickerem Border + Akzent-Fokus (Schritt 5), Status-Pills uppercase + Messages mit Border-Left (Schritt 6), Tabellen mit uppercase Headern (Schritt 7), Feature-Cards und Landing-Steps in größerer Radius mit Akzent-Counter (Schritt 8), Stepper auf Terracotta + Soft-Halo (Schritt 9), Brand-Wordmark zu Fraunces Italic (Schritt 10). Alle bestehenden Templates funktionieren ohne HTML-Änderung weiter.
+- **Eigenanteil**: Commit-Reihenfolge bewusst nach Abhängigkeit sortiert (Pills vor Tables, weil Tables die Pills nutzen). Px-Werte aus dem Kit teilweise auf rem umgerechnet, damit die Codebase einheitlich bleibt. Brand-Wordmark moderater dimensioniert (1.75rem statt 38px), damit der Header nicht zu hoch wird. Optionale Komponenten aus dem Kit (Search-Row, Trustpilot, Stats-Bar) bewusst weggelassen, weil sie keinem aktuellen Akzeptanzkriterium dienen.
+
 ---
 
 ## Reflexion
