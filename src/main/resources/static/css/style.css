@@ -443,71 +443,77 @@ tr:hover td {
 
 .feature-grid {
     display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    margin-bottom: 2rem;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+    margin: 4.5rem 0 2rem;
 }
 
 .feature-card {
-    background: #ffffff;
-    border: 1px solid #d9e2ec;
-    border-radius: 8px;
-    padding: 1.25rem 1.5rem;
+    background: var(--pw-bg-surface);
+    border: 1px solid var(--pw-ink-200);
+    border-radius: var(--pw-radius-md);
+    padding: 2rem;
 }
 
 .feature-card h2 {
-    color: #102a43;
-    margin-top: 0;
+    color: var(--pw-ink-900);
+    font-size: 1.375rem;
+    margin: 0 0 1rem;
 }
 
 .feature-card ul {
+    color: var(--pw-ink-700);
     margin: 0;
-    padding-left: 1.25rem;
+    padding-left: 1.1rem;
 }
 
 .feature-card li {
-    margin: 0.4rem 0;
+    margin: 0.5rem 0;
 }
 
 .landing-steps {
     counter-reset: landing-step;
     display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
     list-style: none;
     padding: 0;
 }
 
 .landing-steps li {
-    background: #ffffff;
-    border: 1px solid #d9e2ec;
-    border-radius: 8px;
+    background: var(--pw-bg-surface);
+    border: 1px solid var(--pw-ink-200);
+    border-radius: var(--pw-radius-md);
     counter-increment: landing-step;
-    padding: 1.25rem 1.5rem;
+    padding: 2rem;
     position: relative;
 }
 
 .landing-steps li::before {
-    background: #0f5e9c;
+    align-items: center;
+    background: var(--pw-accent);
     border-radius: 50%;
     color: #ffffff;
     content: counter(landing-step);
     display: inline-flex;
-    align-items: center;
+    font-family: var(--pw-font-heading);
+    font-size: 1.0625rem;
+    font-weight: 800;
+    height: 2.375rem;
     justify-content: center;
-    font-weight: 700;
-    height: 2rem;
-    margin-bottom: 0.75rem;
-    width: 2rem;
+    margin-bottom: 1.125rem;
+    width: 2.375rem;
 }
 
 .landing-steps h3 {
-    color: #102a43;
-    margin: 0 0 0.25rem;
+    color: var(--pw-ink-900);
+    font-size: 1.1875rem;
+    margin: 0 0 0.5rem;
 }
 
 .landing-steps p {
-    color: #52606d;
+    color: var(--pw-ink-500);
+    font-size: 0.9375rem;
     margin: 0;
 }
 
