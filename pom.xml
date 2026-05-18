@@ -141,6 +141,17 @@
 						</exclude>
 					</excludes>
 				</configuration>
+				<!-- build-info schreibt target/classes/META-INF/build-info.properties
+				     mit Artifact-Name, Version, Build-Time. Actuator liest das beim Start
+				     ein und exponiert es unter /actuator/info — sichtbarer Production-Touch
+				     und essentiell für Bug-Report-Triage ("welche Version ist live?"). -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-info</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
