@@ -103,10 +103,18 @@ a:hover {
 }
 
 .brand {
-    color: #102a43;
-    font-size: 1.25rem;
-    font-weight: 700;
+    color: var(--pw-ink-900);
+    font-family: var(--pw-font-heading);
+    font-size: 1.75rem;
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
     text-decoration: none;
+}
+
+.brand:hover {
+    color: var(--pw-ink-900);
 }
 
 .navbar {
