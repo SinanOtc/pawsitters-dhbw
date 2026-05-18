@@ -3,11 +3,11 @@
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-    <title>Gastgeber-Profil bearbeiten</title>
+    <title>Tierbetreuer-Profil bearbeiten</title>
 </head>
 <body>
 <section>
-    <h1>Gastgeber-Profil bearbeiten</h1>
+    <h1>Tierbetreuer-Profil bearbeiten</h1>
 
     <form th:action="@{/host/profile/edit}" th:object="${updateForm}" method="post" data-date-range>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
