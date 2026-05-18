@@ -1,6 +1,14 @@
 # Testdokumentation
 ## Übersicht
 
+**142 Tests · 100 % grün · 95 % Line Coverage (JaCoCo)**
+
+Aufgeteilt in:
+- **133 Funktionale Tests** — Domain, Service, Web/Controller, Repository, Security/Config (siehe Klassen-Sections unten)
+- **9 Architektur-Tests** — ArchUnit erzwingt Layer-Boundaries, Naming-Konventionen und Zyklenfreiheit (siehe `ArchitectureTest` ganz unten)
+
+Coverage wird mit JaCoCo gemessen (`./mvnw verify` → `target/site/jacoco/index.html`) und als Build-Gate enforced: LINE ≥ 80 %, BRANCH ≥ 65 % — Schwellen liegen ~15 pp unter dem aktuellen Stand (95 % / 79 %) als Sicherheits-Marge gegen Regression.
+
 ## SecurityConfigTest
 Datei: `src/test/java/dhbw/heilbronn/pawsitters/config/SecurityConfigTest.java`
 
@@ -277,3 +285,21 @@ Testet den zentralen Helper der `UserDetails` →
 | `userId_userExists_returnsId`                     | Happy Path mit existierendem User                  | Liefert die ID des gefundenen Users                    | Normal                       |
 | `userId_userNotFound_throwsIllegalStateException` | Eingeloggter User existiert nicht (mehr) in der DB | `IllegalStateException` — keine `NullPointerException` | Edge Case (Defense-in-Depth) |
 ---
+## ArchitectureTest
+Datei: `src/test/java/dhbw/heilbronn/pawsitters/architecture/ArchitectureTest.java`
+
+Architektur-Tests mit ArchUnit. Jede Regel ist eine Architektur-Aussage, die der Build erzwingt — Verstöße scheitern CI. So bleibt die MVC- / Layered-Architektur enforced statt nur dokumentiert. Scope: nur Produktionscode (`ImportOption.DoNotIncludeTests`), damit Test-Hilfsklassen keine Schicht-Regeln verletzen.
+
+| Test                                                            | Was wird geprüft                                                                                       | Erwartetes Ergebnis                 | Typ          |
+|-----------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|-------------------------------------|--------------|
+| `web_must_not_directly_access_repositories`                     | Web-Layer importiert nicht direkt aus `repository` — Controller müssen über Service-Schicht gehen      | Keine Verletzung im Production-Code | Architektur  |
+| `domain_must_not_depend_on_other_layers`                        | Domain hat keine Outbound-Dependencies zu `web` / `service` / `repository` / `config` / `security`     | Keine Verletzung                    | Architektur  |
+| `domain_must_not_depend_on_spring`                              | Entities sind framework-frei (kein `org.springframework`-Import; Jakarta-Persistence-Annotations okay) | Keine Verletzung                    | Architektur  |
+| `repositories_must_not_depend_on_services_or_web`               | Persistence-Layer kennt weder Service noch Web — Dependency-Flow nur nach unten                        | Keine Verletzung                    | Architektur  |
+| `classes_annotated_controller_belong_in_web_controller_package` | `@Controller`-Klassen leben nur in `web.controller`                                                    | Keine Verletzung                    | Lokation     |
+| `controllers_should_have_controller_suffix`                     | `@Controller`-Klassennamen enden auf "Controller"                                                      | Keine Verletzung                    | Naming       |
+| `services_in_service_package_should_have_service_suffix`        | `@Service`-Klassen im `service`-Paket enden auf "Service"                                              | Keine Verletzung                    | Naming       |
+| `repositories_should_have_repository_suffix`                    | Klassen im `repository`-Paket enden auf "Repository"                                                   | Keine Verletzung                    | Naming       |
+| `no_cycles_between_top_level_packages`                          | Keine zyklischen Abhängigkeiten zwischen Top-Level-Paketen                                             | Keine Verletzung                    | Strukturell  |
+
+> **Hinweis zur Entstehung:** `no_cycles_between_top_level_packages` hat beim Erstellen einen impliziten `service ↔ web`-Zyklus aufgedeckt — Services nahmen Form-DTOs aus `web.form` als Parameter. Behoben durch Verschieben der Form-Records in ein neutrales Top-Level-Paket `dto`. Beispiel für "Architektur als Code": ArchUnit hat einen Smell sichtbar gemacht, der bei reinem Code-Reading unsichtbar geblieben wäre.
