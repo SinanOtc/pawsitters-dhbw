@@ -86,7 +86,7 @@ class OfferServiceTest {
                 LocalDate.now().plusDays(15));
         careRequest.setId(CARE_REQUEST_ID);
 
-        validForm = new OfferForm(new BigDecimal("60.00"));
+        validForm = new OfferForm(new BigDecimal("60.00"), null);
     }
 
     // === findMatchingRequests ===
@@ -188,6 +188,30 @@ class OfferServiceTest {
 
         assertThat(result.getCareRequest()).isSameAs(careRequest);
         assertThat(result.getWeeklyPrice()).isEqualByComparingTo("60.00");
+        // Optionales Feld nicht gesetzt → message bleibt null (Default-Form ohne Text).
+        assertThat(result.getMessage()).isNull();
+    }
+
+    @Test
+    void createOffer_withMessage_storesMessageOnEntity() {
+        // Optionales Nachrichten-Feld muss bis ins Entity durchgereicht werden (#88).
+        String hostMessage = "Hallo, ich kümmere mich gerne um euren Hund — habe einen großen Garten.";
+        OfferForm formWithMessage = new OfferForm(new BigDecimal("60.00"), hostMessage);
+
+        when(hostService.findByUserId(HOST_USER_ID)).thenReturn(host);
+        when(careRequestRepository.findById(CARE_REQUEST_ID))
+                .thenReturn(Optional.of(careRequest));
+        when(careRequestRepository.findMatchingForHost(
+                host.getAcceptedSpecies(),
+                host.getAvailableFrom(),
+                host.getAvailableUntil(),
+                host.getId()
+        )).thenReturn(List.of(careRequest));
+        when(offerRepository.save(any(Offer.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        Offer result = offerService.createOffer(HOST_USER_ID, CARE_REQUEST_ID, formWithMessage);
+
+        assertThat(result.getMessage()).isEqualTo(hostMessage);
     }
 
     @Test

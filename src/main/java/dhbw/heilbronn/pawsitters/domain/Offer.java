@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,10 +50,25 @@ public class Offer {
     @Column(nullable = false, length = 16)
     private OfferStatus status;
 
+    // Optional: persönliche Nachricht des Hosts an den Owner. Nullable.
+    // 500 Zeichen-Limit auf Bean-Validation + DB-Spalte synchron, damit kein Mismatch
+    // zwischen Form-Validation und Hibernate-validate (prod) auftritt.
+    @Size(max = 500)
+    @Column(length = 500)
+    private String message;
+
+    // Bewusst zwei Konstruktoren: der 3-arg-Konstruktor delegiert mit message=null
+    // an den 4-arg. Existierende Aufrufer (Tests, Repository-Fixtures) bleiben
+    // dadurch unverändert kompilierbar — kein Big-Bang-Refactor nötig.
     public Offer(HostProfile host, CareRequest careRequest, BigDecimal weeklyPrice) {
+        this(host, careRequest, weeklyPrice, null);
+    }
+
+    public Offer(HostProfile host, CareRequest careRequest, BigDecimal weeklyPrice, String message) {
         this.host = host;
         this.careRequest = careRequest;
         this.weeklyPrice = weeklyPrice;
+        this.message = message;
         // Neue Offers starten immer als Pending.
         this.status = OfferStatus.PENDING;
     }

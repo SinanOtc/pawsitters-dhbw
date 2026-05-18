@@ -114,7 +114,9 @@ public class DevUsersConfig {
 
             // === Offer vom Host auf die Anfrage ===
             offerService.createOffer(hostUserId, careRequest.getId(), new OfferForm(
-                    new BigDecimal("55.00")
+                    new BigDecimal("55.00"),
+                    "Hallo! Ich freue mich, mich um euren Vierbeiner zu kümmern. " +
+                            "Habe Erfahrung mit ähnlichen Tieren und einen gesicherten Garten."
             ));
 
             log.info("Dev-Seed fertig: Owner + Host + Pet + CareRequest + Offer angelegt.");

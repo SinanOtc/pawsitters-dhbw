@@ -85,7 +85,7 @@ public class OfferService {
         if(!matching.contains(cr)){
             throw new OfferNotEligibleException(careRequestId);
         }
-        Offer offer = new Offer(host, cr, form.weeklyPrice());
+        Offer offer = new Offer(host, cr, form.weeklyPrice(), form.message());
         return offerRepository.save(offer);
     }
 
