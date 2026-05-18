@@ -1,12 +1,7 @@
 package dhbw.heilbronn.pawsitters.web.controller;
 
-import dhbw.heilbronn.pawsitters.service.exception.CareRequestNotFoundException;
-import dhbw.heilbronn.pawsitters.service.exception.HostProfileNotFoundException;
-import dhbw.heilbronn.pawsitters.service.exception.OfferNotEligibleException;
-import dhbw.heilbronn.pawsitters.service.exception.OfferNotFoundException;
-import dhbw.heilbronn.pawsitters.service.exception.OfferNotPendingException;
-import dhbw.heilbronn.pawsitters.service.exception.OwnerProfileNotFoundException;
-import dhbw.heilbronn.pawsitters.service.exception.PetNotFoundException;
+import dhbw.heilbronn.pawsitters.service.exception.*;
+import dhbw.heilbronn.pawsitters.service.exception.EmailAlreadyTakenException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -59,4 +54,7 @@ class ThrowingTestController {
     public String throwOfferNotEligible() {
         throw new OfferNotEligibleException(42L);
     }
+
+    @GetMapping("/test/email-already-taken")
+    public String throwEmailAlreadyTaken() { throw new EmailAlreadyTakenException("owner@test.de"); }
 }
