@@ -384,16 +384,30 @@ fieldset {
 }
 
 table {
-    width: 100%;
     border-collapse: collapse;
     margin: 1rem 0;
+    width: 100%;
 }
 
 th,
 td {
-    border-bottom: 1px solid #d9e2ec;
-    padding: 0.65rem;
+    border-bottom: 1px solid var(--pw-ink-200);
+    color: var(--pw-ink-700);
+    padding: 0.875rem 1rem;
     text-align: left;
+    vertical-align: top;
+}
+
+th {
+    color: var(--pw-ink-500);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+tr:hover td {
+    background: var(--pw-bg-shell);
 }
 
 .hero {
