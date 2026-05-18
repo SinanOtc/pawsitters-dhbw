@@ -3,11 +3,11 @@
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: page(~{::title}, ~{::section})}">
 <head>
-    <title>Gastgeber registrieren</title>
+    <title>Tierbetreuer registrieren</title>
 </head>
 <body>
 <section>
-    <h1>Gastgeber-Profil erstellen</h1>
+    <h1>Tierbetreuer-Profil erstellen</h1>
 
     <form th:action="@{/host/register}" th:object="${registerForm}" method="post" data-date-range>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
