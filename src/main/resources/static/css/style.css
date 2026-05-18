@@ -434,14 +434,25 @@ tr:hover td {
 }
 
 .hero h1 {
-    color: #102a43;
-    font-size: 2rem;
-    margin: 0 0 0.5rem;
+    color: var(--pw-ink-900);
+    font-size: 4rem;
+    letter-spacing: -0.03em;
+    line-height: 1.0;
+    margin: 0 auto 1.5rem;
+    max-width: 12ch;
+}
+
+.hero h1 em {
+    color: var(--pw-accent);
+    font-style: italic;
+    font-weight: 500;
 }
 
 .hero-subtitle {
-    color: #52606d;
-    font-size: 1.1rem;
+    color: var(--pw-ink-700);
+    font-size: 1.375rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
     margin: 0 auto 1.5rem;
     max-width: 36rem;
 }
@@ -455,7 +466,7 @@ tr:hover td {
 }
 
 .hero-login {
-    font-size: 0.95rem;
+    font-size: 0.9375rem;
 }
 
 .feature-grid {
