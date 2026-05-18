@@ -250,24 +250,30 @@ fieldset {
 }
 
 .message {
-    border-radius: 6px;
-    padding: 0.75rem 1rem;
+    border-left: 3px solid;
+    border-radius: 12px;
+    font-weight: 600;
+    margin: 0 0 1.125rem;
+    padding: 0.875rem 1.125rem;
 }
 
 .message-error {
-    background: #fff5f5;
-    color: #a61b1b;
+    background: var(--pw-danger-050);
+    border-color: var(--pw-danger-700);
+    color: var(--pw-danger-700);
 }
 
 .message-success {
-    background: #f0fff4;
-    color: #1f7a3f;
+    background: var(--pw-success-050);
+    border-color: var(--pw-success-700);
+    color: var(--pw-success-700);
 }
 
 .field-error {
-    color: #a61b1b;
+    color: var(--pw-danger-700);
     display: block;
-    margin-top: 0.25rem;
+    font-size: 0.8125rem;
+    margin-top: 0.375rem;
 }
 
 .form-actions {
@@ -279,41 +285,31 @@ fieldset {
 }
 
 .status-badge {
-    border-radius: 999px;
+    border-radius: var(--pw-radius-pill);
     display: inline-block;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    padding: 0.2rem 0.6rem;
+    letter-spacing: 0.04em;
+    padding: 0.3rem 0.75rem;
+    text-transform: uppercase;
 }
 
-.status-pending {
-    background: #fff9db;
-    color: #946800;
-}
-
-.status-accepted {
-    background: #f0fff4;
-    color: #1f7a3f;
-}
-
-.status-rejected {
-    background: #f1f3f5;
-    color: #52606d;
-}
-
+.status-pending,
 .status-open {
-    background: #fff9db;
-    color: #946800;
+    background: var(--pw-warning-050);
+    color: var(--pw-warning-700);
 }
 
+.status-accepted,
 .status-matched {
-    background: #f0fff4;
-    color: #1f7a3f;
+    background: var(--pw-success-050);
+    color: var(--pw-success-700);
 }
 
+.status-rejected,
 .status-closed {
-    background: #f1f3f5;
-    color: #52606d;
+    background: var(--pw-neutral-050);
+    color: var(--pw-neutral-700);
 }
 
 .status-stepper {
