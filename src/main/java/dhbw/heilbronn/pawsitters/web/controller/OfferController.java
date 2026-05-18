@@ -119,10 +119,10 @@ public class OfferController {
 
     // === Hilfsfunktionen ===
 
-    // Leeres OfferForm für GET weeklyPrice ist null, Validation läuft erst beim POST
+    // Leeres OfferForm für GET — alle Felder null, Validation läuft erst beim POST.
     @SuppressWarnings({"DataFlowIssue", "java:S2637"})
     private OfferForm emptyOfferForm() {
-        return new OfferForm(null);
+        return new OfferForm(null, null);
     }
 
 
