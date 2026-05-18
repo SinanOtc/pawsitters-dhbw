@@ -104,4 +104,14 @@ class GlobalExceptionHandlerTest {
 
                 .andExpect(model().attributeExists("message"));
     }
+
+    @Test
+    void emailAlreadyTaken_returns409View() throws Exception {
+        // Doppelte E-Mail-Registrierung — 409 Conflict statt
+        // ungefangener Exception + Stack-Trace im Browser.
+        mockMvc.perform(get("/test/email-already-taken"))
+                .andExpect(status().isConflict())
+                .andExpect(view().name("error/409"))
+                .andExpect(model().attributeExists("message"));
+    }
 }

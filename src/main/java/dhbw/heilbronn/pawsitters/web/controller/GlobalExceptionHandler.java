@@ -41,7 +41,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             OfferNotPendingException.class,
-            OfferNotEligibleException.class
+            OfferNotEligibleException.class,
+            EmailAlreadyTakenException.class
     })
     public ModelAndView handleConflict(RuntimeException e){
         ModelAndView mav = new ModelAndView("error/409");
