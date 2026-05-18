@@ -1,3 +1,43 @@
+/* Design-Tokens — siehe Design System (cream + ink + terracotta) */
+:root {
+    /* Hintergrund & Oberflächen */
+    --pw-bg-page:        #f4ede0;
+    --pw-bg-surface:     #ffffff;
+    --pw-bg-shell:       #ebe2d0;
+
+    /* Ink-Skala (warm) */
+    --pw-ink-900:        #1a1410;
+    --pw-ink-700:        #3a2f23;
+    --pw-ink-500:        #6b5a48;
+    --pw-ink-300:        #b8a98d;
+    --pw-ink-200:        #d9cdb4;
+
+    /* Akzent (Terracotta) */
+    --pw-accent:         #c9591f;
+    --pw-accent-dim:     #a8451a;
+    --pw-accent-soft:    #fae5d2;
+
+    /* Semantik */
+    --pw-success-700:    #2f6b3e;
+    --pw-success-050:    #e0f0e3;
+    --pw-warning-700:    #8a5a00;
+    --pw-warning-050:    #fbe9bf;
+    --pw-danger-700:     #9b2c1e;
+    --pw-danger-050:     #fadbd3;
+    --pw-neutral-700:    #6b5a48;
+    --pw-neutral-050:    #ebe2d0;
+
+    /* Type families */
+    --pw-font-body:      "Manrope", Arial, Helvetica, sans-serif;
+    --pw-font-heading:   "Fraunces", Georgia, serif;
+
+    /* Radii */
+    --pw-radius-sm:      8px;
+    --pw-radius-md:      20px;
+    --pw-radius-lg:      24px;
+    --pw-radius-pill:    999px;
+}
+
 * {
     box-sizing: border-box;
 }
