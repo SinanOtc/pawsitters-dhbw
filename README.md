@@ -113,7 +113,7 @@ Klassische **MVC + Layered Architecture**. Begründung & Details: [`docs/ARCHITE
 
 ## 🧪 Tests
 
-Aktuell **133 Tests, 100 % grün**. Verteilung:
+Aktuell **142 Tests, 100 % grün** — gemessen mit **JaCoCo: 95 % Line Coverage, 79 % Branch Coverage**. Verteilung:
 
 | Schicht | Tests | Stil |
 |---|---|---|
@@ -122,8 +122,9 @@ Aktuell **133 Tests, 100 % grün**. Verteilung:
 | Web (Controller) | 45+ | `@WebMvcTest` mit MockMvc + Spring Security Test |
 | Repository | 5 | `@DataJpaTest` gegen In-Memory-H2 |
 | Security/Config | 7 | Integration-Tests gegen die echte SecurityConfig |
+| Architektur | 9 | ArchUnit — Schicht-Regeln, Naming, Zyklen |
 
-`./mvnw test` reicht.
+`./mvnw test` reicht für die Tests, `./mvnw verify` läuft zusätzlich Coverage-Report + Quality-Gate (80 % Lines / 65 % Branches als Build-Threshold). HTML-Report unter `target/site/jacoco/index.html`.
 
 ---
 
