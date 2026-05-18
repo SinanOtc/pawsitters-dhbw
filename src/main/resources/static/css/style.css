@@ -116,36 +116,55 @@ a:hover {
     gap: 0.75rem;
 }
 
+/* Navbar-Links und Logout-Button: schlichter Text, Hover in Akzentfarbe */
 .navbar a,
-.logout-form button,
-.form-actions a,
-button {
-    border: 1px solid #bcccdc;
-    border-radius: 6px;
-    background: #ffffff;
-    color: #102a43;
+.logout-form button {
+    background: none;
+    border: 0;
+    color: var(--pw-ink-900);
     cursor: pointer;
     font: inherit;
-    padding: 0.45rem 0.75rem;
+    font-weight: 600;
+    padding: 0;
     text-decoration: none;
 }
 
 .navbar a:hover,
-.logout-form button:hover,
-.form-actions a:hover,
-button:hover {
-    background: #eef4f8;
+.logout-form button:hover {
+    color: var(--pw-accent);
 }
 
+/* Default-Buttons und Action-Links: outlined Pill mit dunkler Tinte */
+.form-actions a,
+button {
+    background: transparent;
+    border: 2px solid var(--pw-ink-900);
+    border-radius: var(--pw-radius-pill);
+    color: var(--pw-ink-900);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    padding: 0.6rem 1.2rem;
+    text-decoration: none;
+}
+
+.form-actions a:hover,
+button:hover {
+    background: var(--pw-ink-900);
+    color: var(--pw-bg-page);
+}
+
+/* Hauptaktion: gefüllt mit Terracotta */
 .btn-primary {
-    background: #0f5e9c;
-    border-color: #0f5e9c;
+    background: var(--pw-accent);
+    border-color: var(--pw-accent);
     color: #ffffff;
 }
 
 .btn-primary:hover {
-    background: #0c4a7c;
-    border-color: #0c4a7c;
+    background: var(--pw-accent-dim);
+    border-color: var(--pw-accent-dim);
+    color: #ffffff;
 }
 
 .logout-form {
