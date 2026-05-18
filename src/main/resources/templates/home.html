@@ -8,23 +8,29 @@
 <body>
 <section>
     <div class="hero">
-        <h1>Tierbetreuung einfach organisieren</h1>
-        <p class="hero-subtitle">
-            Pawsitters bringt Tierhalter und Tierbetreuer zusammen &mdash;
-            für entspannte Urlaubsplanung mit deinem Haustier.
-        </p>
-        <form method="get" class="hero-cta">
-            <button type="submit" class="btn-primary" th:formaction="@{/owner/register}">
-                Als Tierhalter registrieren
-            </button>
-            <button type="submit" th:formaction="@{/host/register}">
-                Als Gastgeber registrieren
-            </button>
-        </form>
-        <p class="hero-login muted">
-            Schon registriert?
-            <a th:href="@{/login}">Zum Login</a>
-        </p>
+        <div class="hero-text">
+            <h1>Tierbetreuung <em>einfach</em> organisieren</h1>
+            <p class="hero-subtitle">
+                Pawsitters bringt Tierhalter und Tierbetreuer zusammen &mdash;
+                für entspannte Urlaubsplanung mit deinem Haustier.
+            </p>
+            <form method="get" class="hero-cta">
+                <button type="submit" class="btn-primary" th:formaction="@{/owner/register}">
+                    Als Tierhalter registrieren
+                </button>
+                <button type="submit" th:formaction="@{/host/register}">
+                    Als Gastgeber registrieren
+                </button>
+            </form>
+            <p class="hero-login muted">
+                Schon registriert?
+                <a th:href="@{/login}">Zum Login</a>
+            </p>
+        </div>
+
+        <div class="hero-photo">
+            <span class="hero-photo-label">Tierbetreuung in deiner Nähe</span>
+        </div>
     </div>
 
     <div class="feature-grid">
