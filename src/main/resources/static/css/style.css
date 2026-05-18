@@ -406,7 +406,7 @@ td {
     vertical-align: top;
 }
 
-th {
+th[scope="col"] {
     color: var(--pw-ink-500);
     font-size: 0.75rem;
     font-weight: 700;
