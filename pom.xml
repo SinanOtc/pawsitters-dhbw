@@ -28,6 +28,12 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<!-- Security: Spring Boot 4.0.6's managed versions enthalten CVE-betroffene
+		     Versionen. Override auf neueste Patches; Begründungen siehe
+		     .dependency-check-suppressions.xml und docs/SECURITY.md. -->
+		<tomcat.version>11.0.22</tomcat.version>
+		<postgresql.version>42.7.11</postgresql.version>
+		<hibernate-validator.version>9.1.0.Final</hibernate-validator.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -226,6 +232,27 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>11.1.0</version>
+				<configuration>
+					<nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
+					<failBuildOnCVSS>7</failBuildOnCVSS>
+					<formats>
+						<format>HTML</format>
+						<format>JSON</format>
+					</formats>
+					<suppressionFiles>
+						<suppressionFile>.dependency-check-suppressions.xml</suppressionFile>
+					</suppressionFiles>
+					<!-- Sonatype OSS Index ist eine zweite, kommerzielle Vuln-DB neben NVD.
+					     Ohne Token läuft sie schnell ins anonyme Rate-Limit (401 Unauthorized).
+					     NVD + CISA Known Exploited Vulnerabilities decken unseren Bedarf
+					     vollständig ab — OSS Index ist hier abgeschaltet. -->
+					<ossindexAnalyzerEnabled>false</ossindexAnalyzerEnabled>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
