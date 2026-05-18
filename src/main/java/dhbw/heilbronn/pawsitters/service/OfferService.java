@@ -163,4 +163,34 @@ public class OfferService {
 
         return offer;
     }
+
+    /**
+     * Owner lehnt ein Offer manuell ab. Im Gegensatz zu accept:
+     *      - CareRequest bleibt OPEN (andere Offers können weiter angenommen werden)
+     *      - Nur das eine Offer wird REJECTED, andere PENDING bleiben unberührt Schutzregeln (analog zu accept):
+     *      - Offer müssen CareRequest des Owners gehören -> sonst OfferNotFoundException
+     *      - Offer muss PENDING sein -> sonst OfferNotPendingException
+     */
+    @Transactional
+    public Offer reject(Long offerId, Long ownerUserId){
+
+        OwnerProfile owner = ownerService.findByUserId(ownerUserId);
+
+        Offer offer = offerRepository.findById(offerId)
+                .orElseThrow(() -> new OfferNotFoundException(offerId));
+
+        // Security: Owner-Scope. Gleiche Exception wie "nicht existent" gegen Infoleak
+        if(!offer.getCareRequest().getOwner().getId().equals(owner.getId())) {
+            throw new OfferNotFoundException(offerId);
+        }
+
+        // Statecheck: nur Pending Offers können rejected werden.
+        // Nochmal ablehnen ergibt keinen Sinn.
+        if(offer.getStatus() != OfferStatus.PENDING) {
+            throw new OfferNotPendingException(offerId);
+        }
+
+        offer.setStatus(OfferStatus.REJECTED);
+        return offer;
+    }
 }

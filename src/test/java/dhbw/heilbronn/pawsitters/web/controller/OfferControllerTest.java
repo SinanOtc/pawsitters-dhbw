@@ -205,4 +205,38 @@ class OfferControllerTest {
 
         verify(offerService).accept(OFFER_ID, OWNER_USER_ID);
     }
+
+    // === Owner: Offer ablehnen ===
+    @Test
+    @WithMockUser(username = OWNER_EMAIL, roles = "OWNER")
+    void postRejectOffer_validOffer_redirectsToOffersOfCareRequest()
+            throws Exception {
+        // Mock-Offer mit CareRequest, dessen ID wir im Redirect-Pfad erwarten.
+        // Entity-Konstruktoren sind protected — daher Mockito-mock() statt new.
+        dhbw.heilbronn.pawsitters.domain.CareRequest cr =
+                mock(dhbw.heilbronn.pawsitters.domain.CareRequest.class);
+        when(cr.getId()).thenReturn(CARE_REQUEST_ID);
+        dhbw.heilbronn.pawsitters.domain.Offer rejected =
+                mock(dhbw.heilbronn.pawsitters.domain.Offer.class);
+        when(rejected.getCareRequest()).thenReturn(cr);
+        when(offerService.reject(OFFER_ID, OWNER_USER_ID)).thenReturn(rejected);
+
+        mockMvc.perform(post("/owner/offers/{offerId}/reject",
+                        OFFER_ID)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/owner/care-requests/" + CARE_REQUEST_ID + "/offers"));
+
+        verify(offerService).reject(OFFER_ID, OWNER_USER_ID);
+    }
+
+    @Test
+    @WithAnonymousUser
+    void postRejectOffer_unauthenticated_redirectsToLogin() throws Exception {
+        // Security: ungeschütztes POST muss von SecurityConfig auf /login geworfen werden.
+        mockMvc.perform(post("/owner/offers/{offerId}/reject", OFFER_ID)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
+    }
 }

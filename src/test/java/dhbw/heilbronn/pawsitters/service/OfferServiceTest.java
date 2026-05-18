@@ -369,4 +369,92 @@ class OfferServiceTest {
                 OWNER_USER_ID))
                 .isInstanceOf(OfferNotPendingException.class);
     }
+
+    // === reject ===
+
+    @Test
+    void reject_pending_setsOfferRejectedAndLeavesRequestOpen() {
+        // Happy Path: PENDING → REJECTED, CareRequest bleibt OPEN.
+        Offer offer = new Offer(host, careRequest, new BigDecimal("60.00"));
+        offer.setId(OFFER_ID);
+
+        when(ownerService.findByUserId(OWNER_USER_ID)).thenReturn(owner);
+        when(offerRepository.findById(OFFER_ID)).thenReturn(Optional.of(offer));
+
+        Offer result = offerService.reject(OFFER_ID, OWNER_USER_ID);
+
+        assertThat(result.getStatus()).isEqualTo(OfferStatus.REJECTED);
+        assertThat(careRequest.getStatus()).isEqualTo(RequestStatus.OPEN);
+    }
+
+    @Test
+    void reject_doesNotAffectOtherPendingOffers() {
+        // Anders als accept: ein manueller Reject lässt die anderen Offers in Ruhe.
+        Offer toReject = new Offer(host, careRequest, new BigDecimal("60.00"));
+        toReject.setId(OFFER_ID);
+
+        HostProfile host2 = new HostProfile(
+                new User("host2@t.de", "hash", UserRole.HOST),
+                "Maria", "Schmidt", "Adresse 2",
+                EnumSet.of(PetSpecies.DOG),
+                LocalDate.now().plusDays(1),
+                LocalDate.now().plusDays(30),
+                new BigDecimal("55.00")
+        );
+        Offer otherPending = new Offer(host2, careRequest, new BigDecimal("55.00"));
+        otherPending.setId(200L);
+
+        when(ownerService.findByUserId(OWNER_USER_ID)).thenReturn(owner);
+        when(offerRepository.findById(OFFER_ID)).thenReturn(Optional.of(toReject));
+
+        offerService.reject(OFFER_ID, OWNER_USER_ID);
+
+        assertThat(toReject.getStatus()).isEqualTo(OfferStatus.REJECTED);
+        assertThat(otherPending.getStatus()).isEqualTo(OfferStatus.PENDING);
+    }
+
+    @Test
+    void reject_offerNotFound_throwsOfferNotFound() {
+        when(ownerService.findByUserId(OWNER_USER_ID)).thenReturn(owner);
+        when(offerRepository.findById(OFFER_ID)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> offerService.reject(OFFER_ID, OWNER_USER_ID))
+                .isInstanceOf(OfferNotFoundException.class);
+    }
+
+    @Test
+    void reject_offerNotOwnedByUser_throwsOfferNotFound() {
+        // Security: Offer gehört zu fremder CareRequest. Gleiche Exception wie
+        // "nicht existent" → kein Info-Leak via URL-Manipulation.
+        OwnerProfile otherOwner = new OwnerProfile(
+                new User("other@t.de", "hash", UserRole.OWNER),
+                "Anna", "X", "Y");
+        otherOwner.setId(999L);
+        Pet otherPet = new Pet(otherOwner, "Miez", PetSpecies.CAT, PetGender.FEMALE);
+        CareRequest otherCr = new CareRequest(otherOwner, otherPet,
+                LocalDate.now().plusDays(5),
+                LocalDate.now().plusDays(15));
+        Offer offer = new Offer(host, otherCr, new BigDecimal("60.00"));
+        offer.setId(OFFER_ID);
+
+        when(ownerService.findByUserId(OWNER_USER_ID)).thenReturn(owner);
+        when(offerRepository.findById(OFFER_ID)).thenReturn(Optional.of(offer));
+
+        assertThatThrownBy(() -> offerService.reject(OFFER_ID, OWNER_USER_ID))
+                .isInstanceOf(OfferNotFoundException.class);
+    }
+
+    @Test
+    void reject_offerAlreadyRejected_throwsOfferNotPending() {
+        // Doppelter Reject ergibt keinen Sinn — State-Guard schützt davor.
+        Offer offer = new Offer(host, careRequest, new BigDecimal("60.00"));
+        offer.setId(OFFER_ID);
+        offer.setStatus(OfferStatus.REJECTED);
+
+        when(ownerService.findByUserId(OWNER_USER_ID)).thenReturn(owner);
+        when(offerRepository.findById(OFFER_ID)).thenReturn(Optional.of(offer));
+
+        assertThatThrownBy(() -> offerService.reject(OFFER_ID, OWNER_USER_ID))
+                .isInstanceOf(OfferNotPendingException.class);
+    }
 }
