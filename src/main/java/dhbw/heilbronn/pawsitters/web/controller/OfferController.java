@@ -107,6 +107,16 @@ public class OfferController {
         return "redirect:/owner/care-requests/" + accepted.getCareRequest().getId() + "/offers";
     }
 
+    // === Owner: Offer manuell ablehnen
+    @PostMapping("/owner/offers/{offerId}/reject")
+    public String rejectOffer(@PathVariable Long offerId, @AuthenticationPrincipal UserDetails principal) {
+        Long userId = currentUserResolver.userId(principal);
+        Offer rejected = offerService.reject(offerId, userId);
+        // Zurück zur Offers-Seite derselben CareRequest — User sieht das neue
+        // REJECTED-Badge sofort. careRequestId aus dem Offer abgeleitet (kein IDOR).
+        return "redirect:/owner/care-requests/" + rejected.getCareRequest().getId() + "/offers";
+    }
+
     // === Hilfsfunktionen ===
 
     // Leeres OfferForm für GET weeklyPrice ist null, Validation läuft erst beim POST
