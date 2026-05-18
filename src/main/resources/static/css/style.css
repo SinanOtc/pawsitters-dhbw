@@ -175,6 +175,15 @@ button:hover {
     color: #ffffff;
 }
 
+/* Sichtbarer Fokus-Ring fuer Tastatur-Navigation */
+.navbar a:focus-visible,
+.logout-form button:focus-visible,
+.form-actions a:focus-visible,
+button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--pw-accent-soft);
+}
+
 .logout-form {
     margin: 0;
 }
