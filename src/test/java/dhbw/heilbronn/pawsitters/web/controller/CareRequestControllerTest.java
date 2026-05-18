@@ -21,6 +21,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -155,12 +156,50 @@ class CareRequestControllerTest {
         verify(careRequestService, never()).register(any(), any());
     }
 
+    // === Detail ===
+    @Test
+    void getDetail_existingCareRequest_returnsDetailView() throws Exception {
+        // Entity-Konstruktor ist protected → Mockito-mock statt new.
+        // Template detail.html liest pet.name + pet.species + status + start/endDate
+        // → Mock muss diese Pfade auflösen können, sonst scheitert die Thymeleaf-Parse.
+        dhbw.heilbronn.pawsitters.domain.Pet pet =
+                mock(dhbw.heilbronn.pawsitters.domain.Pet.class);
+        when(pet.getName()).thenReturn("Bello");
+        when(pet.getSpecies()).thenReturn(dhbw.heilbronn.pawsitters.domain.PetSpecies.DOG);
+
+        dhbw.heilbronn.pawsitters.domain.CareRequest cr =
+                mock(dhbw.heilbronn.pawsitters.domain.CareRequest.class);
+        Long careRequestId = 42L;
+        when(cr.getId()).thenReturn(careRequestId);
+        when(cr.getPet()).thenReturn(pet);
+        when(cr.getStatus()).thenReturn(dhbw.heilbronn.pawsitters.domain.RequestStatus.OPEN);
+        when(cr.getStartDate()).thenReturn(LocalDate.now().plusDays(5));
+        when(cr.getEndDate()).thenReturn(LocalDate.now().plusDays(10));
+
+        when(careRequestService.findByIdForOwner(careRequestId, USER_ID)).thenReturn(cr);
+
+        mockMvc.perform(get("/owner/care-requests/{id}", careRequestId))
+                .andExpect(status().isOk())
+                .andExpect(view().name("owner/care-requests/detail"))
+                .andExpect(model().attributeExists("careRequest"));
+
+        verify(careRequestService).findByIdForOwner(careRequestId, USER_ID);
+    }
+
     // === Security ===
     @Test
     @WithAnonymousUser
     void getCareRequests_unauthenticated_redirectsToLogin() throws Exception {
         // SecurityConfig schützt /owner/** → ohne Auth Redirect zur Login-Seite
         mockMvc.perform(get("/owner/care-requests"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
+    }
+
+    @Test
+    @WithAnonymousUser
+    void getDetail_unauthenticated_redirectsToLogin() throws Exception {
+        mockMvc.perform(get("/owner/care-requests/{id}", 42L))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login"));
     }

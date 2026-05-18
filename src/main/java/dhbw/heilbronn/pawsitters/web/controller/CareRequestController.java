@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -21,6 +22,7 @@ public class CareRequestController {
 
     private static final String LIST_VIEW = "owner/care-requests/list";
     private static final String FORM_VIEW = "owner/care-requests/form";
+    private static final String DETAIL_VIEW = "owner/care-requests/detail";
     private static final String REDIRECT_LIST = "redirect:/owner/care-requests";
 
     private final CareRequestService careRequestService;
@@ -39,6 +41,17 @@ public class CareRequestController {
         Long userId = currentUserResolver.userId(principal);
         model.addAttribute("careRequests", careRequestService.findAllByOwner(userId));
         return LIST_VIEW;
+    }
+
+    // === Detail ===
+    @GetMapping("/{id}")
+    public String detail(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal, Model model) {
+        Long userId = currentUserResolver.userId(principal);
+        // findByIdForOwner enthält bereits den Owner-Scope-Check und wirft
+        // CareRequestNotFoundException bei fremder/nicht-existenter ID.
+        // GlobalExceptionHandler mapped die Exception auf 404 — kein Info-Leak.
+        model.addAttribute("careRequest", careRequestService.findByIdForOwner(id, userId));
+        return DETAIL_VIEW;
     }
 
     // === Anlegen ===
