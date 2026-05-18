@@ -1,14 +1,15 @@
 package dhbw.heilbronn.pawsitters.service;
 
-import dhbw.heilbronn.pawsitters.domain.OwnerProfile;
-import dhbw.heilbronn.pawsitters.domain.Pet;
-import dhbw.heilbronn.pawsitters.repository.PetRepository;
-import dhbw.heilbronn.pawsitters.service.exception.PetNotFoundException;
-import dhbw.heilbronn.pawsitters.dto.PetForm;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import dhbw.heilbronn.pawsitters.domain.OwnerProfile;
+import dhbw.heilbronn.pawsitters.domain.Pet;
+import dhbw.heilbronn.pawsitters.dto.PetForm;
+import dhbw.heilbronn.pawsitters.repository.PetRepository;
+import dhbw.heilbronn.pawsitters.service.exception.PetNotFoundException;
 
 /**
  * Logik für Pets.
@@ -41,7 +42,7 @@ public class PetService {
     }
 
     /**
-     * Leifert alle Pets für einen Owner
+     * Liefert alle Pets für einen Owner
      * readonly = true → keine Schreibrechte nötig für Übersicht
      */
     @Transactional(readOnly = true)
