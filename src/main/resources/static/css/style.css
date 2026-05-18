@@ -191,45 +191,62 @@ button:hover {
 input,
 select,
 textarea {
-    width: min(100%, 28rem);
-    border: 1px solid #bcccdc;
-    border-radius: 6px;
+    width: min(100%, 30rem);
+    border: 1.5px solid var(--pw-ink-300);
+    border-radius: var(--pw-radius-sm);
+    background: var(--pw-bg-surface);
+    color: var(--pw-ink-900);
     font: inherit;
-    padding: 0.45rem 0.6rem;
+    font-weight: 500;
+    padding: 0.75rem 0.9rem;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--pw-accent);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--pw-ink-500);
 }
 
 input[type="checkbox"] {
     width: auto;
+    accent-color: var(--pw-accent);
 }
 
-label {
+label,
+legend {
     display: block;
+    color: var(--pw-ink-900);
+    font-size: 0.875rem;
     font-weight: 700;
-    margin-bottom: 0.25rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
 }
 
 fieldset {
-    border: 1px solid #d9e2ec;
-    border-radius: 6px;
-    margin: 1rem 0;
-    padding: 0.75rem 1rem;
-}
-
-legend {
-    font-weight: 700;
-    padding: 0 0.25rem;
+    background: var(--pw-bg-surface);
+    border: 1px solid var(--pw-ink-200);
+    border-radius: 12px;
+    margin: 1.125rem 0;
+    padding: 0.875rem 1.125rem;
 }
 
 .checkbox-list {
-    width: min(100%, 28rem);
+    width: min(100%, 30rem);
 }
 
 .checkbox-option {
     align-items: center;
+    color: var(--pw-ink-700);
     display: flex;
-    gap: 0.5rem;
-    font-weight: 400;
-    margin: 0.35rem 0;
+    gap: 0.6rem;
+    font-weight: 500;
+    margin: 0.5rem 0;
 }
 
 .message {
