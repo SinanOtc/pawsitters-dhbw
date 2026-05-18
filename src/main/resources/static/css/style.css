@@ -473,11 +473,19 @@ tr:hover td {
 
 .hero-photo {
     aspect-ratio: 4 / 5;
-    background: url("../images/home-hero-dog.jpg") center / cover no-repeat;
+    background: var(--pw-bg-shell);
     border-radius: 14rem 14rem 1.125rem 1.125rem;
     box-shadow: 0 1.25rem 3rem -1rem rgba(58, 47, 35, 0.35);
     overflow: hidden;
     position: relative;
+}
+
+.hero-photo-image {
+    display: block;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
 }
 
 .hero-photo::after {
