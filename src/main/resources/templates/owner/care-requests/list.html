@@ -9,9 +9,17 @@
 <section>
   <h1>Betreuungsanfragen</h1>
 
-  <p><a th:href="@{/owner/care-requests/new}">Neue Anfrage erstellen</a></p>
+  <p th:unless="${#lists.isEmpty(careRequests)}" class="form-actions">
+    <a th:href="@{/owner/care-requests/new}">Neue Anfrage erstellen</a>
+  </p>
 
-  <p th:if="${#lists.isEmpty(careRequests)}">Es sind noch keine Betreuungsanfragen vorhanden.</p>
+  <div th:if="${#lists.isEmpty(careRequests)}" class="empty-state">
+    <h2>Noch keine Betreuungsanfragen</h2>
+    <p>Erstelle eine Anfrage für den Zeitraum deines Urlaubs &mdash; passende Tierbetreuer schicken dir dann Angebote.</p>
+    <p class="form-actions">
+      <a th:href="@{/owner/care-requests/new}" class="btn-primary">Neue Anfrage erstellen</a>
+    </p>
+  </div>
 
   <table th:unless="${#lists.isEmpty(careRequests)}">
     <thead>

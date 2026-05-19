@@ -9,11 +9,17 @@
 <section>
     <h1>Haustiere</h1>
 
-    <p class="form-actions">
+    <p th:unless="${#lists.isEmpty(pets)}" class="form-actions">
         <a th:href="@{/owner/pets/new}">Haustier registrieren</a>
     </p>
 
-    <p th:if="${#lists.isEmpty(pets)}">Es sind noch keine Haustiere registriert.</p>
+    <div th:if="${#lists.isEmpty(pets)}" class="empty-state">
+        <h2>Noch keine Haustiere registriert</h2>
+        <p>Lege dein erstes Haustier an, damit du Betreuungsanfragen für deinen Urlaub erstellen kannst.</p>
+        <p class="form-actions">
+            <a th:href="@{/owner/pets/new}" class="btn-primary">Haustier registrieren</a>
+        </p>
+    </div>
 
     <table th:unless="${#lists.isEmpty(pets)}">
         <thead>
@@ -35,7 +41,10 @@
             <td th:text="${#strings.isEmpty(pet.description) ? '-' : pet.description}">Verträgt sich gut mit Katzen.</td>
             <td>
                 <a th:href="@{/owner/pets/{id}/edit(id=${pet.id})}">Bearbeiten</a>
-                <form th:action="@{/owner/pets/{id}/delete(id=${pet.id})}" method="post">
+                <form th:action="@{/owner/pets/{id}/delete(id=${pet.id})}"
+                      method="post"
+                      th:attr="data-pet-name=${pet.name}"
+                      onsubmit="return confirm(this.dataset.petName + ' wirklich löschen? Das kann nicht rückgängig gemacht werden.');">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                     <button type="submit">Löschen</button>
                 </form>

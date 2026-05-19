@@ -73,15 +73,26 @@
                     <span th:case="'REJECTED'" class="status-badge status-rejected">Abgelehnt</span>
                 </span>
             </td>
-            <td>
-                <form th:if="${offer.status.name() == 'PENDING' and offer.careRequest.status.name() == 'OPEN'}"
-                      th:action="@{/owner/offers/{offerId}/accept(offerId=${offer.id})}"
-                      method="post">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                    <button type="submit" class="btn-primary">Annehmen</button>
-                </form>
-                <span th:unless="${offer.status.name() == 'PENDING' and offer.careRequest.status.name() == 'OPEN'}"
-                      class="muted">&mdash;</span>
+            <td th:with="actionable=${offer.status.name() == 'PENDING' and offer.careRequest.status.name() == 'OPEN'}">
+                <div th:if="${actionable}" class="form-actions"
+                     th:with="hostName=|${offer.host.firstName} ${offer.host.lastName}|,
+                              priceText=|${#numbers.formatDecimal(offer.weeklyPrice, 1, 'POINT', 2, 'COMMA')} €|">
+                    <form th:action="@{/owner/offers/{offerId}/accept(offerId=${offer.id})}"
+                          method="post"
+                          th:attr="data-host-name=${hostName}, data-price=${priceText}"
+                          onsubmit="return confirm('Angebot von ' + this.dataset.hostName + ' für ' + this.dataset.price + ' annehmen? Alle anderen offenen Angebote werden automatisch abgelehnt.');">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <button type="submit" class="btn-primary">Annehmen</button>
+                    </form>
+                    <form th:action="@{/owner/offers/{offerId}/reject(offerId=${offer.id})}"
+                          method="post"
+                          th:attr="data-host-name=${hostName}"
+                          onsubmit="return confirm('Angebot von ' + this.dataset.hostName + ' ablehnen?');">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <button type="submit">Ablehnen</button>
+                    </form>
+                </div>
+                <span th:unless="${actionable}" class="muted">&mdash;</span>
             </td>
         </tr>
         </tbody>

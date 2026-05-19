@@ -9,9 +9,13 @@
 <section>
     <h1>Passende Anfragen</h1>
 
-    <p th:if="${#lists.isEmpty(matchingRequests)}">
-        Aktuell gibt es keine passenden Betreuungsanfragen für dein Profil.
-    </p>
+    <div th:if="${#lists.isEmpty(matchingRequests)}" class="empty-state">
+        <h2>Keine passenden Anfragen aktuell</h2>
+        <p>Sobald ein Tierhalter eine Anfrage stellt, die zu deinen Tierarten und deiner Verfügbarkeit passt, taucht sie hier auf.</p>
+        <p class="form-actions">
+            <a th:href="@{/host/profile/edit}" class="btn-primary">Profil prüfen</a>
+        </p>
+    </div>
 
     <table th:unless="${#lists.isEmpty(matchingRequests)}">
         <thead>
