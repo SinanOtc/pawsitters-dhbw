@@ -21,8 +21,9 @@
     function geocode(query) {
         var url = NOMINATIM_URL +
             "?q=" + encodeURIComponent(query) +
-            "&format=json&countrycodes=de&limit=1";
-        return fetch(url, { headers: { "Accept-Language": "de" } })
+            "&format=json&countrycodes=de&limit=1" +
+            "&accept-language=de";
+        return fetch(url)
             .then(function (response) {
                 return response.ok ? response.json() : [];
             })
