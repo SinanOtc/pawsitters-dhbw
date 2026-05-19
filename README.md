@@ -67,7 +67,7 @@ Beim Start im `dev`-Profil werden automatisch Demo-Daten angelegt (1 Owner mit P
 | **DB** | H2 In-Memory (dev/test), PostgreSQL (prod) |
 | **Security** | Spring Security · Session-Cookie · BCrypt · CSRF · Role-Based-Access |
 | **Validation** | Jakarta Bean Validation |
-| **Testing** | JUnit 5 · Mockito · `@WebMvcTest` · `@DataJpaTest` · 133+ Tests |
+| **Testing** | JUnit 5 · Mockito · `@WebMvcTest` · `@DataJpaTest` · 155 Tests |
 | **Tooling** | Lombok · DevTools |
 
 ---
@@ -113,15 +113,16 @@ Klassische **MVC + Layered Architecture**. Begründung & Details: [`docs/ARCHITE
 
 ## 🧪 Tests
 
-Aktuell **142 Tests, 100 % grün** — gemessen mit **JaCoCo: 95 % Line Coverage, 79 % Branch Coverage**. Verteilung:
+Aktuell **155 Tests, 100 % grün** — gemessen mit **JaCoCo: 95 % Line Coverage, 79 % Branch Coverage**. Verteilung:
 
 | Schicht | Tests | Stil |
 |---|---|---|
-| Domain | 30+ | Jakarta Validator direkt, keine Spring-Last |
-| Service | 41+ | Mockito-Unit-Tests |
-| Web (Controller) | 45+ | `@WebMvcTest` mit MockMvc + Spring Security Test |
+| Domain | 33 | Jakarta Validator direkt, keine Spring-Last |
+| Service | 49 | Mockito-Unit-Tests |
+| Web (Controller) | 51 | `@WebMvcTest` mit MockMvc + Spring Security Test |
 | Repository | 5 | `@DataJpaTest` gegen In-Memory-H2 |
 | Security/Config | 7 | Integration-Tests gegen die echte SecurityConfig |
+| Smoke | 1 | `@SpringBootTest` `contextLoads()` |
 | Architektur | 9 | ArchUnit — Schicht-Regeln, Naming, Zyklen |
 
 `./mvnw test` reicht für die Tests, `./mvnw verify` läuft zusätzlich Coverage-Report + Quality-Gate (80 % Lines / 65 % Branches als Build-Threshold). HTML-Report unter `target/site/jacoco/index.html`.

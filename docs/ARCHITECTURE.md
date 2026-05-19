@@ -26,7 +26,7 @@
 | **Sicherheit** | Spring Security mit Form-Login, BCrypt-Hashes, CSRF-Schutz, Role-based Access (`OWNER` / `HOST`) |
 | **Validierung** | Jakarta Bean Validation auf Forms UND Entities (Defense-in-Depth) |
 | **Persistenz-Integrität** | Hibernate `ddl-auto: validate` in Prod → Schema-Drift bricht den Start |
-| **Testbarkeit** | 150+ Tests, 95 % Line-Coverage (JaCoCo-Gate erzwingt ≥ 80 %) |
+| **Testbarkeit** | 155 Tests, 95 % Line-Coverage (JaCoCo-Gate erzwingt ≥ 80 %) |
 | **Architektur-Konformität** | ArchUnit-Tests erzwingen Schicht-Regeln in CI |
 | **Deployment-Reife** | Multi-Stage-Dockerfile, Railway-Auto-Deploy, Actuator-Health- und Info-Endpoints |
 
@@ -268,4 +268,4 @@ Ausnahme — Operations-Endpoints über Spring Boot Actuator:
 - i18n via Spring MessageSource (#77)
 - Domain Events bei `OfferService.accept` (#76)
 - Dependabot für automatische Dependency-Updates (#78)
-- Erweiterte Integrationstests (#42) ⁠
+- Erweiterte Integrationstests (#42)
