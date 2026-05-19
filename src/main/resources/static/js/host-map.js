@@ -7,6 +7,9 @@
         [49.1329, 9.2231]
     ];
 
+    // Hardcoded Datenschutz-Anzeige, solange echtes Geocoding/PLZ-Lookup im Backend fehlt
+    var APPROXIMATE_AREA = "Im Raum Heilbronn";
+
     function createPopup(markerData) {
         var wrapper = document.createElement("div");
         wrapper.className = "map-popup";
@@ -15,12 +18,12 @@
         title.textContent = markerData.name;
         wrapper.appendChild(title);
 
-        var address = document.createElement("span");
-        address.textContent = markerData.address;
-        wrapper.appendChild(address);
+        var area = document.createElement("span");
+        area.textContent = APPROXIMATE_AREA;
+        wrapper.appendChild(area);
 
         var price = document.createElement("span");
-        price.textContent = markerData.price + " Euro pro Woche";
+        price.textContent = markerData.price + " € / Woche";
         wrapper.appendChild(price);
 
         var link = document.createElement("a");
@@ -51,7 +54,6 @@
             var position = fallbackPositions[index % fallbackPositions.length];
             var markerData = {
                 name: element.dataset.hostName || "Tierbetreuer",
-                address: element.dataset.hostAddress || "Adresse im PLZ-Bereich",
                 price: element.dataset.hostPrice || "0,00",
                 profileUrl: element.dataset.hostProfileUrl || "#"
             };
