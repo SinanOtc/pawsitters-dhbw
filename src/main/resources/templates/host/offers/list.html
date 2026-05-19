@@ -9,13 +9,17 @@
 <section>
     <h1>Meine Angebote</h1>
 
-    <p class="form-actions">
+    <p th:unless="${#lists.isEmpty(offers)}" class="form-actions">
         <a th:href="@{/host/care-requests}">Passende Anfragen ansehen</a>
     </p>
 
-    <p th:if="${#lists.isEmpty(offers)}">
-        Du hast bisher noch keine Angebote gesendet.
-    </p>
+    <div th:if="${#lists.isEmpty(offers)}" class="empty-state">
+        <h2>Noch keine Angebote gesendet</h2>
+        <p>Schau dir die offenen Betreuungsanfragen an, die zu deinem Profil passen, und sende dein erstes Angebot.</p>
+        <p class="form-actions">
+            <a th:href="@{/host/care-requests}" class="btn-primary">Passende Anfragen ansehen</a>
+        </p>
+    </div>
 
     <table th:unless="${#lists.isEmpty(offers)}">
         <thead>

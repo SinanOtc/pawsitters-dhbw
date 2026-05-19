@@ -9,11 +9,17 @@
 <section>
     <h1>Haustiere</h1>
 
-    <p class="form-actions">
+    <p th:unless="${#lists.isEmpty(pets)}" class="form-actions">
         <a th:href="@{/owner/pets/new}">Haustier registrieren</a>
     </p>
 
-    <p th:if="${#lists.isEmpty(pets)}">Es sind noch keine Haustiere registriert.</p>
+    <div th:if="${#lists.isEmpty(pets)}" class="empty-state">
+        <h2>Noch keine Haustiere registriert</h2>
+        <p>Lege dein erstes Haustier an, damit du Betreuungsanfragen für deinen Urlaub erstellen kannst.</p>
+        <p class="form-actions">
+            <a th:href="@{/owner/pets/new}" class="btn-primary">Haustier registrieren</a>
+        </p>
+    </div>
 
     <table th:unless="${#lists.isEmpty(pets)}">
         <thead>
