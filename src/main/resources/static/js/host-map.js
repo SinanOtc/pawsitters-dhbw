@@ -6,15 +6,28 @@
         if (!address || typeof address !== "string") {
             return null;
         }
-        var match = address.match(/(\d{5})\s+([^,]+)/);
-        if (!match) {
+        var plzMatch = address.match(/\b(\d{5})\b/);
+        if (!plzMatch) {
             return null;
         }
-        var plz = match[1];
-        var city = match[2].trim();
+        var plz = plzMatch[1];
+        var after = address.substring(plzMatch.index + 5);
+        var before = address.substring(0, plzMatch.index);
+
+        var cityAfter = after.match(/^[\s,]*([A-Za-zäöüÄÖÜß][A-Za-zäöüÄÖÜß.\s-]+?)(?=,|\d|$)/);
+        var cityBefore = before.match(/([A-Za-zäöüÄÖÜß][A-Za-zäöüÄÖÜß.\s-]+?)[\s,]*$/);
+
+        var city = "";
+        if (cityAfter && cityAfter[1].trim().length >= 2) {
+            city = cityAfter[1].trim();
+        } else if (cityBefore && cityBefore[1].trim().length >= 2) {
+            city = cityBefore[1].trim();
+        }
+
+        var query = city ? (plz + " " + city) : plz;
         return {
-            query: plz + " " + city,
-            label: plz + " " + city
+            query: query,
+            label: query
         };
     }
 
