@@ -26,6 +26,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -142,5 +143,39 @@ class CareRequestServiceTest {
 
         assertThatThrownBy(() -> careRequestService.findByIdForOwner(REQUEST_ID, USER_ID))
                 .isInstanceOf(CareRequestNotFoundException.class);
+    }
+
+    // === closeExpiredRequests ===
+
+    @Test
+    void closeExpiredRequests_setsExpiredToClosed() {
+        // Zwei CareRequests vorbereiten: eine abgelaufen, eine nicht.
+        // Repository mock liefert nur die abgelaufene zurück (die Filter-Logik
+        // ist Sache von Spring Data, nicht unsere Verantwortung).
+        Pet pet = new Pet(owner, "Bello", PetSpecies.DOG, PetGender.MALE);
+        CareRequest expired = new CareRequest(owner, pet,
+                java.time.LocalDate.now().minusDays(10),
+                java.time.LocalDate.now().minusDays(3));
+        expired.setStatus(RequestStatus.MATCHED);
+
+        when(careRequestRepository.findByStatusNotAndEndDateBefore(
+                eq(RequestStatus.CLOSED), any(java.time.LocalDate.class)))
+                .thenReturn(java.util.List.of(expired));
+
+        int closed = careRequestService.closeExpiredRequests();
+
+        assertThat(closed).isEqualTo(1);
+        assertThat(expired.getStatus()).isEqualTo(RequestStatus.CLOSED);
+    }
+
+    @Test
+    void closeExpiredRequests_noneExpired_returnsZero() {
+        when(careRequestRepository.findByStatusNotAndEndDateBefore(
+                eq(RequestStatus.CLOSED), any(java.time.LocalDate.class)))
+                .thenReturn(java.util.Collections.emptyList());
+
+        int closed = careRequestService.closeExpiredRequests();
+
+        assertThat(closed).isEqualTo(0);
     }
 }

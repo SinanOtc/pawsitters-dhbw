@@ -3,6 +3,7 @@ package dhbw.heilbronn.pawsitters.service;
 import dhbw.heilbronn.pawsitters.domain.CareRequest;
 import dhbw.heilbronn.pawsitters.domain.OwnerProfile;
 import dhbw.heilbronn.pawsitters.domain.Pet;
+import dhbw.heilbronn.pawsitters.domain.RequestStatus;
 import dhbw.heilbronn.pawsitters.repository.CareRequestRepository;
 import dhbw.heilbronn.pawsitters.service.exception.CareRequestNotFoundException;
 import dhbw.heilbronn.pawsitters.dto.CareRequestForm;
@@ -83,5 +84,23 @@ public class CareRequestService {
         return careRequestRepository.findByIdAndOwnerId(careRequestId, owner.getId())
                 .orElseThrow(() -> new CareRequestNotFoundException(careRequestId));
     }
+
+    /**
+     * Setzt alle nicht geschlossenen CareRequests, deren Zeitraum vorbei ist auf CLOSED.
+     * Triggert vom CareRequestExpiryScheduler täglich + beim App Start.
+     *
+     * @return Anzahl der aktualisierten Anfragen (für Logs)
+     */
+    @Transactional
+    public int closeExpiredRequests(){
+        java.time.LocalDate today = java.time.LocalDate.now();
+        List<CareRequest> expired = careRequestRepository
+                .findByStatusNotAndEndDateBefore(
+                        RequestStatus.CLOSED, today
+                );
+        expired.forEach(cr -> cr.setStatus(RequestStatus.CLOSED));
+        return expired.size();
+    }
+
 
 }

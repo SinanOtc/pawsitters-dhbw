@@ -49,4 +49,10 @@ public interface CareRequestRepository extends JpaRepository<CareRequest, Long> 
                 @Param("availableUntil") LocalDate availableUntil,
                 @Param("hostId") Long hostId
                 );
+
+    /**
+     * Findet alle nicht geschlossenen CareRequests, deren endDate vor dem übergebenen Datum liegt.
+     * Genutzt von Expiry-Job, um sie auf CLOSED zu setzen.
+     */
+    List<CareRequest> findByStatusNotAndEndDateBefore(dhbw.heilbronn.pawsitters.domain.RequestStatus status, LocalDate cutoff);
 }
