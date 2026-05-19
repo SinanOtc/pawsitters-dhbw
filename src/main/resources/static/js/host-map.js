@@ -92,7 +92,7 @@
             var area = parseArea(element.dataset.hostAddress);
 
             if (!area) {
-                step(i + 1);
+                delay(0).then(function () { step(i + 1); });
                 return;
             }
 
