@@ -69,7 +69,7 @@
                 <input type="checkbox"
                        th:field="*{acceptedSpecies}"
                        th:value="${species}">
-                <span th:text="${#strings.capitalize(#strings.toLowerCase(species.name()))}">Dog</span>
+                <span th:insert="~{fragments/species :: label(${species})}">Dog</span>
             </label>
             <span th:if="${#fields.hasErrors('acceptedSpecies')}" th:errors="*{acceptedSpecies}" class="field-error"></span>
         </fieldset>

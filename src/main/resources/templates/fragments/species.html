@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="label(species)" th:switch="${species.name()}">
+    <th:block th:case="'DOG'">Hund</th:block>
+    <th:block th:case="'CAT'">Katze</th:block>
+    <th:block th:case="'BIRD'">Vogel</th:block>
+    <th:block th:case="'RABBIT'">Kaninchen</th:block>
+    <th:block th:case="'RODENT'">Nagetier</th:block>
+    <th:block th:case="'REPTILE'">Reptil</th:block>
+    <th:block th:case="'FISH'">Fisch</th:block>
+    <th:block th:case="'OTHER'">Sonstige</th:block>
+    <th:block th:case="*">Unbekannt</th:block>
+</th:block>
+</body>
+</html>

@@ -30,12 +30,12 @@
         <div id="host-map" class="host-map" aria-label="Karte mit Tierbetreuern in der Nähe"></div>
 
         <div class="host-map-data" hidden>
-            <div th:each="offer, offerStat : ${offers}"
+            <div th:each="offer : ${offers}"
                  data-host-map-marker
                  th:data-host-name="|${offer.host.firstName} ${offer.host.lastName}|"
+                 th:data-host-address="${offer.host.address}"
                  th:data-host-price="${#numbers.formatDecimal(offer.weeklyPrice, 1, 'POINT', 2, 'COMMA')}"
-                 th:data-host-profile-url="|#offer-${offer.id}|"
-                 th:data-marker-index="${offerStat.index}">
+                 th:data-host-profile-url="|#offer-${offer.id}|">
             </div>
         </div>
     </section>
