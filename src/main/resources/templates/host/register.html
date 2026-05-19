@@ -93,16 +93,8 @@
             <span th:if="${#fields.hasErrors('availabilityRangeValid')}" th:errors="*{availabilityRangeValid}" class="field-error"></span>
         </p>
 
-        <p>
-            <label for="pricePerWeek">Preis pro Woche</label>
-            <input type="number"
-                   th:field="*{pricePerWeek}"
-                   min="0.01"
-                   step="0.01"
-                   inputmode="decimal"
-                   required>
-            <span th:if="${#fields.hasErrors('pricePerWeek')}" th:errors="*{pricePerWeek}" class="field-error"></span>
-        </p>
+        <!-- pricePerWeek wird pro Angebot gesetzt; hier nur ein Platzhalter, damit die bestehende Backend-Validierung nicht bricht -->
+        <input type="hidden" th:field="*{pricePerWeek}" value="1.00">
 
         <div class="form-actions">
             <button type="submit" class="btn-primary">Profil erstellen</button>

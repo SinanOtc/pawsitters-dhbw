@@ -43,10 +43,6 @@
       <th scope="row">Verfügbar bis:</th>
       <td th:text="${#temporals.format(profile.availableUntil, 'dd.MM.yyyy')}"></td>
     </tr>
-    <tr>
-      <th scope="row">Preis pro Woche:</th>
-      <td><span th:text="${#numbers.formatDecimal(profile.pricePerWeek, 1, 'POINT', 2, 'COMMA')}"></span> €</td>
-    </tr>
   </table>
 
   <div class="form-actions">
