@@ -43,7 +43,8 @@
                 <a th:href="@{/owner/pets/{id}/edit(id=${pet.id})}">Bearbeiten</a>
                 <form th:action="@{/owner/pets/{id}/delete(id=${pet.id})}"
                       method="post"
-                      th:onsubmit="|return confirm('${pet.name} wirklich löschen? Das kann nicht rückgängig gemacht werden.');|">
+                      th:attr="data-pet-name=${pet.name}"
+                      onsubmit="return confirm(this.dataset.petName + ' wirklich löschen? Das kann nicht rückgängig gemacht werden.');">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                     <button type="submit">Löschen</button>
                 </form>
