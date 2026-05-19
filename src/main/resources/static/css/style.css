@@ -443,6 +443,50 @@ fieldset {
     height: 100%;
 }
 
+.map-section {
+    margin: 1.5rem 0;
+}
+
+.map-heading {
+    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.map-heading h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.host-map {
+    border: 1px solid var(--pw-ink-200);
+    border-radius: var(--pw-radius-sm);
+    height: 22rem;
+    overflow: hidden;
+    width: 100%;
+}
+
+.map-popup {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 12rem;
+}
+
+.map-popup strong {
+    color: var(--pw-ink-900);
+}
+
+.map-popup span {
+    color: var(--pw-ink-700);
+}
+
+.map-popup a {
+    font-weight: 700;
+    margin-top: 0.25rem;
+}
+
 .status-badge {
     border-radius: var(--pw-radius-pill);
     display: inline-block;

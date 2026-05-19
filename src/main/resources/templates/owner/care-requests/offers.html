@@ -17,6 +17,28 @@
         Für diese Anfrage sind noch keine Angebote eingegangen.
     </p>
 
+    <section th:unless="${#lists.isEmpty(offers)}" class="map-section">
+        <div class="map-heading">
+            <div>
+                <h2>Tierbetreuer in der Nähe</h2>
+                <p class="muted">Die Marker zeigen nur ungefähre Positionen im PLZ-Bereich, keine exakten Adressen.</p>
+            </div>
+        </div>
+
+        <div id="host-map" class="host-map" aria-label="Karte mit Tierbetreuern in der Nähe"></div>
+
+        <div class="host-map-data" hidden>
+            <div th:each="offer, offerStat : ${offers}"
+                 data-host-map-marker
+                 th:data-host-name="|${offer.host.firstName} ${offer.host.lastName}|"
+                 th:data-host-address="${offer.host.address}"
+                 th:data-host-price="${#numbers.formatDecimal(offer.weeklyPrice, 1, 'POINT', 2, 'COMMA')}"
+                 th:data-host-profile-url="@{/owner/care-requests/{id}/offers(id=${careRequestId})}"
+                 th:data-marker-index="${offerStat.index}">
+            </div>
+        </div>
+    </section>
+
     <table th:unless="${#lists.isEmpty(offers)}">
         <thead>
         <tr>
@@ -63,6 +85,9 @@
         </tr>
         </tbody>
     </table>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script th:src="@{/js/host-map.js}"></script>
 </section>
 </body>
 </html>
