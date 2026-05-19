@@ -74,12 +74,18 @@
                 </span>
             </td>
             <td th:with="actionable=${offer.status.name() == 'PENDING' and offer.careRequest.status.name() == 'OPEN'}">
-                <div th:if="${actionable}" class="form-actions">
-                    <form th:action="@{/owner/offers/{offerId}/accept(offerId=${offer.id})}" method="post">
+                <div th:if="${actionable}" class="form-actions"
+                     th:with="hostName=|${offer.host.firstName} ${offer.host.lastName}|,
+                              priceText=|${#numbers.formatDecimal(offer.weeklyPrice, 1, 'POINT', 2, 'COMMA')} €|">
+                    <form th:action="@{/owner/offers/{offerId}/accept(offerId=${offer.id})}"
+                          method="post"
+                          th:onsubmit="|return confirm('Angebot von ${hostName} für ${priceText} annehmen? Alle anderen offenen Angebote werden automatisch abgelehnt.');|">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                         <button type="submit" class="btn-primary">Annehmen</button>
                     </form>
-                    <form th:action="@{/owner/offers/{offerId}/reject(offerId=${offer.id})}" method="post">
+                    <form th:action="@{/owner/offers/{offerId}/reject(offerId=${offer.id})}"
+                          method="post"
+                          th:onsubmit="|return confirm('Angebot von ${hostName} ablehnen?');|">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                         <button type="submit">Ablehnen</button>
                     </form>
