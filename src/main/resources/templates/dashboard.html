@@ -12,8 +12,74 @@
 
     <p>Eingeloggt als <span sec:authentication="name"></span></p>
 
-    <p sec:authorize="hasRole('OWNER')"><a th:href="@{/owner/profile}">Mein Profil</a></p>
-    <p sec:authorize="hasRole('HOST')"><a th:href="@{/host/profile}">Mein Profil</a></p>
+    <div sec:authorize="hasRole('OWNER')" class="form-actions">
+        <a th:href="@{/owner/profile}">Mein Profil</a>
+        <a th:href="@{/owner/pets}">Meine Haustiere</a>
+        <a th:href="@{/owner/care-requests}">Meine Anfragen</a>
+    </div>
+
+    <div sec:authorize="hasRole('HOST')" class="host-dashboard">
+        <div class="dashboard-actions">
+            <a th:href="@{/host/profile}">Mein Profil</a>
+            <a th:href="@{/host/care-requests}">Passende Anfragen</a>
+            <a th:href="@{/host/offers}">Meine Angebote</a>
+        </div>
+
+        <div class="stat-grid">
+            <article class="stat-card">
+                <span class="stat-label">Buchungen im Monat</span>
+                <strong>8</strong>
+                <span class="stat-note">+2 zum Vormonat</span>
+            </article>
+            <article class="stat-card">
+                <span class="stat-label">Einnahmen im Monat</span>
+                <strong>1.280,00 €</strong>
+                <span class="stat-note">bei angenommenen Angeboten</span>
+            </article>
+            <article class="stat-card">
+                <span class="stat-label">Auslastung</span>
+                <strong>68 %</strong>
+                <span class="stat-note">gebuchte verfügbare Tage</span>
+            </article>
+            <article class="stat-card">
+                <span class="stat-label">Aktive Anfragen</span>
+                <strong>5</strong>
+                <span class="stat-note">offen für Angebote</span>
+            </article>
+        </div>
+
+        <div class="dashboard-charts">
+            <article class="chart-panel">
+                <h2>Buchungen pro Monat</h2>
+                <ul class="bar-chart" aria-label="Buchungen pro Monat">
+                    <li style="--bar-size: 35%;"><span>Jan</span><strong>3</strong></li>
+                    <li style="--bar-size: 55%;"><span>Feb</span><strong>5</strong></li>
+                    <li style="--bar-size: 70%;"><span>Mär</span><strong>7</strong></li>
+                    <li style="--bar-size: 45%;"><span>Apr</span><strong>4</strong></li>
+                    <li style="--bar-size: 82%;"><span>Mai</span><strong>8</strong></li>
+                </ul>
+            </article>
+
+            <article class="chart-panel">
+                <h2>Einnahmen pro Monat</h2>
+                <ul class="bar-chart" aria-label="Einnahmen pro Monat">
+                    <li style="--bar-size: 30%;"><span>Jan</span><strong>420 €</strong></li>
+                    <li style="--bar-size: 52%;"><span>Feb</span><strong>760 €</strong></li>
+                    <li style="--bar-size: 66%;"><span>Mär</span><strong>980 €</strong></li>
+                    <li style="--bar-size: 48%;"><span>Apr</span><strong>690 €</strong></li>
+                    <li style="--bar-size: 88%;"><span>Mai</span><strong>1.280 €</strong></li>
+                </ul>
+            </article>
+        </div>
+
+        <article class="chart-panel">
+            <h2>Auslastungsquote</h2>
+            <div class="usage-meter">
+                <span class="usage-meter-bar" style="width: 68%;"></span>
+            </div>
+            <p class="muted">68 von 100 verfügbaren Tagen sind aktuell gebucht.</p>
+        </article>
+    </div>
 </section>
 </body>
 </html>
