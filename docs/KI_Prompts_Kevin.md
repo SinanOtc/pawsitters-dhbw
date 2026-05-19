@@ -133,6 +133,13 @@ Format: **Zweck → Prompt → Ergebnis & Anpassung → Eigenanteil**.
 - **Ergebnis & Anpassung**: Im bestehenden `/dashboard` wurde ein Host-Bereich ergänzt, der nur für Gastgeber sichtbar ist. Die Navbar hat für Hosts einen Dashboard-Link bekommen. Das Dashboard zeigt vier Statistik-Kacheln, zwei einfache Balkendiagramme und einen Auslastungsbalken. Da noch kein Backend-Endpunkt für aggregierte Statistikdaten vorhanden ist, bleiben die Werte vorerst statisch und dienen als Frontend-Vorbereitung.
 - **Eigenanteil**: Frontend-only Scope bewusst eingehalten, Backend-Endpoint und Aggregationstests als offenen Teil aus dem Issue erkannt und die Entscheidung getroffen, erstmal die UI-Struktur ohne Backend-Änderung umzusetzen.
 
+### 2026-05-19 - Frontend: Kartenansicht für Host-Standorte
+
+- **Zweck**: Issue #137 frontendseitig umsetzen: Host-Angebote sollen visuell auf einer Karte erscheinen.
+- **Prompt** (sinngemäß): Issue #137 will Leaflet mit OpenStreetMap, Marker für Hosts in der Nähe und ein Mini-Profil beim Klick. Ein Teil davon ist Backend, weil echte Koordinaten und Geocoding aus Adressen nicht im Template entstehen sollten. Mein Vorschlag wäre: Wir bauen die Karte auf der Owner-Angebotsseite ein, weil dort bereits Angebote und Hostdaten im Model vorhanden sind. Für die Demo nutzen wir ungefähre Marker im PLZ-Bereich und schreiben sichtbar dazu, dass keine exakte Adresse angezeigt wird. Kannst du das mit Leaflet und einem kleinen JS-Modul umsetzen, ohne Backend-Klassen zu ändern?
+- **Ergebnis & Anpassung**: In `owner/care-requests/offers.html` wurde eine Leaflet-Karte ergänzt. Die Hostdaten werden als `data-*`-Attribute für das JS bereitgestellt, `host-map.js` setzt Marker und zeigt beim Klick Name, Adresse, Wochenpreis und Link zum Angebot. Die Marker nutzen bewusst ungefähre Demo-Positionen rund um Heilbronn, bis das Backend echte PLZ-/Geocoding-Daten liefert.
+- **Eigenanteil**: Stelle für die Karte selbst gewählt (eingegangene Angebote statt separate neue Route), Datenschutz-Hinweis ergänzt und Backend-Anteile wie Geocoding sowie öffentliche Host-Profilroute bewusst aus dem Frontend-Scope herausgehalten.
+
 ---
 
 ## Reflexion
