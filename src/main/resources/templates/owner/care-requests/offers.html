@@ -7,6 +7,8 @@
 </head>
 <body>
 <section>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
     <h1>Eingegangene Angebote</h1>
 
     <p class="form-actions">
@@ -16,6 +18,27 @@
     <p th:if="${#lists.isEmpty(offers)}">
         Für diese Anfrage sind noch keine Angebote eingegangen.
     </p>
+
+    <section th:unless="${#lists.isEmpty(offers)}" class="map-section">
+        <div class="map-heading">
+            <div>
+                <h2>Tierbetreuer in der Nähe</h2>
+                <p class="muted">Die Marker zeigen nur ungefähre Positionen im PLZ-Bereich, keine exakten Adressen.</p>
+            </div>
+        </div>
+
+        <div id="host-map" class="host-map" aria-label="Karte mit Tierbetreuern in der Nähe"></div>
+
+        <div class="host-map-data" hidden>
+            <div th:each="offer, offerStat : ${offers}"
+                 data-host-map-marker
+                 th:data-host-name="|${offer.host.firstName} ${offer.host.lastName}|"
+                 th:data-host-price="${#numbers.formatDecimal(offer.weeklyPrice, 1, 'POINT', 2, 'COMMA')}"
+                 th:data-host-profile-url="|#offer-${offer.id}|"
+                 th:data-marker-index="${offerStat.index}">
+            </div>
+        </div>
+    </section>
 
     <table th:unless="${#lists.isEmpty(offers)}">
         <thead>
@@ -29,7 +52,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="offer : ${offers}">
+        <tr th:each="offer : ${offers}" th:id="|offer-${offer.id}|">
             <td>
                 <span th:text="${offer.host.firstName}">Max</span>
                 <span th:text="${offer.host.lastName}">Mustermann</span>
@@ -63,6 +86,9 @@
         </tr>
         </tbody>
     </table>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script th:src="@{/js/host-map.js}"></script>
 </section>
 </body>
 </html>
