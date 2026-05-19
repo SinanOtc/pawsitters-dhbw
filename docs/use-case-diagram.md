@@ -91,18 +91,20 @@ flowchart LR
 
 ## Bezug zu Issues
 
-Dieses Diagramm referenziert folgende Issues (Mindestanforderungen aus der Projektbeschreibung):
+Dieses Diagramm referenziert die Pflicht-Funktionalitäten aus der Projektbeschreibung. Die meisten Use Cases sind bereits umgesetzt; verbleibende Issues betreffen vor allem Frontend-Verfeinerungen und Dokumentation.
 
-- UC1 → #2 (geschlossen)
-- UC2 → #3
-- UC3 → #15, #29
-- UC4 → #4 (geschlossen), #24
-- UC5 → #5 (geschlossen), #25
-- UC6 → #10, #28
-- UC7 → #6, #26
-- UC8 → #7, #26
-- UC9 → #6, #27
-- UC10 → #8, #27
-- UC11 → #27
-- UC12 → #9
-- UC13 → #10
+| Use Case | Umgesetzt durch | Status |
+|---|---|---|
+| UC1 PetOwner-Profil erstellen | #2, #22 | ✅ live |
+| UC2 Host-Profil erstellen | #3, #23 | ✅ live |
+| UC3 Anmelden / Authentifizieren | #15, #29 | ✅ live (Spring Security, BCrypt, Session-Cookie, CSRF) |
+| UC4 Haustier registrieren | #4, #24 | ✅ live |
+| UC5 Betreuungsanfrage erstellen | #5, #25 | ✅ live |
+| UC6 Anfrage-Status anzeigen | #10, #28 | ✅ live (Stepper im Owner-Dashboard) |
+| UC7 Passende Anfragen anzeigen | #6, #26 | ✅ live |
+| UC8 Angebot versenden | #7, #26 | ✅ live |
+| UC9 Angebote zur Anfrage anzeigen | #6, #27 | ✅ live |
+| UC10 Angebot annehmen | #8, #27 | ✅ live |
+| UC11 Angebot ablehnen | #104 (PR), #27 | ✅ live (separater Reject-Endpoint) |
+| UC12 Andere Angebote automatisch ablehnen | #9 | ✅ live (Kaskade in `OfferService.accept`) |
+| UC13 Anfrage-Status aktualisieren | #10, #147 (PR) | ✅ live (auch Auto-CLOSED für abgelaufene Anfragen) |
