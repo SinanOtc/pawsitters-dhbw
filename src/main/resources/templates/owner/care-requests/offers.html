@@ -32,7 +32,7 @@
                  data-host-map-marker
                  th:data-host-name="|${offer.host.firstName} ${offer.host.lastName}|"
                  th:data-host-price="${#numbers.formatDecimal(offer.weeklyPrice, 1, 'POINT', 2, 'COMMA')}"
-                 th:data-host-profile-url="@{/owner/care-requests/{id}/offers(id=${careRequestId})}"
+                 th:data-host-profile-url="|#offer-${offer.id}|"
                  th:data-marker-index="${offerStat.index}">
             </div>
         </div>
@@ -50,7 +50,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="offer : ${offers}">
+        <tr th:each="offer : ${offers}" th:id="|offer-${offer.id}|">
             <td>
                 <span th:text="${offer.host.firstName}">Max</span>
                 <span th:text="${offer.host.lastName}">Mustermann</span>
