@@ -79,13 +79,15 @@
                               priceText=|${#numbers.formatDecimal(offer.weeklyPrice, 1, 'POINT', 2, 'COMMA')} €|">
                     <form th:action="@{/owner/offers/{offerId}/accept(offerId=${offer.id})}"
                           method="post"
-                          th:onsubmit="|return confirm('Angebot von ${hostName} für ${priceText} annehmen? Alle anderen offenen Angebote werden automatisch abgelehnt.');|">
+                          th:attr="data-host-name=${hostName}, data-price=${priceText}"
+                          onsubmit="return confirm('Angebot von ' + this.dataset.hostName + ' für ' + this.dataset.price + ' annehmen? Alle anderen offenen Angebote werden automatisch abgelehnt.');">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                         <button type="submit" class="btn-primary">Annehmen</button>
                     </form>
                     <form th:action="@{/owner/offers/{offerId}/reject(offerId=${offer.id})}"
                           method="post"
-                          th:onsubmit="|return confirm('Angebot von ${hostName} ablehnen?');|">
+                          th:attr="data-host-name=${hostName}"
+                          onsubmit="return confirm('Angebot von ' + this.dataset.hostName + ' ablehnen?');">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                         <button type="submit">Ablehnen</button>
                     </form>
