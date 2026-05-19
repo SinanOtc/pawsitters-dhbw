@@ -25,6 +25,7 @@
         <a sec:authorize="hasRole('OWNER')" th:href="@{/owner/pets}">Haustiere</a>
         <a sec:authorize="hasRole('OWNER')" th:href="@{/owner/care-requests}">Anfragen</a>
 
+        <a sec:authorize="hasRole('HOST')" th:href="@{/dashboard}">Dashboard</a>
         <a sec:authorize="hasRole('HOST')" th:href="@{/host/profile}">Profil</a>
         <a sec:authorize="hasRole('HOST')" th:href="@{/host/care-requests}">Anfragen</a>
         <a sec:authorize="hasRole('HOST')" th:href="@{/host/offers}">Angebote</a>

@@ -126,6 +126,13 @@ Format: **Zweck → Prompt → Ergebnis & Anpassung → Eigenanteil**.
 - **Ergebnis & Anpassung**: `.hero` jetzt als CSS-Grid (1.05fr 1fr), H1 auf 4.5rem mit Italic-Akzent über `em`-Tag (z.B. „Tierbetreuung *einfach* organisieren"). Neuer `.hero-photo`-Block mit radialem Caramel-Gradient und `border-radius: 14rem 14rem 1.125rem 1.125rem` für die typische „oben rund, unten eckig"-Form aus dem Kit. Pseudo-element `::after` simuliert einen abstrakten Tier-Schatten, weiße Pill-Label oben links. Auf 900px Single-Column, auf 640px H1 weiter geschrumpft. CSS-Werte aus dem Kit von px auf rem umgerechnet für Konsistenz mit dem Rest.
 - **Eigenanteil**: Template-Struktur (zwei DIVs `.hero-text` + `.hero-photo`) selbst entschieden, Italic-Akzent über `<em>` statt eigener Klasse, weil das semantisch besser passt und im Kit so vorgesehen ist. Mobile-Breakpoint bei 900px gewählt (sonst überlappen Foto und Text). Foto-Label-Text frei formuliert („Tierbetreuung in deiner Nähe").
 
+### 2026-05-19 - Frontend: Host-Dashboard mit Statistik-UI
+
+- **Zweck**: Issue #141 frontendseitig vorbereiten: Gastgeber sollen im Dashboard Kacheln und einfache Diagramme zu Buchungen, Einnahmen, Auslastung und aktiven Anfragen sehen.
+- **Prompt** (sinngemäß): Issue #141 enthält zwar auch Backend-Aggregationen und Tests, aber mein Bereich ist Frontend. Ich möchte trotzdem schon eine sinnvolle Host-Dashboard-Oberfläche bauen, damit man in der Demo sieht, wie die Statistikansicht später aussehen soll. Kannst du prüfen, welche Route es bereits gibt, und dann ohne Controller-Änderung eine Host-Ansicht im vorhandenen Dashboard ergänzen? Wichtig wären vier Kacheln und einfache Balkendiagramme mit HTML/CSS statt direkt Chart.js, damit es nicht unnötig komplex wird.
+- **Ergebnis & Anpassung**: Im bestehenden `/dashboard` wurde ein Host-Bereich ergänzt, der nur für Gastgeber sichtbar ist. Die Navbar hat für Hosts einen Dashboard-Link bekommen. Das Dashboard zeigt vier Statistik-Kacheln, zwei einfache Balkendiagramme und einen Auslastungsbalken. Da noch kein Backend-Endpunkt für aggregierte Statistikdaten vorhanden ist, bleiben die Werte vorerst statisch und dienen als Frontend-Vorbereitung.
+- **Eigenanteil**: Frontend-only Scope bewusst eingehalten, Backend-Endpoint und Aggregationstests als offenen Teil aus dem Issue erkannt und die Entscheidung getroffen, erstmal die UI-Struktur ohne Backend-Änderung umzusetzen.
+
 ---
 
 ## Reflexion

@@ -301,6 +301,148 @@ fieldset {
     margin-top: 1rem;
 }
 
+.dashboard-actions {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+}
+
+.dashboard-actions a {
+    background: var(--pw-bg-surface);
+    border: 1.5px solid var(--pw-ink-200);
+    border-radius: var(--pw-radius-pill);
+    color: var(--pw-ink-900);
+    font-weight: 700;
+    padding: 0.55rem 1rem;
+    text-decoration: none;
+}
+
+.dashboard-actions a:hover {
+    border-color: var(--pw-accent);
+    color: var(--pw-accent);
+}
+
+.host-dashboard {
+    margin-top: 1.5rem;
+}
+
+.stat-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    margin: 1.5rem 0;
+}
+
+.stat-card,
+.chart-panel {
+    background: var(--pw-bg-surface);
+    border: 1px solid var(--pw-ink-200);
+    border-radius: var(--pw-radius-sm);
+    padding: 1.25rem;
+}
+
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.stat-label,
+.stat-note {
+    color: var(--pw-ink-500);
+    font-size: 0.8125rem;
+}
+
+.stat-label {
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.stat-card strong {
+    color: var(--pw-ink-900);
+    font-family: var(--pw-font-heading);
+    font-size: 2rem;
+    line-height: 1.1;
+}
+
+.dashboard-charts {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+    margin: 1rem 0;
+}
+
+.chart-panel h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.bar-chart {
+    display: grid;
+    gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.bar-chart li {
+    align-items: center;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: 2.5rem 1fr 4.5rem;
+}
+
+.bar-chart li::before {
+    background: var(--pw-accent-soft);
+    border-radius: var(--pw-radius-pill);
+    content: "";
+    grid-column: 2;
+    height: 0.75rem;
+    overflow: hidden;
+}
+
+.bar-chart li::after {
+    background: var(--pw-accent);
+    border-radius: var(--pw-radius-pill);
+    content: "";
+    grid-column: 2;
+    grid-row: 1;
+    height: 0.75rem;
+    width: var(--bar-size);
+}
+
+.bar-chart span,
+.bar-chart strong {
+    font-size: 0.875rem;
+}
+
+.bar-chart span {
+    color: var(--pw-ink-500);
+    font-weight: 700;
+}
+
+.bar-chart strong {
+    color: var(--pw-ink-900);
+    font-weight: 700;
+    text-align: right;
+}
+
+.usage-meter {
+    background: var(--pw-accent-soft);
+    border-radius: var(--pw-radius-pill);
+    height: 1rem;
+    overflow: hidden;
+}
+
+.usage-meter-bar {
+    background: var(--pw-accent);
+    display: block;
+    height: 100%;
+}
+
 .status-badge {
     border-radius: var(--pw-radius-pill);
     display: inline-block;
