@@ -31,7 +31,7 @@
       <td>
         <span th:if="${profile.acceptedSpecies.empty}">Keine</span>
         <span th:each="species, iterStat : ${profile.acceptedSpecies}">
-          <span th:text="${#strings.capitalize(#strings.toLowerCase(species.name()))}">Dog</span><span th:if="${!iterStat.last}">, </span>
+          <span th:insert="~{fragments/species :: label(${species})}">Dog</span><span th:if="${!iterStat.last}">, </span>
         </span>
       </td>
     </tr>

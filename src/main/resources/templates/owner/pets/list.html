@@ -35,7 +35,7 @@
         <tbody>
         <tr th:each="pet : ${pets}">
             <td th:text="${pet.name}">Bello</td>
-            <td th:text="${#strings.capitalize(#strings.toLowerCase(pet.species.name()))}">Dog</td>
+            <td th:insert="~{fragments/species :: label(${pet.species})}">Dog</td>
             <td th:text="${#strings.isEmpty(pet.breed) ? '-' : pet.breed}">Labrador</td>
             <td th:text="${pet.birthYear ?: '-'}">2020</td>
             <td th:text="${#strings.isEmpty(pet.description) ? '-' : pet.description}">Verträgt sich gut mit Katzen.</td>

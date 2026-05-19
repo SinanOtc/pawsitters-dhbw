@@ -17,7 +17,7 @@
         <span th:text="${careRequest.pet.name}">Bello</span>
         <span class="muted">
             &ndash;
-            <span th:text="${#strings.capitalize(#strings.toLowerCase(careRequest.pet.species.name()))}">Dog</span>
+            <span th:insert="~{fragments/species :: label(${careRequest.pet.species})}">Dog</span>
         </span>
     </p>
 

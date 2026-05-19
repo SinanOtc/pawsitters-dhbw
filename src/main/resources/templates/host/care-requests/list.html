@@ -30,7 +30,7 @@
         <tbody>
         <tr th:each="request : ${matchingRequests}">
             <td th:text="${request.pet.name}">Bello</td>
-            <td th:text="${#strings.capitalize(#strings.toLowerCase(request.pet.species.name()))}">Dog</td>
+            <td th:insert="~{fragments/species :: label(${request.pet.species})}">Dog</td>
             <td>
                 <span th:text="${#temporals.format(request.startDate, 'dd.MM.yyyy')}">01.01.2026</span>
                 &ndash;
