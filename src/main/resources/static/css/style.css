@@ -103,11 +103,14 @@ a:hover {
 }
 
 .brand {
+    align-items: center;
     color: var(--pw-ink-900);
+    display: inline-flex;
     font-family: var(--pw-font-heading);
     font-size: 1.75rem;
     font-style: italic;
     font-weight: 500;
+    gap: 0.5rem;
     letter-spacing: -0.02em;
     line-height: 1;
     text-decoration: none;
@@ -115,6 +118,12 @@ a:hover {
 
 .brand:hover {
     color: var(--pw-ink-900);
+}
+
+.brand-logo {
+    flex-shrink: 0;
+    height: 2.25rem;
+    width: 2.25rem;
 }
 
 .navbar {
