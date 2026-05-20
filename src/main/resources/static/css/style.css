@@ -122,8 +122,8 @@ a:hover {
 
 .brand-logo {
     flex-shrink: 0;
-    height: 2.25rem;
-    width: 2.25rem;
+    height: 36px;
+    width: 36px;
 }
 
 .navbar {
